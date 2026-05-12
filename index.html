@@ -30,9 +30,12 @@
             z-index: 1000;
             border-bottom: 2px solid var(--gold);
         }
-        .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; position: relative; }
         .main-logo { height: 45px; }
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
+
+        /* Hamburger Menu Icon */
+        .menu-toggle { display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer; }
 
         .search-wrapper {
             max-width: 90%; margin: 10px auto; display: flex;
@@ -50,40 +53,17 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME AREA (FIXED FOR MOBILE) --- */
+        /* --- THEME AREA (Fixed) --- */
         .theme-container {
             position: fixed;
-            top: 160px; /* PC height */
-            left: 0; width: 100%; height: calc(100vh - 160px);
+            top: 170px;
+            left: 0; width: 100%; height: calc(100vh - 170px);
             z-index: 1;
             background: #000;
             overflow: hidden;
         }
-        .theme-viewport { 
-            width: 100%; height: 100%; 
-            display: flex; justify-content: center; align-items: center;
-        }
-        .theme-viewport img { 
-            width: 100%; height: 100%; 
-            object-fit: contain; /* Default for PC */
-        }
-
-        /* --- MOBILE SPECIFIC FIX --- */
-        @media screen and (max-width: 768px) {
-            header { padding: 5px 0; }
-            .theme-container { 
-                top: 200px; /* Adjusted for mobile header height */
-                height: calc(100vh - 200px);
-            }
-            .theme-viewport img {
-                width: 100%;
-                height: auto;
-                object-fit: fill; /* Forces the image to stretch to edges on phone */
-                transform: scale(1.1); /* Slightly zoom to ensure no black gaps */
-            }
-            .nav-menu li a { font-size: 10px; padding: 4px 5px; }
-            .circuit-container { gap: 40px; }
-        }
+        .theme-viewport { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+        .theme-viewport img { width: 100%; height: 100%; object-fit: contain; }
 
         /* --- SHUTTER PANEL --- */
         .shutter-panel {
@@ -96,12 +76,12 @@
             box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
         }
 
+        /* --- CIRCUIT ANIMATION --- */
         .circuit-container { display: flex; justify-content: center; gap: 100px; padding-bottom: 40px; flex-wrap: wrap; }
         .circuit-switch { position: relative; text-align: center; cursor: pointer; padding: 20px; }
         .switch-label { font-weight: bold; font-size: 1.5rem; color: #fff; display: block; margin-bottom: 25px; transition: 0.5s; }
         .wire-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
         .wire-piece { width: 35px; height: 4px; background: #333; transition: 0.4s ease-in-out; }
-        
         .circuit-switch:hover .wire-piece:first-child { transform: translateX(12px); }
         .circuit-switch:hover .wire-piece:last-child { transform: translateX(-12px); }
         .chip-icon { font-size: 2.8rem; color: #333; transition: 0.5s; }
@@ -114,7 +94,20 @@
         .final-switch:hover .wire-piece { background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
         .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); }
 
-        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); background: #000; overflow: hidden; }
+        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); background: #000; }
+
+        /* --- MOBILE FIXES --- */
+        @media screen and (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-menu { 
+                display: none; flex-direction: column; width: 100%; 
+                background: var(--maroon-dark); padding: 10px 0; 
+            }
+            .nav-menu.active { display: flex; }
+            .theme-container { top: 200px; }
+            .theme-viewport img { object-fit: cover; width: 100%; height: 100%; transform: scale(1.05); }
+            .circuit-container { gap: 40px; }
+        }
 
         footer { background: #000; padding: 30px 20px; border-top: 1px solid #1a1a1a; text-align: center; }
         .footer-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -129,21 +122,28 @@
         <div class="header-top">
             <img src="Logo-batch.png" alt="Logo" class="main-logo">
             <div class="header-title">AUST EEE-2.1</div>
+            <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
         <div class="search-wrapper">
             <input type="text" placeholder="Search resources...">
             <button>Search</button>
         </div>
         <nav class="navbar">
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="#">Materials</a></li>
+                <li><a href="#">2.1 Study Materials</a></li>
+                <li><a href="#">Previous Semester</a></li>
                 <li><a href="#">Routine</a></li>
                 <li><a href="#">Exams</a></li>
                 <li><a href="#">Faculty</a></li>
+                <li><a href="#">BUS Route</a></li>
                 <li><a href="#">Notice</a></li>
+                <li><a href="#">CR & GM Section</a></li>
                 <li><a href="#">Credits</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#">OBE Syllabus</a></li>
+                <li><a href="#">Helping Sites</a></li>
+                <li><a href="#">Waiver</a></li>
+                <li><a href="#">Contact Us</a></li>
             </ul>
         </nav>
     </header>
@@ -189,5 +189,11 @@
         </footer>
     </div>
 
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
