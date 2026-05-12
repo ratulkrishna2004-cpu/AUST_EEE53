@@ -3,259 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE 2.1 | Batch Portal</title>
+    <title>AUST EEE 2.1 | Spardho 53</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --maroon-dark: #4a0000;
             --maroon-bright: #800000;
             --gold: #FFD700;
-            --bg-black: #0d0d0d;
             --green-glow: #00ff00;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-black);
+            margin: 0; padding: 0;
+            background-image: url('Theme.png'); /* থিম ইমেজ ব্যাকগ্রাউন্ড হিসেবে */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
             font-family: 'Segoe UI', Arial, sans-serif;
             color: white;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Top Header */
+        /* হেডার ব্যানার */
         .header-banner {
-            background: linear-gradient(to bottom, var(--maroon-dark), var(--maroon-bright));
+            background: linear-gradient(to bottom, rgba(74, 0, 0, 0.9), rgba(128, 0, 0, 0.9));
             padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            border-bottom: 2px solid var(--gold);
+            text-align: center;
         }
 
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
+        .header-content { display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .batch-logo { height: 60px; filter: drop-shadow(0 0 5px gold); }
+        .main-title { color: var(--gold); font-family: 'Georgia', serif; font-style: italic; font-size: 2.2rem; margin: 0; }
 
-        .batch-logo {
-            height: 60px;
-            filter: drop-shadow(0 0 5px gold);
-        }
-
-        .main-title {
-            color: var(--gold);
-            font-family: 'Georgia', serif;
-            font-style: italic;
-            font-size: 2.2rem;
-            margin: 0;
-        }
-
-        /* Search Bar Section */
-        .search-section {
-            background-color: var(--maroon-bright);
-            padding: 15px 0;
-            display: flex;
-            justify-content: center;
-        }
-
+        /* সার্চ সেকশন */
+        .search-section { background: rgba(128, 0, 0, 0.8); padding: 15px 0; display: flex; justify-content: center; }
         .search-wrapper {
-            width: 95%;
-            max-width: 1100px;
-            background: white;
-            border: 3px solid var(--green-glow);
-            border-radius: 30px;
-            display: flex;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 95%; max-width: 1100px; background: white;
+            border: 3px solid var(--green-glow); border-radius: 30px; display: flex; overflow: hidden;
         }
+        .search-input { flex: 1; border: none; padding: 12px 25px; outline: none; font-size: 1rem; color: #333; }
+        .search-btn { background: linear-gradient(to bottom, #ff3333, #800000); color: white; border: none; padding: 0 35px; cursor: pointer; font-weight: bold; }
 
-        .search-input {
-            flex: 1;
-            border: none;
-            padding: 12px 25px;
-            outline: none;
-            font-size: 1rem;
-            color: #333;
-        }
+        /* মেনু বার */
+        .main-nav { background: rgba(128, 0, 0, 0.9); padding: 10px 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1300px; margin: 0 auto; text-align: center; }
+        .primary-menu { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .primary-menu li a { color: white; text-decoration: none; font-size: 0.9rem; font-weight: 500; }
 
-        .search-btn {
-            background: linear-gradient(to bottom, #ff3333, #800000);
-            color: white;
-            border: none;
-            padding: 0 35px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .search-btn:hover {
-            filter: brightness(1.2);
-        }
-
-        /* Navigation Menu */
-        .main-nav {
-            background-color: var(--maroon-bright);
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .nav-container {
-            max-width: 1300px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .primary-menu, .secondary-menu {
-            list-style: none;
-            margin: 0;
-            padding: 5px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .primary-menu li a, .secondary-menu li a {
-            color: white;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .primary-menu li a:hover, .secondary-menu li a:hover { 
-            color: var(--gold); 
-        }
-
-        /* 3D Floating Hero Image */
-        .hero-container {
-            padding: 60px 20px;
-            perspective: 1500px;
-            text-align: center;
-        }
-
-        .theme-wrapper {
-            display: inline-block;
-            border: 3px solid var(--gold);
-            border-radius: 15px;
-            overflow: hidden;
-            animation: float3d 6s ease-in-out infinite;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-            max-width: 95%;
-        }
-
-        .floating-theme {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        @keyframes float3d {
-            0%, 100% { transform: rotateX(5deg) translateY(0); }
-            50% { transform: rotateX(12deg) translateY(-20px); }
-        }
-
-        /* 3D Mode Toggle */
-        .mode-selector { padding: 40px; text-align: center; }
-
+        /* ৩ডি সুইচ স্টাইল */
+        .mode-selector { padding: 80px 20px; text-align: center; }
         .mode-label {
-            width: 220px;
-            height: 60px;
-            background: #1a1a1a;
-            border-radius: 30px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: space-around;
-            position: relative;
-            cursor: pointer;
-            border: 1px solid var(--maroon-bright);
-            box-shadow: inset 0 5px 15px black;
+            width: 200px; height: 60px; background: rgba(26, 26, 26, 0.9); border-radius: 30px;
+            display: inline-flex; align-items: center; justify-content: space-around;
+            position: relative; cursor: pointer; border: 2px solid var(--maroon-bright);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-
         .switch-handle {
-            width: 105px;
-            height: 50px;
-            background: linear-gradient(145deg, var(--gold), #b8860b);
-            border-radius: 25px;
-            position: absolute;
-            left: 5px;
+            width: 95px; height: 50px; background: linear-gradient(145deg, var(--gold), #b8860b);
+            border-radius: 25px; position: absolute; left: 5px;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-
         .mode-checkbox { display: none; }
+        .mode-checkbox:checked + .mode-label .switch-handle { left: 100px; background: linear-gradient(145deg, #ff3333, #800000); }
+        .label-text { z-index: 1; font-weight: bold; font-size: 1rem; color: white; }
 
-        .mode-checkbox:checked + .mode-label .switch-handle {
-            left: 110px;
-            background: linear-gradient(145deg, #a00, #400);
-        }
+        /* ক্যালেন্ডার */
+        .calendar-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .calendar-frame { border: 4px solid var(--maroon-bright); border-radius: 15px; overflow: hidden; background: white; }
 
-        .label-text { z-index: 1; font-weight: bold; font-size: 1rem; letter-spacing: 1px; }
-
-        /* Google Calendar Section */
-        .calendar-container {
-            max-width: 1150px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .calendar-frame {
-            border: 4px solid var(--maroon-bright);
-            border-radius: 15px;
-            overflow: hidden;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* Footer */
-        footer {
-            padding: 60px;
-            text-align: center;
-            background: linear-gradient(to top, #000, #0d0d0d);
-            border-top: 1px solid rgba(255, 215, 0, 0.1);
-        }
-
-        .footer-mail-btn {
-            background: var(--maroon-bright);
-            color: var(--gold);
-            border: 2px solid var(--gold);
-            padding: 12px 40px;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: 0.3s;
-        }
-
-        .footer-mail-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--gold);
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .main-title { font-size: 1.5rem; }
-            .primary-menu, .secondary-menu { gap: 10px; }
-            .primary-menu li a { font-size: 0.8rem; }
-            .batch-logo { height: 45px; }
-        }
+        footer { padding: 30px; text-align: center; background: rgba(0,0,0,0.8); font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <div class="header-banner">
         <div class="header-content">
-            <img src="Logo-batch.png" alt="Batch Logo" class="batch-logo">
+            <img src="Logo-batch.png" alt="Logo" class="batch-logo">
             <h1 class="main-title">AUST EEE-2.1</h1>
         </div>
     </div>
 
     <div class="search-section">
         <div class="search-wrapper">
-            <input type="text" placeholder="Search study materials, notices..." class="search-input">
+            <input type="text" placeholder="Search Materials..." class="search-input">
             <button class="search-btn">Search</button>
         </div>
     </div>
@@ -267,7 +98,6 @@
                 <li><a href="#">2.1 Study Materials</a></li>
                 <li><a href="#">Previous Semester</a></li>
                 <li><a href="#">Routine</a></li>
-                <li><a href="#">Exams <i class="fas fa-caret-down"></i></a></li>
                 <li><a href="#">Faculty</a></li>
                 <li><a href="#">BUS Route</a></li>
                 <li><a href="#">Notice</a></li>
@@ -275,28 +105,17 @@
                 <li><a href="#">Credits</a></li>
                 <li><a href="#">OBE Syllabus</a></li>
             </ul>
-            <ul class="secondary-menu">
-                <li><a href="#">Helping Sites</a></li>
-                <li><a href="#">Waiver</a></li>
-                <li><a href="#">Contact Us</a></li>
-            </ul>
         </div>
     </nav>
 
     <main>
-        <section class="hero-container">
-            <div class="theme-wrapper">
-                <img src="Theme.jpg" alt="AUST EEE Theme" class="floating-theme">
-            </div>
-        </section>
-
         <section class="mode-selector">
             <div class="toggle-switch">
                 <input type="checkbox" id="modeInput" class="mode-checkbox">
                 <label for="modeInput" class="mode-label">
-                    <span class="label-text mid">MID</span>
+                    <span class="label-text">MID</span>
                     <div class="switch-handle"></div>
-                    <span class="label-text final">FINAL</span>
+                    <span class="label-text">FINAL</span>
                 </label>
             </div>
         </section>
@@ -304,15 +123,52 @@
         <section class="calendar-container">
             <div class="calendar-frame">
                 <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=Asia%2FDhaka&amp;showPrint=0&amp;src=YXVzdGVlZTUzQGdtYWlsLmNvbQ&amp;color=%23ef6c00" 
-                        style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+                style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
             </div>
         </section>
     </main>
 
     <footer>
-        <button class="footer-mail-btn"><i class="fas fa-envelope"></i> Batch Mail</button>
-        <p>&copy; 2026 AUST EEE 53 | Designed by Ratul Krishna Mojumder</p>
+        <p>&copy; 2026 AUST EEE 53 | Batch: স্পার্ধ্য-৫৩</p>
     </footer>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnx342TC2Iry0lBYDBEzTlu0t-BZPWETg",
+            authDomain: "spardho53.firebaseapp.com",
+            databaseURL: "https://spardho53-default-rtdb.firebaseio.com",
+            projectId: "spardho53",
+            storageBucket: "spardho53.firebasestorage.app",
+            messagingSenderId: "432228439641",
+            appId: "1:432228439641:web:9a558dc03eefde7c694348"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const modeRef = ref(db, 'siteMode');
+        const modeSwitch = document.getElementById('modeInput');
+
+        // ড্রাইভ লিঙ্কগুলো এখানে দিবে
+        const MID_LINK = "https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6";
+        const FINAL_LINK = "https://final-exam-psi-neon.vercel.app/";
+
+        onValue(modeRef, (snapshot) => {
+            const mode = snapshot.val();
+            modeSwitch.checked = (mode === 'FINAL');
+        });
+
+        // ক্লিক করলে লিঙ্কে নিয়ে যাবে
+        modeSwitch.addEventListener('click', (e) => {
+            // যদি শুধু সুইচ করতে চাও তবে নিচের window.open লাইনগুলো কমেন্ট করে দিও
+            const targetLink = modeSwitch.checked ? FINAL_LINK : MID_LINK;
+            window.open(targetLink, '_blank'); 
+            
+            const status = modeSwitch.checked ? 'FINAL' : 'MID';
+            set(modeRef, status);
+        });
+    </script>
 </body>
 </html>
