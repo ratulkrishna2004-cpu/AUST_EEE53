@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE-2.1 | Pro</title>
+    <title>AUST EEE-2.1 | Pro Max</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -51,35 +51,37 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME & WAVES --- */
+        /* --- THEME & WAVES (UPDATED) --- */
         .theme-container {
             position: relative;
-            width: 100%; height: 75vh;
+            width: 100%; height: 85vh;
             background: #000; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
         }
 
-        .theme-viewport { width: 80%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 5; }
-        .theme-viewport img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        /* Image enlarged to cover more space */
+        .theme-viewport { width: 95%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 5; }
+        .theme-viewport img { width: 100%; height: 100%; object-fit: contain; }
 
         .wave-sidebar {
             position: absolute; top: 0; bottom: 0;
-            width: 80px; height: 100%;
+            width: 100px; height: 100%;
             overflow: hidden; pointer-events: none;
+            z-index: 6;
         }
-        /* Left wave moved slightly right */
-        .wave-left { left: 25px; } 
-        .wave-right { right: 10px; transform: scaleX(-1); }
+        /* Left sinusoidal wave moved right for full visibility */
+        .wave-left { left: 50px; } 
+        .wave-right { right: 15px; transform: scaleX(-1); }
 
         .wave-column {
             position: relative; height: 200%; width: 100%;
-            animation: scroll-down 6s linear infinite; /* T=6s */
+            animation: scroll-down 15s linear infinite; /* T=15s */
         }
         @keyframes scroll-down { from { transform: translateY(-50%); } to { transform: translateY(0%); } }
         .wave-svg-unit { width: 100%; height: 50%; }
-        .traveling-path { filter: drop-shadow(0 0 10px currentColor); }
+        .traveling-path { filter: drop-shadow(0 0 12px currentColor); }
 
-        /* --- CIRCUIT SWITCH ANIMATION --- */
+        /* --- CIRCUIT SWITCH ANIMATION (UPDATED) --- */
         .shutter-panel {
             position: relative; z-index: 10; background: #050000;
             padding: 60px 0 20px; border-top: 3px solid var(--maroon);
@@ -90,33 +92,32 @@
             position: relative; text-align: center; cursor: pointer; padding: 20px;
         }
         
-        /* The Label (Initially White) */
         .switch-label { 
             font-weight: bold; font-size: 1.5rem; color: #fff; 
             display: block; margin-bottom: 25px; transition: 0.5s;
         }
 
-        /* The Wire logic */
         .wire-container {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 20px; /* Wider gap for move effect */
         }
         .wire-piece {
-            width: 30px; height: 4px; background: #333; transition: 0.5s;
+            width: 35px; height: 4px; background: #333; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .chip-icon { font-size: 2.5rem; color: #333; transition: 0.5s; }
+        /* The "Join" move effect */
+        .circuit-switch:hover .wire-piece:first-child { transform: translateX(15px); }
+        .circuit-switch:hover .wire-piece:last-child { transform: translateX(-15px); }
 
-        /* Hover States */
-        .circuit-switch:hover .wire-piece { background: currentColor; box-shadow: 0 0 10px currentColor; }
-        
-        /* Mid Specific Glow */
+        .chip-icon { font-size: 2.8rem; color: #333; transition: 0.5s; }
+
+        /* Mid Glow */
         .mid-switch:hover .switch-label { color: var(--gold); text-shadow: 0 0 15px var(--gold); }
-        .mid-switch:hover { color: var(--gold); }
-        .mid-switch:hover .chip-icon { color: var(--gold); transform: scale(1.1); }
+        .mid-switch:hover .wire-piece { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+        .mid-switch:hover .chip-icon { color: var(--gold); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--gold)); }
 
-        /* Final Specific Glow */
+        /* Final Glow */
         .final-switch:hover .switch-label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
-        .final-switch:hover { color: var(--neon-green); }
-        .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); }
+        .final-switch:hover .wire-piece { background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
+        .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--neon-green)); }
 
         .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
 
@@ -126,7 +127,7 @@
         .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.5rem; text-decoration: none; }
         .footer-mail-link { color: var(--gold); font-size: 1.8rem; transition: 0.3s; }
         .dev-credit { 
-            text-align: center; color: #fff; font-weight: bold; font-size: 0.9rem;
+            text-align: center; color: #fff; font-weight: bold; font-size: 1rem;
             margin-top: 10px; border-top: 1px solid #222; padding-top: 10px;
         }
 
@@ -134,7 +135,7 @@
             .menu-toggle { display: block; }
             .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--maroon-dark); }
             .nav-menu.active { display: flex; }
-            .footer-top-row { flex-direction: column; gap: 15px; }
+            .wave-left { left: 10px; }
         }
     </style>
 </head>
@@ -171,6 +172,7 @@
     </header>
 
     <div class="theme-container">
+        <!-- Left Sinusoidal Wave -->
         <div class="wave-sidebar wave-left">
             <div class="wave-column">
                 <div class="wave-svg-unit" id="wave-l"></div>
@@ -182,6 +184,7 @@
             <img src="Theme.png" alt="AUST Theme">
         </div>
 
+        <!-- Right Square Wave -->
         <div class="wave-sidebar wave-right">
             <div class="wave-column">
                 <div class="wave-svg-unit" id="wave-r"></div>
@@ -192,7 +195,6 @@
 
     <div class="shutter-panel">
         <section class="circuit-container">
-            <!-- MID SWITCH WITH CONNECTION EFFECT -->
             <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                 <span class="switch-label">MID</span>
                 <div class="wire-container">
@@ -202,7 +204,6 @@
                 </div>
             </div>
 
-            <!-- FINAL SWITCH WITH CONNECTION EFFECT -->
             <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
                 <span class="switch-label">FINAL</span>
                 <div class="wire-container">
@@ -223,7 +224,7 @@
                 <a href="index.html" class="footer-logo-link">AUST EEE-53</a>
                 <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
             </div>
-            <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
+            <div class="dev-credit">Developed by: **Ratul Krishna Mojumder**</div>
         </footer>
     </div>
 
@@ -233,14 +234,16 @@
         function generateWave(type, color) {
             let path = "";
             if(type === 'sine') {
-                path = "M10,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `Q60,${i+15} 10,${i+30} T10,${i+60} `; }
+                // Modified Sine path for better amplitude visibility
+                path = "M15,0 ";
+                for(let i=0; i<=1000; i+=80) { path += `Q85,${i+20} 15,${i+40} T15,${i+80} `; }
             } else {
                 path = "M5,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `L55,${i} L55,${i+30} L5,${i+30} L5,${i+60} `; }
+                for(let i=0; i<=1000; i+=60) { path += `L75,${i} L75,${i+30} L5,${i+30} L5,${i+60} `; }
             }
-            return `<svg preserveAspectRatio="none" viewBox="0 0 60 1000" style="height:100%; width:100%; color:${color};">
-                        <path d="${path}" fill="none" stroke="currentColor" stroke-width="5" class="traveling-path"/>
+            // Larger viewBox width for Sine wave curves
+            return `<svg preserveAspectRatio="none" viewBox="0 0 90 1000" style="height:100%; width:100%; color:${color};">
+                        <path d="${path}" fill="none" stroke="currentColor" stroke-width="4" class="traveling-path"/>
                     </svg>`;
         }
 
