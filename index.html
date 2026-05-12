@@ -22,7 +22,7 @@
             scroll-behavior: smooth;
         }
 
-        /* --- HEADER (Fixed at top) --- */
+        /* --- HEADER --- */
         header {
             background: linear-gradient(to bottom, var(--maroon), var(--maroon-dark));
             padding: 10px 0; text-align: center;
@@ -50,66 +50,82 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME AREA (Fixed Shutter Logic) --- */
+        /* --- THEME AREA (FIXED FOR MOBILE) --- */
         .theme-container {
-            position: fixed; /* Fixed so it stays while scrolling */
-            top: 160px; /* Adjusting based on header height to avoid overlap */
+            position: fixed;
+            top: 160px; /* PC height */
             left: 0; width: 100%; height: calc(100vh - 160px);
-            z-index: 1; /* Lowest layer */
-            display: flex; justify-content: center; align-items: center;
+            z-index: 1;
             background: #000;
+            overflow: hidden;
         }
-        .theme-viewport { width: 100%; height: 100%; }
-        .theme-viewport img { width: 100%; height: 100%; object-fit: contain; }
+        .theme-viewport { 
+            width: 100%; height: 100%; 
+            display: flex; justify-content: center; align-items: center;
+        }
+        .theme-viewport img { 
+            width: 100%; height: 100%; 
+            object-fit: contain; /* Default for PC */
+        }
 
-        /* --- SHUTTER PANEL (Moves up to cover theme) --- */
+        /* --- MOBILE SPECIFIC FIX --- */
+        @media screen and (max-width: 768px) {
+            header { padding: 5px 0; }
+            .theme-container { 
+                top: 200px; /* Adjusted for mobile header height */
+                height: calc(100vh - 200px);
+            }
+            .theme-viewport img {
+                width: 100%;
+                height: auto;
+                object-fit: fill; /* Forces the image to stretch to edges on phone */
+                transform: scale(1.1); /* Slightly zoom to ensure no black gaps */
+            }
+            .nav-menu li a { font-size: 10px; padding: 4px 5px; }
+            .circuit-container { gap: 40px; }
+        }
+
+        /* --- SHUTTER PANEL --- */
         .shutter-panel {
             position: relative;
-            margin-top: 100vh; /* Starts below the initial view */
-            z-index: 10; /* Higher layer to cover theme */
+            margin-top: 100vh;
+            z-index: 10;
             background: #050000;
             padding: 60px 0 20px;
             border-top: 5px solid var(--maroon);
-            box-shadow: 0 -15px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
         }
 
-        /* --- CIRCUIT SWITCH ANIMATION --- */
         .circuit-container { display: flex; justify-content: center; gap: 100px; padding-bottom: 40px; flex-wrap: wrap; }
         .circuit-switch { position: relative; text-align: center; cursor: pointer; padding: 20px; }
         .switch-label { font-weight: bold; font-size: 1.5rem; color: #fff; display: block; margin-bottom: 25px; transition: 0.5s; }
         .wire-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
-        .wire-piece { width: 35px; height: 4px; background: #333; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .wire-piece { width: 35px; height: 4px; background: #333; transition: 0.4s ease-in-out; }
         
-        .circuit-switch:hover .wire-piece:first-child { transform: translateX(15px); }
-        .circuit-switch:hover .wire-piece:last-child { transform: translateX(-15px); }
+        .circuit-switch:hover .wire-piece:first-child { transform: translateX(12px); }
+        .circuit-switch:hover .wire-piece:last-child { transform: translateX(-12px); }
         .chip-icon { font-size: 2.8rem; color: #333; transition: 0.5s; }
 
         .mid-switch:hover .switch-label { color: var(--gold); text-shadow: 0 0 15px var(--gold); }
         .mid-switch:hover .wire-piece { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
-        .mid-switch:hover .chip-icon { color: var(--gold); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--gold)); }
+        .mid-switch:hover .chip-icon { color: var(--gold); transform: scale(1.1); }
 
         .final-switch:hover .switch-label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
         .final-switch:hover .wire-piece { background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
-        .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--neon-green)); }
+        .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); }
 
-        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); background: #000; }
+        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); background: #000; overflow: hidden; }
 
-        footer { background: #000; padding: 30px 50px; border-top: 1px solid #1a1a1a; }
+        footer { background: #000; padding: 30px 20px; border-top: 1px solid #1a1a1a; text-align: center; }
         .footer-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.5rem; text-decoration: none; }
-        .footer-mail-link { color: var(--gold); font-size: 1.8rem; transition: 0.3s; }
-        .dev-credit { text-align: center; color: #fff; font-weight: bold; font-size: 1rem; margin-top: 10px; border-top: 1px solid #222; padding-top: 10px; }
-
-        @media screen and (max-width: 768px) {
-            .nav-menu { gap: 2px; }
-            .circuit-container { gap: 30px; }
-            .theme-container { top: 220px; } /* Mobile adjustment */
-        }
+        .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none; }
+        .footer-mail-link { color: var(--gold); font-size: 1.6rem; }
+        .dev-credit { color: #fff; font-weight: bold; font-size: 0.9rem; border-top: 1px solid #222; padding-top: 10px; }
     </style>
 </head>
 <body>
 
-    <header id="mainHeader">
+    <header>
         <div class="header-top">
             <img src="Logo-batch.png" alt="Logo" class="main-logo">
             <div class="header-title">AUST EEE-2.1</div>
@@ -121,25 +137,23 @@
         <nav class="navbar">
             <ul class="nav-menu">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="#">2.1 Study Materials</a></li>
+                <li><a href="#">Materials</a></li>
                 <li><a href="#">Routine</a></li>
                 <li><a href="#">Exams</a></li>
                 <li><a href="#">Faculty</a></li>
                 <li><a href="#">Notice</a></li>
                 <li><a href="#">Credits</a></li>
-                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Theme Container remains fixed behind everything -->
     <div class="theme-container">
         <div class="theme-viewport">
             <img src="Theme.png" alt="AUST Theme">
         </div>
     </div>
 
-    <!-- Shutter Panel covers the theme on scroll -->
     <div class="shutter-panel">
         <section class="circuit-container">
             <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
@@ -163,7 +177,7 @@
 
         <div class="calendar-box">
             <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
-            style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
+            style="border: 0" width="100%" height="450" frameborder="0" scrolling="no"></iframe>
         </div>
 
         <footer>
