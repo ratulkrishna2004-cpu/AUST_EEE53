@@ -34,7 +34,6 @@
         .main-logo { height: 45px; }
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
 
-        /* Hamburger Menu Icon */
         .menu-toggle { display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer; }
 
         .search-wrapper {
@@ -53,7 +52,7 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME AREA (Fixed) --- */
+        /* --- THEME AREA (Fixed Background) --- */
         .theme-container {
             position: fixed;
             top: 170px;
@@ -76,10 +75,9 @@
             box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
         }
 
-        /* --- CIRCUIT ANIMATION --- */
         .circuit-container { display: flex; justify-content: center; gap: 100px; padding-bottom: 40px; flex-wrap: wrap; }
         .circuit-switch { position: relative; text-align: center; cursor: pointer; padding: 20px; }
-        .switch-label { font-weight: bold; font-size: 1.5rem; color: #fff; display: block; margin-bottom: 25px; transition: 0.5s; }
+        .switch-label { font-weight: bold; font-size: 1.5rem; color: #fff; display: block; margin-bottom: 25px; }
         .wire-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
         .wire-piece { width: 35px; height: 4px; background: #333; transition: 0.4s ease-in-out; }
         .circuit-switch:hover .wire-piece:first-child { transform: translateX(12px); }
@@ -94,18 +92,20 @@
         .final-switch:hover .wire-piece { background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
         .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); }
 
-        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); background: #000; }
+        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
 
         /* --- MOBILE FIXES --- */
         @media screen and (max-width: 768px) {
             .menu-toggle { display: block; }
-            .nav-menu { 
-                display: none; flex-direction: column; width: 100%; 
-                background: var(--maroon-dark); padding: 10px 0; 
-            }
+            .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--maroon-dark); }
             .nav-menu.active { display: flex; }
             .theme-container { top: 200px; }
-            .theme-viewport img { object-fit: cover; width: 100%; height: 100%; transform: scale(1.05); }
+            /* Mobile Theme Fix: Force full width */
+            .theme-viewport img { 
+                width: 100vw; 
+                height: 100%; 
+                object-fit: fill; 
+            }
             .circuit-container { gap: 40px; }
         }
 
