@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE-2.1 | Official Site</title>
+    <title>AUST EEE-2.1 | Official</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -23,7 +23,7 @@
             scroll-behavior: smooth;
         }
 
-        /* --- HEADER & NAVIGATION --- */
+        /* --- HEADER --- */
         header {
             background: linear-gradient(to bottom, var(--maroon), var(--maroon-dark));
             padding: 10px 0; text-align: center;
@@ -33,10 +33,7 @@
         .main-logo { height: 45px; }
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
 
-        /* Hamburger Menu for Mobile */
-        .menu-toggle {
-            display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer;
-        }
+        .menu-toggle { display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer; }
 
         .search-wrapper {
             max-width: 90%; margin: 10px auto; display: flex;
@@ -54,7 +51,7 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME & WAVE SECTION --- */
+        /* --- THEME & SINGLE WAVES --- */
         .theme-container {
             position: relative;
             width: 100%; height: 75vh;
@@ -62,70 +59,71 @@
             display: flex; justify-content: center; align-items: center;
         }
 
-        .theme-viewport {
-            width: 80%; height: 100%; 
-            display: flex; justify-content: center; align-items: center;
-            z-index: 5;
-        }
+        .theme-viewport { width: 85%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 5; }
         .theme-viewport img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .wave-sidebar {
             position: absolute; top: 0; bottom: 0;
-            width: 15%; height: 100%;
-            display: flex; justify-content: space-around;
+            width: 80px; height: 100%;
             overflow: hidden; pointer-events: none;
         }
-        .wave-left { left: 0; }
-        .wave-right { right: 0; transform: scaleX(-1); }
+        .wave-left { left: 10px; }
+        .wave-right { right: 10px; transform: scaleX(-1); }
 
         .wave-column {
-            position: relative; height: 200%; width: 50px;
+            position: relative; height: 200%; width: 100%;
             animation: scroll-down 3s linear infinite;
         }
         @keyframes scroll-down { from { transform: translateY(-50%); } to { transform: translateY(0%); } }
-
         .wave-svg-unit { width: 100%; height: 50%; }
         .traveling-path { filter: drop-shadow(0 0 10px currentColor); }
 
-        /* --- CONTENT & CIRCUIT --- */
+        /* --- CIRCUIT SECTION --- */
         .shutter-panel {
             position: relative; z-index: 10; background: #050000;
             padding: 50px 0 20px; border-top: 3px solid var(--maroon);
         }
+        .circuit-container { display: flex; justify-content: center; gap: 80px; padding-bottom: 40px; flex-wrap: wrap; }
+        .circuit-switch { text-align: center; cursor: pointer; transition: 0.3s; }
+        .switch-label { font-weight: bold; font-size: 1.4rem; color: #fff; display: block; margin-bottom: 10px; }
+        .chip-icon { font-size: 3rem; color: #333; transition: 0.4s; }
+        .circuit-switch:hover .chip-icon { color: var(--gold); filter: drop-shadow(0 0 12px var(--gold)); }
 
-        .circuit-container { display: flex; justify-content: center; gap: 50px; padding-bottom: 40px; flex-wrap: wrap; }
-        .circuit-switch { text-align: center; cursor: pointer; min-width: 120px; }
-        .switch-label { font-weight: bold; font-size: 1.3rem; color: #fff; display: block; margin-bottom: 10px; }
-        .chip-icon { font-size: 2.5rem; color: #222; transition: 0.4s; }
-        .circuit-switch:hover .chip-icon { color: var(--gold); filter: drop-shadow(0 0 8px var(--gold)); }
+        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
 
-        .calendar-box {
-            max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon);
-        }
-
-        /* --- FOOTER --- */
+        /* --- UPDATED FOOTER --- */
         footer { 
-            background: #000; padding: 40px 20px; text-align: center;
+            background: #000; padding: 30px 50px;
             border-top: 1px solid #1a1a1a;
         }
-        .footer-social { margin-bottom: 15px; }
-        .footer-social a { color: var(--gold); font-size: 2rem; text-decoration: none; }
+        .footer-top-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px;
+        }
+        .footer-logo-link {
+            color: var(--gold); font-weight: bold; font-size: 1.5rem;
+            text-decoration: none; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .footer-mail-link {
+            color: var(--gold); font-size: 1.8rem; transition: 0.3s;
+        }
+        .footer-mail-link:hover { transform: scale(1.1); filter: drop-shadow(0 0 10px var(--gold)); }
+        
         .dev-credit { 
-            color: var(--gold); font-weight: bold; font-size: 1.2rem;
-            text-shadow: 0 0 15px var(--gold); margin-top: 10px;
+            text-align: center; color: #fff; font-weight: bold; font-size: 0.9rem;
+            margin-top: 10px; border-top: 1px solid #222; padding-top: 10px;
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- RESPONSIVE --- */
         @media screen and (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-menu {
                 display: none; flex-direction: column; width: 100%; background: var(--maroon-dark);
-                padding: 10px 0; border-top: 1px solid rgba(255,215,0,0.2);
+                padding: 10px 0;
             }
             .nav-menu.active { display: flex; }
-            .nav-menu li { text-align: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-            .wave-sidebar { width: 25%; opacity: 0.6; }
-            .theme-viewport { width: 100%; }
+            .wave-sidebar { width: 50px; opacity: 0.5; }
+            .footer-top-row { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
@@ -138,48 +136,53 @@
             <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
         <div class="search-wrapper">
-            <input type="text" placeholder="Search study materials...">
+            <input type="text" placeholder="Search resources...">
             <button>Search</button>
         </div>
         <nav class="navbar">
-    <ul class="nav-menu" id="navMenu">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="#">2.1 Study Materials</a></li>
-        <li><a href="#">Previous Semester</a></li>
-        <li><a href="#">Routine</a></li>
-        <li><a href="#">Exams</a></li>
-        <li><a href="#">Faculty</a></li>
-        <li><a href="#">BUS Route</a></li>
-        <li><a href="#">Notice</a></li>
-        <li><a href="#">CR & GM Section</a></li>
-        <li><a href="#">Credits</a></li>
-        <li><a href="#">OBE Syllabus</a></li>
-        <li><a href="#">Helping Sites</a></li>
-        <li><a href="#">Waiver</a></li>
-        <li><a href="#">Contact Us</a></li>
-    </ul>
-</nav>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">2.1 Study Materials</a></li>
+                <li><a href="#">Previous Semester</a></li>
+                <li><a href="#">Routine</a></li>
+                <li><a href="#">Exams</a></li>
+                <li><a href="#">Faculty</a></li>
+                <li><a href="#">BUS Route</a></li>
+                <li><a href="#">Notice</a></li>
+                <li><a href="#">CR & GM Section</a></li>
+                <li><a href="#">Credits</a></li>
+                <li><a href="#">OBE Syllabus</a></li>
+                <li><a href="#">Helping Sites</a></li>
+                <li><a href="#">Waiver</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="theme-container">
+        <!-- Left: Blue Sine Wave -->
         <div class="wave-sidebar wave-left">
-            <div class="wave-column"><div class="wave-svg-unit" id="sine-l"></div><div class="wave-svg-unit" id="sine-l-d"></div></div>
-            <div class="wave-column"><div class="wave-svg-unit" id="square-l"></div><div class="wave-svg-unit" id="square-l-d"></div></div>
-            <div class="wave-column"><div class="wave-svg-unit" id="saw-l"></div><div class="wave-svg-unit" id="saw-l-d"></div></div>
+            <div class="wave-column">
+                <div class="wave-svg-unit" id="wave-l"></div>
+                <div class="wave-svg-unit" id="wave-l-d"></div>
+            </div>
         </div>
 
         <div class="theme-viewport">
             <img src="Theme.png" alt="AUST Theme">
         </div>
 
+        <!-- Right: Green Square Wave -->
         <div class="wave-sidebar wave-right">
-            <div class="wave-column"><div class="wave-svg-unit" id="sine-r"></div><div class="wave-svg-unit" id="sine-r-d"></div></div>
-            <div class="wave-column"><div class="wave-svg-unit" id="square-r"></div><div class="wave-svg-unit" id="square-r-d"></div></div>
-            <div class="wave-column"><div class="wave-svg-unit" id="saw-r"></div><div class="wave-svg-unit" id="saw-r-d"></div></div>
+            <div class="wave-column">
+                <div class="wave-svg-unit" id="wave-r"></div>
+                <div class="wave-svg-unit" id="wave-r-d"></div>
+            </div>
         </div>
     </div>
 
     <div class="shutter-panel">
+        <!-- Circuit Switches Returned -->
         <section class="circuit-container">
             <div class="circuit-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                 <span class="switch-label">MID DRIVE</span>
@@ -197,48 +200,37 @@
         </div>
 
         <footer>
-            <div class="footer-social">
-                <a href="mailto:austeee53@gmail.com"><i class="fas fa-envelope"></i></a>
+            <div class="footer-top-row">
+                <a href="index.html" class="footer-logo-link">AUST EEE-53</a>
+                <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
             </div>
-            <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
+            <div class="dev-credit">
+                Developed by: Ratul Krishna Mojumder
+            </div>
         </footer>
     </div>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('navMenu').classList.toggle('active');
-        }
+        function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
 
         function generateWave(type, color) {
             let path = "";
             if(type === 'sine') {
                 path = "M10,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `Q50,${i+15} 10,${i+30} T10,${i+60} `; }
-            } else if(type === 'square') {
+                for(let i=0; i<=1000; i+=60) { path += `Q60,${i+15} 10,${i+30} T10,${i+60} `; }
+            } else {
                 path = "M5,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `L45,${i} L45,${i+30} L5,${i+30} L5,${i+60} `; }
-            } else if(type === 'saw') {
-                path = "M5,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `L45,${i+50} L5,${i+50} `; }
+                for(let i=0; i<=1000; i+=60) { path += `L55,${i} L55,${i+30} L5,${i+30} L5,${i+60} `; }
             }
-            return `<svg preserveAspectRatio="none" viewBox="0 0 50 1000" style="height:100%; width:100%; color:${color};">
-                        <path d="${path}" fill="none" stroke="currentColor" stroke-width="4" class="traveling-path"/>
+            return `<svg preserveAspectRatio="none" viewBox="0 0 60 1000" style="height:100%; width:100%; color:${color};">
+                        <path d="${path}" fill="none" stroke="currentColor" stroke-width="5" class="traveling-path"/>
                     </svg>`;
         }
 
-        const waves = [
-            {id: 'sine', type: 'sine', color: 'var(--gold)'},
-            {id: 'square', type: 'square', color: 'var(--neon-green)'},
-            {id: 'saw', type: 'saw', color: 'var(--neon-blue)'}
-        ];
-
-        waves.forEach(w => {
-            const html = generateWave(w.type, w.color);
-            document.getElementById(w.id+'-l').innerHTML = html;
-            document.getElementById(w.id+'-l-d').innerHTML = html;
-            document.getElementById(w.id+'-r').innerHTML = html;
-            document.getElementById(w.id+'-r-d').innerHTML = html;
-        });
+        document.getElementById('wave-l').innerHTML = generateWave('sine', 'var(--neon-blue)');
+        document.getElementById('wave-l-d').innerHTML = generateWave('sine', 'var(--neon-blue)');
+        document.getElementById('wave-r').innerHTML = generateWave('square', 'var(--neon-green)');
+        document.getElementById('wave-r-d').innerHTML = generateWave('square', 'var(--neon-green)');
     </script>
 </body>
 </html>
