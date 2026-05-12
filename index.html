@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE-53 | Official</title>
+    <title>AUST EEE-53 | Official Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -20,16 +20,18 @@
             font-family: Arial, sans-serif;
             color: #fff;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* --- 1. HEADER (Fixed at top) --- */
+        /* --- HEADER (Sticky) --- */
         header {
             background: linear-gradient(to bottom, var(--maroon), var(--maroon-dark));
             padding: 10px 0; text-align: center;
             position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
         .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; }
-        .main-logo { height: 45px; }
+        .main-logo { height: 45px; cursor: pointer; }
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
 
         .search-wrapper {
@@ -48,61 +50,73 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 13px; padding: 5px 10px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- 2. THEME SECTION (Static Background) --- */
+        /* --- THEME VIEWPORT (Fixed for Shutter Effect) --- */
         .theme-viewport {
-            width: 100%; height: calc(100vh - 150px);
+            width: 100%; height: calc(100vh - 160px);
             background-color: #000;
             display: flex; justify-content: center; align-items: center;
-            position: sticky; top: 150px; z-index: 1;
+            position: sticky; top: 160px; z-index: 1;
         }
         .theme-viewport img {
             max-width: 100%; max-height: 100%; object-fit: contain;
         }
 
-        /* --- 3. SHUTTER PANEL (Moves over the theme) --- */
+        /* --- SHUTTER PANEL --- */
         .shutter-panel {
             position: relative; z-index: 10;
             background: linear-gradient(180deg, #120000 0%, #000 100%);
-            box-shadow: 0 -20px 40px rgba(0,0,0,1);
-            padding-top: 50px; border-top: 3px solid var(--maroon);
+            box-shadow: 0 -25px 50px rgba(0,0,0,1);
+            padding-top: 60px; border-top: 3px solid var(--maroon);
         }
 
-        /* --- 4. INTERACTIVE CIRCUIT (Processor Effect) --- */
+        /* --- INTERACTIVE CIRCUIT --- */
         .circuit-container {
             display: flex; justify-content: center; gap: 80px; padding: 50px 20px; flex-wrap: wrap;
         }
         .circuit-switch {
             position: relative; width: 160px; height: 100px; cursor: pointer; text-align: center;
         }
+        /* labels: Bold White by default */
         .switch-label {
             position: absolute; top: -35px; left: 50%; transform: translateX(-50%);
-            font-weight: bold; font-size: 1.4rem; color: rgba(255,255,255,0.1); transition: 0.4s;
+            font-weight: 900; font-size: 1.5rem; color: #fff; transition: 0.4s;
         }
         .wire { position: absolute; top: 60%; width: 30px; height: 4px; background: #222; transition: 0.4s ease-in-out; }
         .wire.left { left: 10px; } .wire.right { right: 10px; }
-        
         .chip-icon { font-size: 2.2rem; margin-top: 45px; color: #111; transition: 0.4s; }
 
-        /* MID Effect (Yellow) */
+        /* MID Hover */
         .mid-switch:hover .wire { background: var(--gold); width: 50px; box-shadow: 0 0 15px var(--gold); }
         .mid-switch:hover .chip-icon { color: var(--gold); filter: drop-shadow(0 0 10px var(--gold)); }
         .mid-switch:hover .switch-label { color: var(--gold); text-shadow: 0 0 15px var(--gold); }
 
-        /* FINAL Effect (Neon Green) */
+        /* FINAL Hover */
         .final-switch:hover .wire { background: var(--neon-green); width: 50px; box-shadow: 0 0 15px var(--neon-green); }
         .final-switch:hover .chip-icon { color: var(--neon-green); filter: drop-shadow(0 0 10px var(--neon-green)); }
         .final-switch:hover .switch-label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
 
-        /* --- 5. FOOTER --- */
+        /* --- FOOTER --- */
         footer { background: #000; padding: 50px 20px 20px; border-top: 1px solid #1a1a1a; }
         .footer-top { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
-        .batch-logo-text { font-size: 2rem; font-weight: bold; color: var(--gold); text-decoration: none; }
+        .footer-batch-title { font-size: 2rem; font-weight: bold; color: var(--gold); text-decoration: none; }
         .mail-icon { font-size: 2rem; color: var(--gold); }
-        .dev-credit { text-align: center; margin-top: 30px; color: #444; font-size: 0.85rem; border-top: 1px solid #0a0a0a; padding-top: 15px; }
+        
+        /* Golden Glow Dev Name */
+        .dev-credit { 
+            text-align: center; margin-top: 30px; 
+            font-size: 1rem; font-weight: bold;
+            color: var(--gold); 
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            border-top: 1px solid #0a0a0a; padding-top: 15px;
+            animation: glow-pulse 3s infinite alternate;
+        }
+        @keyframes glow-pulse {
+            from { text-shadow: 0 0 5px var(--gold); }
+            to { text-shadow: 0 0 15px var(--gold), 0 0 20px #fff; }
+        }
 
         @media screen and (max-width: 768px) {
             .theme-viewport { height: 50vh; position: relative; top: 0; }
-            .circuit-container { gap: 30px; }
         }
     </style>
 </head>
@@ -110,16 +124,16 @@
 
     <header>
         <div class="header-top">
-            <img src="Logo-batch.png" alt="Logo" class="main-logo">
+            <a href="index.html"><img src="Logo-batch.png" alt="Logo" class="main-logo"></a>
             <div class="header-title">AUST EEE-2.1</div>
         </div>
         <div class="search-wrapper">
-            <input type="text" placeholder="Search study materials...">
+            <input type="text" placeholder="Search study materials, notices...">
             <button>Search</button>
         </div>
         <nav class="navbar">
             <ul class="nav-menu">
-                <li><a href="#">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="#">2.1 Study Materials</a></li>
                 <li><a href="#">Previous Semester</a></li>
                 <li><a href="#">Routine</a></li>
@@ -138,7 +152,7 @@
     </header>
 
     <div class="theme-viewport">
-        <img src="Theme.jpg" alt="AUST EEE Theme">
+        <img src="Theme.png" alt="AUST EEE-53 Theme">
     </div>
 
     <div class="shutter-panel">
@@ -159,14 +173,14 @@
             </div>
         </section>
 
-        <div style="max-width: 1000px; margin: 40px auto; border-radius: 10px; overflow: hidden;">
+        <div style="max-width: 1000px; margin: 40px auto; border-radius: 12px; overflow: hidden; border: 2px solid var(--maroon);">
             <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
             style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
         </div>
 
         <footer>
             <div class="footer-top">
-                <a href="#" class="batch-logo-text">AUST EEE-53</a>
+                <a href="index.html" class="footer-batch-title">AUST EEE-53</a>
                 <a href="mailto:austeee53@gmail.com" class="mail-icon"><i class="fas fa-envelope"></i></a>
             </div>
             <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
