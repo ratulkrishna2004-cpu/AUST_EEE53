@@ -51,37 +51,25 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME & WAVES (UPDATED) --- */
+        /* --- THEME AREA (Full Width, No Waves) --- */
         .theme-container {
             position: relative;
             width: 100%; height: 85vh;
-            background: #000; overflow: hidden;
+            background: #000;
             display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
         }
 
-        /* Image enlarged to cover more space */
-        .theme-viewport { width: 95%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 5; }
-        .theme-viewport img { width: 100%; height: 100%; object-fit: contain; }
-
-        .wave-sidebar {
-            position: absolute; top: 0; bottom: 0;
-            width: 100px; height: 100%;
-            overflow: hidden; pointer-events: none;
-            z-index: 6;
+        .theme-viewport { 
+            width: 100%; height: 100%; 
+            display: flex; justify-content: center; align-items: center; 
         }
-        /* Left sinusoidal wave moved right for full visibility */
-        .wave-left { left: 50px; } 
-        .wave-right { right: 15px; transform: scaleX(-1); }
-
-        .wave-column {
-            position: relative; height: 200%; width: 100%;
-            animation: scroll-down 15s linear infinite; /* T=15s */
+        .theme-viewport img { 
+            width: 100%; height: 100%; 
+            object-fit: cover; /* This will make sure it covers the entire area */
         }
-        @keyframes scroll-down { from { transform: translateY(-50%); } to { transform: translateY(0%); } }
-        .wave-svg-unit { width: 100%; height: 50%; }
-        .traveling-path { filter: drop-shadow(0 0 12px currentColor); }
 
-        /* --- CIRCUIT SWITCH ANIMATION (UPDATED) --- */
+        /* --- CIRCUIT SWITCH ANIMATION --- */
         .shutter-panel {
             position: relative; z-index: 10; background: #050000;
             padding: 60px 0 20px; border-top: 3px solid var(--maroon);
@@ -98,12 +86,13 @@
         }
 
         .wire-container {
-            display: flex; align-items: center; justify-content: center; gap: 20px; /* Wider gap for move effect */
+            display: flex; align-items: center; justify-content: center; gap: 20px;
         }
         .wire-piece {
             width: 35px; height: 4px; background: #333; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        /* The "Join" move effect */
+        
+        /* The Join move effect */
         .circuit-switch:hover .wire-piece:first-child { transform: translateX(15px); }
         .circuit-switch:hover .wire-piece:last-child { transform: translateX(-15px); }
 
@@ -135,7 +124,6 @@
             .menu-toggle { display: block; }
             .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--maroon-dark); }
             .nav-menu.active { display: flex; }
-            .wave-left { left: 10px; }
         }
     </style>
 </head>
@@ -171,25 +159,10 @@
         </nav>
     </header>
 
+    <!-- Theme Area now fully covers the space -->
     <div class="theme-container">
-        <!-- Left Sinusoidal Wave -->
-        <div class="wave-sidebar wave-left">
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="wave-l"></div>
-                <div class="wave-svg-unit" id="wave-l-d"></div>
-            </div>
-        </div>
-
         <div class="theme-viewport">
             <img src="Theme.png" alt="AUST Theme">
-        </div>
-
-        <!-- Right Square Wave -->
-        <div class="wave-sidebar wave-right">
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="wave-r"></div>
-                <div class="wave-svg-unit" id="wave-r-d"></div>
-            </div>
         </div>
     </div>
 
@@ -224,33 +197,12 @@
                 <a href="index.html" class="footer-logo-link">AUST EEE-53</a>
                 <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
             </div>
-            <div class="dev-credit">Developed by: **Ratul Krishna Mojumder**</div>
+            <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
         </footer>
     </div>
 
     <script>
         function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
-
-        function generateWave(type, color) {
-            let path = "";
-            if(type === 'sine') {
-                // Modified Sine path for better amplitude visibility
-                path = "M15,0 ";
-                for(let i=0; i<=1000; i+=80) { path += `Q85,${i+20} 15,${i+40} T15,${i+80} `; }
-            } else {
-                path = "M5,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `L75,${i} L75,${i+30} L5,${i+30} L5,${i+60} `; }
-            }
-            // Larger viewBox width for Sine wave curves
-            return `<svg preserveAspectRatio="none" viewBox="0 0 90 1000" style="height:100%; width:100%; color:${color};">
-                        <path d="${path}" fill="none" stroke="currentColor" stroke-width="4" class="traveling-path"/>
-                    </svg>`;
-        }
-
-        document.getElementById('wave-l').innerHTML = generateWave('sine', 'var(--neon-blue)');
-        document.getElementById('wave-l-d').innerHTML = generateWave('sine', 'var(--neon-blue)');
-        document.getElementById('wave-r').innerHTML = generateWave('square', 'var(--neon-green)');
-        document.getElementById('wave-r-d').innerHTML = generateWave('square', 'var(--neon-green)');
     </script>
 </body>
 </html>
