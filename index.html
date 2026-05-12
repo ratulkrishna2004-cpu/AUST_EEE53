@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE-2.1 | Official</title>
+    <title>AUST EEE-2.1 | Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -51,7 +51,7 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME & SINGLE WAVES --- */
+        /* --- THEME & WAVES --- */
         .theme-container {
             position: relative;
             width: 100%; height: 75vh;
@@ -59,7 +59,7 @@
             display: flex; justify-content: center; align-items: center;
         }
 
-        .theme-viewport { width: 85%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 5; }
+        .theme-viewport { width: 80%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 5; }
         .theme-viewport img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .wave-sidebar {
@@ -67,62 +67,73 @@
             width: 80px; height: 100%;
             overflow: hidden; pointer-events: none;
         }
-        .wave-left { left: 10px; }
+        /* Left wave moved slightly right */
+        .wave-left { left: 25px; } 
         .wave-right { right: 10px; transform: scaleX(-1); }
 
         .wave-column {
             position: relative; height: 200%; width: 100%;
-            animation: scroll-down 3s linear infinite;
+            animation: scroll-down 6s linear infinite; /* T=6s */
         }
         @keyframes scroll-down { from { transform: translateY(-50%); } to { transform: translateY(0%); } }
         .wave-svg-unit { width: 100%; height: 50%; }
         .traveling-path { filter: drop-shadow(0 0 10px currentColor); }
 
-        /* --- CIRCUIT SECTION --- */
+        /* --- CIRCUIT SWITCH ANIMATION --- */
         .shutter-panel {
             position: relative; z-index: 10; background: #050000;
-            padding: 50px 0 20px; border-top: 3px solid var(--maroon);
+            padding: 60px 0 20px; border-top: 3px solid var(--maroon);
         }
-        .circuit-container { display: flex; justify-content: center; gap: 80px; padding-bottom: 40px; flex-wrap: wrap; }
-        .circuit-switch { text-align: center; cursor: pointer; transition: 0.3s; }
-        .switch-label { font-weight: bold; font-size: 1.4rem; color: #fff; display: block; margin-bottom: 10px; }
-        .chip-icon { font-size: 3rem; color: #333; transition: 0.4s; }
-        .circuit-switch:hover .chip-icon { color: var(--gold); filter: drop-shadow(0 0 12px var(--gold)); }
+        .circuit-container { display: flex; justify-content: center; gap: 100px; padding-bottom: 40px; flex-wrap: wrap; }
+        
+        .circuit-switch {
+            position: relative; text-align: center; cursor: pointer; padding: 20px;
+        }
+        
+        /* The Label (Initially White) */
+        .switch-label { 
+            font-weight: bold; font-size: 1.5rem; color: #fff; 
+            display: block; margin-bottom: 25px; transition: 0.5s;
+        }
+
+        /* The Wire logic */
+        .wire-container {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .wire-piece {
+            width: 30px; height: 4px; background: #333; transition: 0.5s;
+        }
+        .chip-icon { font-size: 2.5rem; color: #333; transition: 0.5s; }
+
+        /* Hover States */
+        .circuit-switch:hover .wire-piece { background: currentColor; box-shadow: 0 0 10px currentColor; }
+        
+        /* Mid Specific Glow */
+        .mid-switch:hover .switch-label { color: var(--gold); text-shadow: 0 0 15px var(--gold); }
+        .mid-switch:hover { color: var(--gold); }
+        .mid-switch:hover .chip-icon { color: var(--gold); transform: scale(1.1); }
+
+        /* Final Specific Glow */
+        .final-switch:hover .switch-label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
+        .final-switch:hover { color: var(--neon-green); }
+        .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); }
 
         .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
 
-        /* --- UPDATED FOOTER --- */
-        footer { 
-            background: #000; padding: 30px 50px;
-            border-top: 1px solid #1a1a1a;
-        }
-        .footer-top-row {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px;
-        }
-        .footer-logo-link {
-            color: var(--gold); font-weight: bold; font-size: 1.5rem;
-            text-decoration: none; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        .footer-mail-link {
-            color: var(--gold); font-size: 1.8rem; transition: 0.3s;
-        }
-        .footer-mail-link:hover { transform: scale(1.1); filter: drop-shadow(0 0 10px var(--gold)); }
-        
+        /* --- FOOTER --- */
+        footer { background: #000; padding: 30px 50px; border-top: 1px solid #1a1a1a; }
+        .footer-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.5rem; text-decoration: none; }
+        .footer-mail-link { color: var(--gold); font-size: 1.8rem; transition: 0.3s; }
         .dev-credit { 
             text-align: center; color: #fff; font-weight: bold; font-size: 0.9rem;
             margin-top: 10px; border-top: 1px solid #222; padding-top: 10px;
         }
 
-        /* --- RESPONSIVE --- */
         @media screen and (max-width: 768px) {
             .menu-toggle { display: block; }
-            .nav-menu {
-                display: none; flex-direction: column; width: 100%; background: var(--maroon-dark);
-                padding: 10px 0;
-            }
+            .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--maroon-dark); }
             .nav-menu.active { display: flex; }
-            .wave-sidebar { width: 50px; opacity: 0.5; }
             .footer-top-row { flex-direction: column; gap: 15px; }
         }
     </style>
@@ -160,7 +171,6 @@
     </header>
 
     <div class="theme-container">
-        <!-- Left: Blue Sine Wave -->
         <div class="wave-sidebar wave-left">
             <div class="wave-column">
                 <div class="wave-svg-unit" id="wave-l"></div>
@@ -172,7 +182,6 @@
             <img src="Theme.png" alt="AUST Theme">
         </div>
 
-        <!-- Right: Green Square Wave -->
         <div class="wave-sidebar wave-right">
             <div class="wave-column">
                 <div class="wave-svg-unit" id="wave-r"></div>
@@ -182,15 +191,25 @@
     </div>
 
     <div class="shutter-panel">
-        <!-- Circuit Switches Returned -->
         <section class="circuit-container">
-            <div class="circuit-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
-                <span class="switch-label">MID DRIVE</span>
-                <i class="fas fa-microchip chip-icon"></i>
+            <!-- MID SWITCH WITH CONNECTION EFFECT -->
+            <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
+                <span class="switch-label">MID</span>
+                <div class="wire-container">
+                    <div class="wire-piece"></div>
+                    <i class="fas fa-microchip chip-icon"></i>
+                    <div class="wire-piece"></div>
+                </div>
             </div>
-            <div class="circuit-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
-                <span class="switch-label">FINAL DRIVE</span>
-                <i class="fas fa-bolt chip-icon"></i>
+
+            <!-- FINAL SWITCH WITH CONNECTION EFFECT -->
+            <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
+                <span class="switch-label">FINAL</span>
+                <div class="wire-container">
+                    <div class="wire-piece"></div>
+                    <i class="fas fa-bolt chip-icon"></i>
+                    <div class="wire-piece"></div>
+                </div>
             </div>
         </section>
 
@@ -204,9 +223,7 @@
                 <a href="index.html" class="footer-logo-link">AUST EEE-53</a>
                 <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
             </div>
-            <div class="dev-credit">
-                Developed by: Ratul Krishna Mojumder
-            </div>
+            <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
         </footer>
     </div>
 
