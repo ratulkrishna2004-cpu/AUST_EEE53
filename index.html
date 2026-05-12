@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE-2.1 | Smooth Traveling Wave</title>
+    <title>AUST EEE-2.1 | Official Site</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -17,7 +17,7 @@
         body, html {
             margin: 0; padding: 0;
             background-color: #000;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             color: #fff;
             overflow-x: hidden;
             scroll-behavior: smooth;
@@ -27,19 +27,24 @@
         header {
             background: linear-gradient(to bottom, var(--maroon), var(--maroon-dark));
             padding: 10px 0; text-align: center;
-            position: sticky; top: 0; z-index: 100;
+            position: sticky; top: 0; z-index: 1000;
         }
-        .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; position: relative; }
         .main-logo { height: 45px; }
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
 
+        /* Hamburger Menu for Mobile */
+        .menu-toggle {
+            display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer;
+        }
+
         .search-wrapper {
-            max-width: 95%; margin: 10px auto; display: flex;
+            max-width: 90%; margin: 10px auto; display: flex;
             border: 2px solid #00FF00; border-radius: 30px;
             overflow: hidden; background: #fff;
         }
-        .search-wrapper input { flex: 1; border: none; padding: 8px 20px; outline: none; color: #000; }
-        .search-wrapper button { background: #cc0000; color: #fff; border: none; padding: 0 20px; font-weight: bold; cursor: pointer; }
+        .search-wrapper input { flex: 1; border: none; padding: 8px 15px; outline: none; color: #000; }
+        .search-wrapper button { background: #cc0000; color: #fff; border: none; padding: 0 15px; cursor: pointer; }
 
         .navbar { background: var(--maroon-dark); border-bottom: 1px solid rgba(255,215,0,0.2); }
         .nav-menu {
@@ -49,80 +54,77 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME & INFINITE WAVE SECTION --- */
+        /* --- THEME & WAVE SECTION --- */
         .theme-container {
             position: relative;
-            width: 100%; height: calc(100vh - 160px);
+            width: 100%; height: 75vh;
             background: #000; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
         }
 
         .theme-viewport {
-            width: 82%; height: 100%; 
+            width: 80%; height: 100%; 
             display: flex; justify-content: center; align-items: center;
             z-index: 5;
         }
         .theme-viewport img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Sidebars with 3 Waves */
         .wave-sidebar {
             position: absolute; top: 0; bottom: 0;
-            width: 18%; height: 100%;
-            pointer-events: none;
-            display: flex; justify-content: space-between;
-            overflow: hidden;
-            padding: 0 5px;
+            width: 15%; height: 100%;
+            display: flex; justify-content: space-around;
+            overflow: hidden; pointer-events: none;
         }
         .wave-left { left: 0; }
         .wave-right { right: 0; transform: scaleX(-1); }
 
-        /* Smooth Infinite Scroll Logic */
         .wave-column {
-            position: relative;
-            height: 200%; 
-            width: 60px; /* Increased width for higher amplitude */
-            animation: scroll-down 3s linear infinite; /* T=3s for slow flow */
+            position: relative; height: 200%; width: 50px;
+            animation: scroll-down 3s linear infinite;
         }
+        @keyframes scroll-down { from { transform: translateY(-50%); } to { transform: translateY(0%); } }
 
-        @keyframes scroll-down {
-            from { transform: translateY(-50%); }
-            to { transform: translateY(0%); }
-        }
+        .wave-svg-unit { width: 100%; height: 50%; }
+        .traveling-path { filter: drop-shadow(0 0 10px currentColor); }
 
-        .wave-svg-unit {
-            width: 100%; height: 50%;
-            display: flex; flex-direction: column;
-        }
-
-        .traveling-path {
-            filter: drop-shadow(0 0 12px currentColor);
-        }
-
-        /* --- SHUTTER PANEL --- */
+        /* --- CONTENT & CIRCUIT --- */
         .shutter-panel {
-            position: relative; z-index: 10;
-            background: #050000;
-            padding: 60px 0 20px; border-top: 3px solid var(--maroon);
+            position: relative; z-index: 10; background: #050000;
+            padding: 50px 0 20px; border-top: 3px solid var(--maroon);
         }
 
-        .circuit-container { display: flex; justify-content: center; gap: 60px; padding-bottom: 50px; flex-wrap: wrap; }
-        .circuit-switch { text-align: center; cursor: pointer; }
-        .switch-label { font-weight: 900; font-size: 1.4rem; color: #fff; display: block; margin-bottom: 10px; }
+        .circuit-container { display: flex; justify-content: center; gap: 50px; padding-bottom: 40px; flex-wrap: wrap; }
+        .circuit-switch { text-align: center; cursor: pointer; min-width: 120px; }
+        .switch-label { font-weight: bold; font-size: 1.3rem; color: #fff; display: block; margin-bottom: 10px; }
         .chip-icon { font-size: 2.5rem; color: #222; transition: 0.4s; }
-        
-        .mid-switch:hover .chip-icon { color: var(--gold); filter: drop-shadow(0 0 10px var(--gold)); }
-        .final-switch:hover .chip-icon { color: var(--neon-green); filter: drop-shadow(0 0 10px var(--neon-green)); }
+        .circuit-switch:hover .chip-icon { color: var(--gold); filter: drop-shadow(0 0 8px var(--gold)); }
 
         .calendar-box {
-            max-width: 1100px; margin: 20px auto; 
-            border: 2px solid var(--maroon); background: #000;
+            max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon);
         }
 
-        footer { background: #000; padding: 40px 20px; border-top: 1px solid #1a1a1a; text-align: center; }
-        .dev-credit { color: var(--gold); font-weight: bold; text-shadow: 0 0 10px var(--gold); }
+        /* --- FOOTER --- */
+        footer { 
+            background: #000; padding: 40px 20px; text-align: center;
+            border-top: 1px solid #1a1a1a;
+        }
+        .footer-social { margin-bottom: 15px; }
+        .footer-social a { color: var(--gold); font-size: 2rem; text-decoration: none; }
+        .dev-credit { 
+            color: var(--gold); font-weight: bold; font-size: 1.2rem;
+            text-shadow: 0 0 15px var(--gold); margin-top: 10px;
+        }
 
+        /* --- MOBILE RESPONSIVENESS --- */
         @media screen and (max-width: 768px) {
-            .wave-sidebar { display: none; }
+            .menu-toggle { display: block; }
+            .nav-menu {
+                display: none; flex-direction: column; width: 100%; background: var(--maroon-dark);
+                padding: 10px 0; border-top: 1px solid rgba(255,215,0,0.2);
+            }
+            .nav-menu.active { display: flex; }
+            .nav-menu li { text-align: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            .wave-sidebar { width: 25%; opacity: 0.6; }
             .theme-viewport { width: 100%; }
         }
     </style>
@@ -133,72 +135,57 @@
         <div class="header-top">
             <img src="Logo-batch.png" alt="Logo" class="main-logo">
             <div class="header-title">AUST EEE-2.1</div>
+            <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
         <div class="search-wrapper">
-            <input type="text" placeholder="Search resources...">
+            <input type="text" placeholder="Search study materials...">
             <button>Search</button>
         </div>
         <nav class="navbar">
-            <ul class="nav-menu">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Study Materials</a></li>
-                <li><a href="#">Routine</a></li>
-                <li><a href="#">Exams</a></li>
-                <li><a href="#">Faculty</a></li>
-                <li><a href="#">Notice</a></li>
-                <li><a href="#">CR Section</a></li>
-                <li><a href="#">Syllabus</a></li>
-                <li><a href="#">Credits</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
+    <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">2.1 Study Materials</a></li>
+        <li><a href="#">Previous Semester</a></li>
+        <li><a href="#">Routine</a></li>
+        <li><a href="#">Exams</a></li>
+        <li><a href="#">Faculty</a></li>
+        <li><a href="#">BUS Route</a></li>
+        <li><a href="#">Notice</a></li>
+        <li><a href="#">CR & GM Section</a></li>
+        <li><a href="#">Credits</a></li>
+        <li><a href="#">OBE Syllabus</a></li>
+        <li><a href="#">Helping Sites</a></li>
+        <li><a href="#">Waiver</a></li>
+        <li><a href="#">Contact Us</a></li>
+    </ul>
+</nav>
     </header>
 
     <div class="theme-container">
-        <!-- Left Side: 3 High Amplitude Waves -->
         <div class="wave-sidebar wave-left">
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="sine-left"></div>
-                <div class="wave-svg-unit" id="sine-left-dup"></div>
-            </div>
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="square-left"></div>
-                <div class="wave-svg-unit" id="square-left-dup"></div>
-            </div>
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="saw-left"></div>
-                <div class="wave-svg-unit" id="saw-left-dup"></div>
-            </div>
+            <div class="wave-column"><div class="wave-svg-unit" id="sine-l"></div><div class="wave-svg-unit" id="sine-l-d"></div></div>
+            <div class="wave-column"><div class="wave-svg-unit" id="square-l"></div><div class="wave-svg-unit" id="square-l-d"></div></div>
+            <div class="wave-column"><div class="wave-svg-unit" id="saw-l"></div><div class="wave-svg-unit" id="saw-l-d"></div></div>
         </div>
 
         <div class="theme-viewport">
-            <img src="Theme.png" alt="AUST EEE Theme">
+            <img src="Theme.png" alt="AUST Theme">
         </div>
 
-        <!-- Right Side: 3 High Amplitude Waves -->
         <div class="wave-sidebar wave-right">
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="sine-right"></div>
-                <div class="wave-svg-unit" id="sine-right-dup"></div>
-            </div>
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="square-right"></div>
-                <div class="wave-svg-unit" id="square-right-dup"></div>
-            </div>
-            <div class="wave-column">
-                <div class="wave-svg-unit" id="saw-right"></div>
-                <div class="wave-svg-unit" id="saw-right-dup"></div>
-            </div>
+            <div class="wave-column"><div class="wave-svg-unit" id="sine-r"></div><div class="wave-svg-unit" id="sine-r-d"></div></div>
+            <div class="wave-column"><div class="wave-svg-unit" id="square-r"></div><div class="wave-svg-unit" id="square-r-d"></div></div>
+            <div class="wave-column"><div class="wave-svg-unit" id="saw-r"></div><div class="wave-svg-unit" id="saw-r-d"></div></div>
         </div>
     </div>
 
     <div class="shutter-panel">
         <section class="circuit-container">
-            <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
+            <div class="circuit-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                 <span class="switch-label">MID DRIVE</span>
                 <i class="fas fa-microchip chip-icon"></i>
             </div>
-            <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
+            <div class="circuit-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
                 <span class="switch-label">FINAL DRIVE</span>
                 <i class="fas fa-bolt chip-icon"></i>
             </div>
@@ -206,48 +193,51 @@
 
         <div class="calendar-box">
             <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
-            style="border: 0" width="100%" height="550" frameborder="0" scrolling="no"></iframe>
+            style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
         </div>
 
         <footer>
+            <div class="footer-social">
+                <a href="mailto:austeee53@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
             <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
         </footer>
     </div>
 
     <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
         function generateWave(type, color) {
             let path = "";
-            // Amplitude and Width optimized for wide look
             if(type === 'sine') {
                 path = "M10,0 ";
                 for(let i=0; i<=1000; i+=60) { path += `Q50,${i+15} 10,${i+30} T10,${i+60} `; }
             } else if(type === 'square') {
                 path = "M5,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `L50,${i} L50,${i+30} L5,${i+30} L5,${i+60} `; }
+                for(let i=0; i<=1000; i+=60) { path += `L45,${i} L45,${i+30} L5,${i+30} L5,${i+60} `; }
             } else if(type === 'saw') {
                 path = "M5,0 ";
-                for(let i=0; i<=1000; i+=60) { path += `L50,${i+50} L5,${i+50} `; }
+                for(let i=0; i<=1000; i+=60) { path += `L45,${i+50} L5,${i+50} `; }
             }
-
-            return `
-                <svg preserveAspectRatio="none" viewBox="0 0 60 1000" style="height:100%; width:100%; color:${color};">
-                    <path d="${path}" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" class="traveling-path"/>
-                </svg>
-            `;
+            return `<svg preserveAspectRatio="none" viewBox="0 0 50 1000" style="height:100%; width:100%; color:${color};">
+                        <path d="${path}" fill="none" stroke="currentColor" stroke-width="4" class="traveling-path"/>
+                    </svg>`;
         }
 
-        const configs = [
+        const waves = [
             {id: 'sine', type: 'sine', color: 'var(--gold)'},
             {id: 'square', type: 'square', color: 'var(--neon-green)'},
             {id: 'saw', type: 'saw', color: 'var(--neon-blue)'}
         ];
 
-        configs.forEach(conf => {
-            const html = generateWave(conf.type, conf.color);
-            document.getElementById(`${conf.id}-left`).innerHTML = html;
-            document.getElementById(`${conf.id}-left-dup`).innerHTML = html;
-            document.getElementById(`${conf.id}-right`).innerHTML = html;
-            document.getElementById(`${conf.id}-right-dup`).innerHTML = html;
+        waves.forEach(w => {
+            const html = generateWave(w.type, w.color);
+            document.getElementById(w.id+'-l').innerHTML = html;
+            document.getElementById(w.id+'-l-d').innerHTML = html;
+            document.getElementById(w.id+'-r').innerHTML = html;
+            document.getElementById(w.id+'-r-d').innerHTML = html;
         });
     </script>
 </body>
