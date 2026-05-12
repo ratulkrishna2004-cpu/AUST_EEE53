@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE-53 | Official Home</title>
+    <title>AUST EEE-53 | Oscilloscope Flow</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -12,7 +12,6 @@
             --gold: #FFD700;
             --neon-green: #39FF14;
             --neon-blue: #00FFFF;
-            --search-border: #00FF00;
         }
 
         body, html {
@@ -36,7 +35,7 @@
 
         .search-wrapper {
             max-width: 95%; margin: 10px auto; display: flex;
-            border: 2px solid var(--search-border); border-radius: 30px;
+            border: 2px solid #00FF00; border-radius: 30px;
             overflow: hidden; background: #fff;
         }
         .search-wrapper input { flex: 1; border: none; padding: 8px 20px; outline: none; }
@@ -47,10 +46,9 @@
             display: flex; flex-wrap: wrap; justify-content: center;
             list-style: none; margin: 0; padding: 8px; gap: 5px;
         }
-        .nav-menu li a { color: #fff; text-decoration: none; font-size: 13px; padding: 5px 10px; transition: 0.3s; }
-        .nav-menu li a:hover { color: var(--gold); }
+        .nav-menu li a { color: #fff; text-decoration: none; font-size: 13px; padding: 5px 10px; }
 
-        /* --- THEME SECTION & LARGE WAVE ANIMATION --- */
+        /* --- THEME & OSCILLOSCOPE WAVE SECTION --- */
         .theme-container {
             position: sticky; top: 160px; z-index: 1;
             width: 100%; height: calc(100vh - 160px);
@@ -59,28 +57,36 @@
         }
 
         .theme-viewport {
-            width: 65%; height: 100%; 
+            width: 60%; height: 100%; 
             display: flex; justify-content: center; align-items: center;
-            z-index: 5;
+            z-index: 5; background: rgba(0,0,0,0.5);
         }
         .theme-viewport img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Wave Sidebars */
+        /* Moving Wave Sidebars */
         .wave-sidebar {
-            position: absolute; top: 0; width: 17.5%; height: 200%; 
-            display: flex; flex-direction: column; align-items: center;
-            opacity: 0.8; pointer-events: none;
-            animation: wave-slide 8s linear infinite;
+            position: absolute; top: 0; width: 20%; height: 100%;
+            overflow: hidden; pointer-events: none;
         }
-        .wave-left { left: 0; }
-        .wave-right { right: 0; }
+        .wave-left { left: 0; border-right: 1px solid rgba(57, 255, 20, 0.2); }
+        .wave-right { right: 0; border-left: 1px solid rgba(57, 255, 20, 0.2); }
 
-        /* Large Wave styling */
-        .wave-svg { width: 100%; height: 200px; margin: -10px 0; filter: drop-shadow(0 0 5px currentColor); }
+        /* Animation for the flow */
+        .wave-track {
+            position: absolute; width: 100%;
+            display: flex; flex-direction: column;
+            animation: oscilloscope-flow 2s linear infinite; /* T=1 feel, high speed */
+        }
 
-        @keyframes wave-slide {
-            from { transform: translateY(0); }
-            to { transform: translateY(-50%); }
+        @keyframes oscilloscope-flow {
+            from { transform: translateY(-50%); }
+            to { transform: translateY(0); }
+        }
+
+        .wave-svg { 
+            width: 100%; height: 150px; 
+            filter: drop-shadow(0 0 8px currentColor);
+            margin-bottom: 20px;
         }
 
         /* --- SHUTTER PANEL --- */
@@ -91,43 +97,32 @@
             padding-top: 60px; border-top: 3px solid var(--maroon);
         }
 
-        /* --- INTERACTIVE CIRCUIT --- */
         .circuit-container { display: flex; justify-content: center; gap: 80px; padding: 50px 20px; flex-wrap: wrap; }
         .circuit-switch { position: relative; width: 160px; height: 100px; cursor: pointer; text-align: center; }
         .switch-label {
             position: absolute; top: -35px; left: 50%; transform: translateX(-50%);
             font-weight: 900; font-size: 1.5rem; color: #fff; transition: 0.4s;
         }
-        .wire { position: absolute; top: 60%; width: 30px; height: 4px; background: #222; transition: 0.4s ease-in-out; }
+        .wire { position: absolute; top: 60%; width: 30px; height: 4px; background: #222; transition: 0.4s; }
         .wire.left { left: 10px; } .wire.right { right: 10px; }
         .chip-icon { font-size: 2.2rem; margin-top: 45px; color: #111; transition: 0.4s; }
 
-        .mid-switch:hover .wire { background: var(--gold); width: 50px; box-shadow: 0 0 15px var(--gold); }
-        .mid-switch:hover .chip-icon { color: var(--gold); filter: drop-shadow(0 0 10px var(--gold)); }
-        .mid-switch:hover .switch-label { color: var(--gold); text-shadow: 0 0 15px var(--gold); }
+        .mid-switch:hover .wire { background: var(--gold); box-shadow: 0 0 15px var(--gold); }
+        .mid-switch:hover .chip-icon { color: var(--gold); }
+        .mid-switch:hover .switch-label { color: var(--gold); }
 
-        .final-switch:hover .wire { background: var(--neon-green); width: 50px; box-shadow: 0 0 15px var(--neon-green); }
-        .final-switch:hover .chip-icon { color: var(--neon-green); filter: drop-shadow(0 0 10px var(--neon-green)); }
-        .final-switch:hover .switch-label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
+        .final-switch:hover .wire { background: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
+        .final-switch:hover .chip-icon { color: var(--neon-green); }
+        .final-switch:hover .switch-label { color: var(--neon-green); }
 
         /* --- FOOTER --- */
         footer { background: #000; padding: 50px 20px 20px; border-top: 1px solid #1a1a1a; }
-        .footer-top { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
         .dev-credit { 
             text-align: center; margin-top: 30px; font-size: 1.1rem; font-weight: bold;
             color: var(--gold); text-shadow: 0 0 10px var(--gold);
             animation: glow-pulse 2s infinite alternate;
         }
         @keyframes glow-pulse { from { opacity: 0.7; } to { opacity: 1; text-shadow: 0 0 20px var(--gold); } }
-
-        @media screen and (max-width: 1024px) {
-            .wave-sidebar { width: 10%; }
-            .theme-viewport { width: 80%; }
-        }
-        @media screen and (max-width: 768px) {
-            .wave-sidebar { display: none; }
-            .theme-viewport { width: 100%; height: 50vh; position: relative; top: 0; }
-        }
     </style>
 </head>
 <body>
@@ -137,93 +132,78 @@
             <a href="index.html"><img src="Logo-batch.png" alt="Logo" class="main-logo"></a>
             <div class="header-title">AUST EEE-2.1</div>
         </div>
-        <div class="search-wrapper">
-            <input type="text" placeholder="Search study materials...">
-            <button>Search</button>
-        </div>
         <nav class="navbar">
             <ul class="nav-menu">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="#">2.1 Study Materials</a></li>
-                <li><a href="#">Previous Semester</a></li>
+                <li><a href="#">Study Materials</a></li>
                 <li><a href="#">Routine</a></li>
                 <li><a href="#">Exams</a></li>
-                <li><a href="#">Faculty</a></li>
-                <li><a href="#">BUS Route</a></li>
-                <li><a href="#">Notice</a></li>
-                <li><a href="#">CR & GM Section</a></li>
-                <li><a href="#">Credits</a></li>
-                <li><a href="#">OBE Syllabus</a></li>
-                <li><a href="#">Helping Sites</a></li>
-                <li><a href="#">Waiver</a></li>
-                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="theme-container">
-        <div class="wave-sidebar wave-left" id="leftWaves"></div>
+        <!-- Left Sidebar -->
+        <div class="wave-sidebar wave-left">
+            <div class="wave-track" id="leftTrack"></div>
+        </div>
+
+        <!-- Central Theme -->
         <div class="theme-viewport">
             <img src="Theme.png" alt="AUST EEE-53 Theme">
         </div>
-        <div class="wave-sidebar wave-right" id="rightWaves"></div>
+
+        <!-- Right Sidebar -->
+        <div class="wave-sidebar wave-right">
+            <div class="wave-track" id="rightTrack"></div>
+        </div>
     </div>
 
     <div class="shutter-panel">
         <section class="circuit-container">
             <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                 <span class="switch-label">MID</span>
-                <div class="wire left"></div>
-                <div class="wire right"></div>
+                <div class="wire left"></div><div class="wire right"></div>
                 <i class="fas fa-microchip chip-icon"></i>
             </div>
             <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
                 <span class="switch-label">FINAL</span>
-                <div class="wire left"></div>
-                <div class="wire right"></div>
+                <div class="wire left"></div><div class="wire right"></div>
                 <i class="fas fa-bolt chip-icon"></i>
             </div>
         </section>
 
-        <div style="max-width: 1000px; margin: 40px auto; border-radius: 12px; overflow: hidden; border: 2px solid var(--maroon);">
-            <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
-            style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
-        </div>
-
         <footer>
-            <div class="footer-top">
-                <a href="index.html" style="font-size: 2rem; font-weight: bold; color: var(--gold); text-decoration: none;">AUST EEE-53</a>
-                <a href="mailto:austeee53@gmail.com" style="font-size: 2rem; color: var(--gold);"><i class="fas fa-envelope"></i></a>
-            </div>
             <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
         </footer>
     </div>
 
     <script>
-        function createLargeWaves(containerId) {
-            const container = document.getElementById(containerId);
-            const colors = ['#FFD700', '#39FF14', '#00FFFF']; 
-            // paths updated for larger, higher frequency waves (Lower T)
+        function populateTrack(trackId) {
+            const track = document.getElementById(trackId);
+            const colors = ['#FFD700', '#39FF14', '#00FFFF'];
+            // Oscilloscope style sharp paths
             const wavePaths = [
-                "M0 100 Q 50 20 100 100 T 200 100", // Larger Sinusoidal
-                "M0 100 L 40 100 L 40 20 L 160 20 L 160 100 L 200 100", // Larger Square
-                "M0 100 L 100 20 L 100 100 L 200 100" // Larger Sawtooth
+                "M10 80 Q 50 10 90 80 T 170 80", // Sine
+                "M10 80 L 50 80 L 50 20 L 130 20 L 130 80 L 170 80", // Square
+                "M10 80 L 90 20 L 90 80 L 170 80" // Sawtooth
             ];
 
-            for (let j = 0; j < 2; j++) {
-                for (let i = 0; i < 12; i++) {
-                    const color = colors[i % colors.length];
-                    const path = wavePaths[i % wavePaths.length];
-                    const svg = `
-                        <svg class="wave-svg" viewBox="0 0 200 200" style="color: ${color}">
-                            <path d="${path}" stroke="currentColor" fill="none" stroke-width="6" stroke-linecap="round" />
-                        </svg>`;
-                    container.innerHTML += svg;
-                }
+            // Create a long list of waves for seamless scrolling
+            for (let i = 0; i < 20; i++) {
+                const color = colors[i % colors.length];
+                const path = wavePaths[i % wavePaths.length];
+                const svg = `
+                    <svg class="wave-svg" viewBox="0 0 180 100" style="color: ${color}">
+                        <path d="${path}" stroke="currentColor" fill="none" stroke-width="4" stroke-join="round" />
+                    </svg>`;
+                track.innerHTML += svg;
             }
         }
-        createLargeWaves('leftWaves');
-        createLargeWaves('rightWaves');
+
+        populateTrack('leftTrack');
+        populateTrack('rightTrack');
     </script>
 </body>
 </html>
