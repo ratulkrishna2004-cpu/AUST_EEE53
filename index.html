@@ -11,7 +11,6 @@
             --maroon-dark: #4d0000;
             --gold: #FFD700;
             --neon-green: #39FF14;
-            --neon-blue: #00FFFF;
         }
 
         body, html {
@@ -23,17 +22,17 @@
             scroll-behavior: smooth;
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER (Fixed at top) --- */
         header {
             background: linear-gradient(to bottom, var(--maroon), var(--maroon-dark));
             padding: 10px 0; text-align: center;
-            position: sticky; top: 0; z-index: 1000;
+            position: fixed; top: 0; width: 100%;
+            z-index: 1000;
+            border-bottom: 2px solid var(--gold);
         }
-        .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; position: relative; }
+        .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; }
         .main-logo { height: 45px; }
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
-
-        .menu-toggle { display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer; }
 
         .search-wrapper {
             max-width: 90%; margin: 10px auto; display: flex;
@@ -43,7 +42,7 @@
         .search-wrapper input { flex: 1; border: none; padding: 8px 15px; outline: none; color: #000; }
         .search-wrapper button { background: #cc0000; color: #fff; border: none; padding: 0 15px; cursor: pointer; }
 
-        .navbar { background: var(--maroon-dark); border-bottom: 1px solid rgba(255,215,0,0.2); }
+        .navbar { background: var(--maroon-dark); }
         .nav-menu {
             display: flex; flex-wrap: wrap; justify-content: center;
             list-style: none; margin: 0; padding: 8px; gap: 5px;
@@ -51,121 +50,96 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME AREA (Full Width, No Waves) --- */
+        /* --- THEME AREA (Fixed Shutter Logic) --- */
         .theme-container {
-            position: relative;
-            width: 100%; height: 85vh;
-            background: #000;
+            position: fixed; /* Fixed so it stays while scrolling */
+            top: 160px; /* Adjusting based on header height to avoid overlap */
+            left: 0; width: 100%; height: calc(100vh - 160px);
+            z-index: 1; /* Lowest layer */
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+            background: #000;
         }
+        .theme-viewport { width: 100%; height: 100%; }
+        .theme-viewport img { width: 100%; height: 100%; object-fit: contain; }
 
-        .theme-viewport { 
-            width: 100%; height: 100%; 
-            display: flex; justify-content: center; align-items: center; 
-        }
-        .theme-viewport img { 
-            width: 100%; height: 100%; 
-            object-fit: cover; /* This will make sure it covers the entire area */
+        /* --- SHUTTER PANEL (Moves up to cover theme) --- */
+        .shutter-panel {
+            position: relative;
+            margin-top: 100vh; /* Starts below the initial view */
+            z-index: 10; /* Higher layer to cover theme */
+            background: #050000;
+            padding: 60px 0 20px;
+            border-top: 5px solid var(--maroon);
+            box-shadow: 0 -15px 30px rgba(0,0,0,0.8);
         }
 
         /* --- CIRCUIT SWITCH ANIMATION --- */
-        .shutter-panel {
-            position: relative; z-index: 10; background: #050000;
-            padding: 60px 0 20px; border-top: 3px solid var(--maroon);
-        }
         .circuit-container { display: flex; justify-content: center; gap: 100px; padding-bottom: 40px; flex-wrap: wrap; }
+        .circuit-switch { position: relative; text-align: center; cursor: pointer; padding: 20px; }
+        .switch-label { font-weight: bold; font-size: 1.5rem; color: #fff; display: block; margin-bottom: 25px; transition: 0.5s; }
+        .wire-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .wire-piece { width: 35px; height: 4px; background: #333; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        .circuit-switch {
-            position: relative; text-align: center; cursor: pointer; padding: 20px;
-        }
-        
-        .switch-label { 
-            font-weight: bold; font-size: 1.5rem; color: #fff; 
-            display: block; margin-bottom: 25px; transition: 0.5s;
-        }
-
-        .wire-container {
-            display: flex; align-items: center; justify-content: center; gap: 20px;
-        }
-        .wire-piece {
-            width: 35px; height: 4px; background: #333; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        /* The Join move effect */
         .circuit-switch:hover .wire-piece:first-child { transform: translateX(15px); }
         .circuit-switch:hover .wire-piece:last-child { transform: translateX(-15px); }
-
         .chip-icon { font-size: 2.8rem; color: #333; transition: 0.5s; }
 
-        /* Mid Glow */
         .mid-switch:hover .switch-label { color: var(--gold); text-shadow: 0 0 15px var(--gold); }
         .mid-switch:hover .wire-piece { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
         .mid-switch:hover .chip-icon { color: var(--gold); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--gold)); }
 
-        /* Final Glow */
         .final-switch:hover .switch-label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
         .final-switch:hover .wire-piece { background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
         .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--neon-green)); }
 
-        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
+        .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); background: #000; }
 
-        /* --- FOOTER --- */
         footer { background: #000; padding: 30px 50px; border-top: 1px solid #1a1a1a; }
         .footer-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.5rem; text-decoration: none; }
         .footer-mail-link { color: var(--gold); font-size: 1.8rem; transition: 0.3s; }
-        .dev-credit { 
-            text-align: center; color: #fff; font-weight: bold; font-size: 1rem;
-            margin-top: 10px; border-top: 1px solid #222; padding-top: 10px;
-        }
+        .dev-credit { text-align: center; color: #fff; font-weight: bold; font-size: 1rem; margin-top: 10px; border-top: 1px solid #222; padding-top: 10px; }
 
         @media screen and (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--maroon-dark); }
-            .nav-menu.active { display: flex; }
+            .nav-menu { gap: 2px; }
+            .circuit-container { gap: 30px; }
+            .theme-container { top: 220px; } /* Mobile adjustment */
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <header id="mainHeader">
         <div class="header-top">
             <img src="Logo-batch.png" alt="Logo" class="main-logo">
             <div class="header-title">AUST EEE-2.1</div>
-            <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
         <div class="search-wrapper">
             <input type="text" placeholder="Search resources...">
             <button>Search</button>
         </div>
         <nav class="navbar">
-            <ul class="nav-menu" id="navMenu">
+            <ul class="nav-menu">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="#">2.1 Study Materials</a></li>
-                <li><a href="#">Previous Semester</a></li>
                 <li><a href="#">Routine</a></li>
                 <li><a href="#">Exams</a></li>
                 <li><a href="#">Faculty</a></li>
-                <li><a href="#">BUS Route</a></li>
                 <li><a href="#">Notice</a></li>
-                <li><a href="#">CR & GM Section</a></li>
                 <li><a href="#">Credits</a></li>
-                <li><a href="#">OBE Syllabus</a></li>
-                <li><a href="#">Helping Sites</a></li>
-                <li><a href="#">Waiver</a></li>
                 <li><a href="#">Contact Us</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Theme Area now fully covers the space -->
+    <!-- Theme Container remains fixed behind everything -->
     <div class="theme-container">
         <div class="theme-viewport">
             <img src="Theme.png" alt="AUST Theme">
         </div>
     </div>
 
+    <!-- Shutter Panel covers the theme on scroll -->
     <div class="shutter-panel">
         <section class="circuit-container">
             <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
@@ -201,8 +175,5 @@
         </footer>
     </div>
 
-    <script>
-        function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
-    </script>
 </body>
 </html>
