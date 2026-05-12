@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUST EEE 2.1 | Spardho 53</title>
+    <title>AUST EEE-53 | Spardho 53</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --maroon-dark: #1a0000;
+            --maroon-bright: #800000;
             --gold: #FFD700;
             --green-neon: #39FF14;
             --circuit-grey: #444;
@@ -17,10 +18,11 @@
             margin: 0; padding: 0;
             background-color: #000;
             color: var(--gold);
+            font-family: 'Segoe UI', Arial, sans-serif;
             scroll-behavior: smooth;
         }
 
-        /* Parallax Theme Background */
+        /* 1. Hero Section (Parallax Theme) */
         .hero-section {
             height: 100vh;
             background-image: url('Theme.png');
@@ -34,93 +36,123 @@
             position: relative;
         }
 
-        /* Logo Smoke Effect */
         .logo-wrapper { position: relative; text-align: center; }
         .batch-logo { height: 110px; z-index: 10; position: relative; filter: drop-shadow(0 0 10px var(--gold)); }
         .smoke {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 150px; height: 150px; background: radial-gradient(circle, var(--green-neon), var(--gold), transparent);
-            filter: blur(45px); opacity: 0.5; animation: pulse 4s infinite alternate;
+            filter: blur(45px); opacity: 0.4; animation: pulse 4s infinite alternate;
         }
         @keyframes pulse { 0% { opacity: 0.3; scale: 0.9; } 100% { opacity: 0.6; scale: 1.2; } }
 
-        /* Content Layer with Redish Black BG */
+        /* 2. Content Area (Redish Black BG) */
         .content-layer {
             background: linear-gradient(180deg, #1a0000 0%, #000000 100%);
-            position: relative; z-index: 20; padding-bottom: 50px;
+            position: relative; z-index: 20; padding-bottom: 120px; /* Space for bottom nav */
             box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
         }
 
-        /* Circuit Switch Section */
+        /* Circuit Switch Styling */
         .circuit-container {
             display: flex; justify-content: center; gap: 40px; padding: 80px 20px;
             flex-wrap: wrap;
         }
-
         .circuit-switch {
             position: relative; width: 160px; height: 100px;
             cursor: pointer; text-align: center;
         }
-
-        /* Circuit Lines */
-        .wire {
-            position: absolute; top: 50%; width: 40px; height: 4px;
-            background: var(--circuit-grey); transition: 0.3s;
-        }
-        .wire.left { left: 0; }
-        .wire.right { right: 0; }
-
+        .wire { position: absolute; top: 50%; width: 40px; height: 4px; background: var(--circuit-grey); transition: 0.3s; }
+        .wire.left { left: 0; } .wire.right { right: 0; }
         .switch-label {
             position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
             font-weight: bold; font-size: 1.5rem; letter-spacing: 2px;
-            transition: 0.3s; color: rgba(255, 215, 0, 0.5);
+            transition: 0.3s; color: rgba(255, 215, 0, 0.4);
         }
-
-        /* Hover/Active State */
         .circuit-switch:hover .wire, .circuit-switch:active .wire {
-            background: var(--gold);
-            box-shadow: 0 0 15px var(--gold);
-            width: 55px; /* Connects closer */
+            background: var(--gold); box-shadow: 0 0 15px var(--gold); width: 55px;
         }
-
         .circuit-switch:hover .switch-label, .circuit-switch:active .switch-label {
-            color: var(--gold);
-            text-shadow: 0 0 20px var(--gold);
+            color: var(--gold); text-shadow: 0 0 20px var(--gold);
         }
-
-        /* Glow Effect Background */
         .glow-bg {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 100%; height: 100%; border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.2), transparent);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.15), transparent);
             opacity: 0; transition: 0.4s; z-index: -1;
         }
         .circuit-switch:hover .glow-bg { opacity: 1; }
 
-        /* Footer & Developer Info */
-        footer {
-            background: #000; padding: 60px 20px; text-align: center;
-            border-top: 1px solid #300;
+        /* 3. Global Bottom Navigation (Sticky Footer) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(42, 0, 0, 0.95);
+            border-top: 2px solid var(--maroon-bright);
+            z-index: 1000; padding: 10px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
         }
-        .mail-btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            background: #4a0000; color: var(--gold); padding: 12px 30px;
-            border-radius: 30px; border: 2px solid var(--gold);
-            text-decoration: none; font-weight: bold; margin-top: 20px;
+
+        .nav-wrapper {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 20px;
+        }
+
+        /* Left Side: AUST EEE-53 (Home Link) */
+        .nav-home-link {
+            font-size: 1.8rem; font-weight: 900; color: var(--gold);
+            text-decoration: none; text-shadow: 2px 2px 5px black;
+        }
+
+        /* Middle: Developer Name (Small) */
+        .nav-dev {
+            font-size: 0.75rem; color: rgba(255, 215, 0, 0.7);
+            text-align: center; font-style: italic;
+        }
+
+        /* Right Side: Hamburger Menu */
+        .menu-icon { font-size: 1.8rem; cursor: pointer; color: var(--gold); }
+
+        /* Full Serialized Menu (Hidden initially) */
+        .mobile-menu-overlay {
+            position: fixed; bottom: 70px; right: 20px;
+            background: var(--maroon-dark); border: 2px solid var(--gold);
+            border-radius: 15px; width: 250px; display: none;
+            flex-direction: column; overflow: hidden; z-index: 1001;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+        }
+        .mobile-menu-overlay.active { display: flex; }
+        .mobile-menu-overlay a {
+            padding: 15px 20px; color: white; text-decoration: none;
+            border-bottom: 1px solid rgba(255,215,0,0.1); font-size: 0.9rem;
+        }
+        .mobile-menu-overlay a:hover { background: var(--maroon-bright); color: var(--gold); }
+
+        /* Calendar Frame */
+        .calendar-container {
+            max-width: 1000px; margin: 0 auto; background: white;
+            border-radius: 15px; overflow: hidden; border: 3px solid var(--gold);
+        }
+
+        @media (max-width: 600px) {
+            .nav-home-link { font-size: 1.4rem; }
+            .nav-dev { display: none; } /* Mobile এ জায়গা কম থাকলে হাইড হবে */
         }
     </style>
 </head>
 <body>
 
+    <!-- Parallax Hero -->
     <section class="hero-section">
         <div class="logo-wrapper">
             <div class="smoke"></div>
             <img src="Logo-batch.png" alt="Logo" class="batch-logo">
-            <h1 style="font-size: 3rem; text-shadow: 0 0 15px #000;">AUST EEE-2.1</h1>
+            <h1 style="font-size: 2.5rem; text-shadow: 0 0 15px #000; margin-top: 15px;">AUST EEE-2.1</h1>
         </div>
     </section>
 
+    <!-- Content Area -->
     <div class="content-layer">
+        
+        <!-- Interactive Circuit Switches -->
         <div class="circuit-container">
             <div class="circuit-switch" onclick="openLink('MID')">
                 <span class="switch-label">MID</span>
@@ -139,21 +171,49 @@
             </div>
         </div>
 
-        <div style="max-width: 1000px; margin: 0 auto; background: white; border-radius: 15px; overflow: hidden; border: 3px solid var(--gold);">
-            <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com" width="100%" height="600" frameborder="0"></iframe>
+        <!-- Google Calendar -->
+        <div class="calendar-container">
+            <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
+            style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
         </div>
-
-        <footer>
-            <h2 style="color: var(--gold); margin-bottom: 5px;">Developed by: <b>Ratul Krishna Mojumder</b></h2>
-            <a href="mailto:aust53@gmail.com" class="mail-btn">
-                <i class="fas fa-envelope"></i> aust53@gmail.com
-            </a>
-        </footer>
     </div>
 
+    <!-- Global Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <div class="nav-wrapper">
+            <!-- Left -->
+            <a href="index.html" class="nav-home-link">AUST EEE-53</a>
+
+            <!-- Middle -->
+            <div class="nav-dev">
+                Dev: Ratul Krishna Mojumder
+            </div>
+
+            <!-- Right -->
+            <div class="menu-icon" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Serialized Menu (Appears on click) -->
+    <div class="mobile-menu-overlay" id="mainMenu">
+        <a href="#">Home</a>
+        <a href="#">2.1 Study Materials</a>
+        <a href="#">Previous Semester</a>
+        <a href="#">Routine</a>
+        <a href="#">Faculty</a>
+        <a href="#">Notice</a>
+        <a href="#">CR & GM Section</a>
+        <a href="#">Credits</a>
+        <a href="#">OBE Syllabus</a>
+        <a href="mailto:aust53@gmail.com">Contact Us</a>
+    </div>
+
+    <!-- Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBnx342TC2Iry0lBYDBEzTlu0t-BZPWETg",
@@ -168,6 +228,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // Links
         const MID_LINK = "https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6";
         const FINAL_LINK = "https://final-exam-psi-neon.vercel.app/";
 
@@ -176,6 +237,20 @@
             window.open(link, '_blank');
             set(ref(db, 'siteMode'), type);
         };
+
+        // Menu Toggle
+        window.toggleMenu = () => {
+            document.getElementById('mainMenu').classList.toggle('active');
+        };
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('mainMenu');
+            const icon = document.querySelector('.menu-icon');
+            if (!menu.contains(e.target) && !icon.contains(e.target)) {
+                menu.classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html>
