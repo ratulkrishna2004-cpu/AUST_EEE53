@@ -50,7 +50,7 @@
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 13px; padding: 5px 10px; transition: 0.3s; }
         .nav-menu li a:hover { color: var(--gold); }
 
-        /* --- THEME SECTION & WAVE ANIMATION --- */
+        /* --- THEME SECTION & LARGE WAVE ANIMATION --- */
         .theme-container {
             position: sticky; top: 160px; z-index: 1;
             width: 100%; height: calc(100vh - 160px);
@@ -59,7 +59,7 @@
         }
 
         .theme-viewport {
-            width: 70%; height: 100%; /* theme takes 70% width */
+            width: 65%; height: 100%; 
             display: flex; justify-content: center; align-items: center;
             z-index: 5;
         }
@@ -67,15 +67,16 @@
 
         /* Wave Sidebars */
         .wave-sidebar {
-            position: absolute; top: 0; width: 15%; height: 200%; /* Height 200% for smooth loop */
+            position: absolute; top: 0; width: 17.5%; height: 200%; 
             display: flex; flex-direction: column; align-items: center;
-            opacity: 0.6; pointer-events: none;
-            animation: wave-slide 10s linear infinite;
+            opacity: 0.8; pointer-events: none;
+            animation: wave-slide 8s linear infinite;
         }
         .wave-left { left: 0; }
         .wave-right { right: 0; }
 
-        .wave-svg { width: 80px; height: 150px; margin: 10px 0; }
+        /* Large Wave styling */
+        .wave-svg { width: 100%; height: 200px; margin: -10px 0; filter: drop-shadow(0 0 5px currentColor); }
 
         @keyframes wave-slide {
             from { transform: translateY(0); }
@@ -117,8 +118,12 @@
             color: var(--gold); text-shadow: 0 0 10px var(--gold);
             animation: glow-pulse 2s infinite alternate;
         }
-        @keyframes glow-pulse { from { opacity: 0.7; } to { opacity: 1; } }
+        @keyframes glow-pulse { from { opacity: 0.7; } to { opacity: 1; text-shadow: 0 0 20px var(--gold); } }
 
+        @media screen and (max-width: 1024px) {
+            .wave-sidebar { width: 10%; }
+            .theme-viewport { width: 80%; }
+        }
         @media screen and (max-width: 768px) {
             .wave-sidebar { display: none; }
             .theme-viewport { width: 100%; height: 50vh; position: relative; top: 0; }
@@ -157,15 +162,10 @@
     </header>
 
     <div class="theme-container">
-        <!-- Left Sidebar Waves -->
         <div class="wave-sidebar wave-left" id="leftWaves"></div>
-
-        <!-- Central Theme -->
         <div class="theme-viewport">
             <img src="Theme.png" alt="AUST EEE-53 Theme">
         </div>
-
-        <!-- Right Sidebar Waves -->
         <div class="wave-sidebar wave-right" id="rightWaves"></div>
     </div>
 
@@ -200,32 +200,30 @@
     </div>
 
     <script>
-        // Function to generate Wave SVGs
-        function createWaves(containerId) {
+        function createLargeWaves(containerId) {
             const container = document.getElementById(containerId);
-            const colors = ['#FFD700', '#39FF14', '#00FFFF']; // Gold, Neon Green, Blue
-            const waveTypes = [
-                "M0 75 Q 20 40 40 75 T 80 75", // Sinusoidal
-                "M0 75 L 20 75 L 20 40 L 60 40 L 60 75 L 80 75", // Square
-                "M0 75 L 40 40 L 40 75 L 80 75" // Sawtooth
+            const colors = ['#FFD700', '#39FF14', '#00FFFF']; 
+            // paths updated for larger, higher frequency waves (Lower T)
+            const wavePaths = [
+                "M0 100 Q 50 20 100 100 T 200 100", // Larger Sinusoidal
+                "M0 100 L 40 100 L 40 20 L 160 20 L 160 100 L 200 100", // Larger Square
+                "M0 100 L 100 20 L 100 100 L 200 100" // Larger Sawtooth
             ];
 
-            // Create two sets for seamless looping
             for (let j = 0; j < 2; j++) {
-                for (let i = 0; i < 15; i++) {
+                for (let i = 0; i < 12; i++) {
                     const color = colors[i % colors.length];
-                    const path = waveTypes[i % waveTypes.length];
+                    const path = wavePaths[i % wavePaths.length];
                     const svg = `
-                        <svg class="wave-svg" viewBox="0 0 80 150">
-                            <path d="${path}" stroke="${color}" fill="none" stroke-width="3" />
+                        <svg class="wave-svg" viewBox="0 0 200 200" style="color: ${color}">
+                            <path d="${path}" stroke="currentColor" fill="none" stroke-width="6" stroke-linecap="round" />
                         </svg>`;
                     container.innerHTML += svg;
                 }
             }
         }
-
-        createWaves('leftWaves');
-        createWaves('rightWaves');
+        createLargeWaves('leftWaves');
+        createLargeWaves('rightWaves');
     </script>
 </body>
 </html>
