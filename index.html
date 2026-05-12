@@ -7,250 +7,186 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --maroon-dark: #1a0000;
-            --maroon-bright: #800000;
+            --maroon-header: #800000;
+            --maroon-dark: #4d0000;
             --gold: #FFD700;
-            --green-neon: #39FF14;
-            --circuit-grey: #444;
+            --neon-green: #00FF00;
         }
 
         body, html {
             margin: 0; padding: 0;
+            font-family: Arial, sans-serif;
             background-color: #000;
-            color: var(--gold);
-            font-family: 'Segoe UI', Arial, sans-serif;
-            scroll-behavior: smooth;
+            color: #fff;
         }
 
-        /* 1. Hero Section (Parallax Theme) */
-        .hero-section {
-            height: 100vh;
-            background-image: url('Theme.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+        /* --- HEADER SECTION (As per screenshot) --- */
+        header {
+            background: linear-gradient(to bottom, var(--maroon-header), var(--maroon-dark));
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .header-top {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
-        .logo-wrapper { position: relative; text-align: center; }
-        .batch-logo { height: 110px; z-index: 10; position: relative; filter: drop-shadow(0 0 10px var(--gold)); }
-        .smoke {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 150px; height: 150px; background: radial-gradient(circle, var(--green-neon), var(--gold), transparent);
-            filter: blur(45px); opacity: 0.4; animation: pulse 4s infinite alternate;
-        }
-        @keyframes pulse { 0% { opacity: 0.3; scale: 0.9; } 100% { opacity: 0.6; scale: 1.2; } }
+        .main-logo { height: 50px; }
+        .header-title { color: var(--gold); font-style: italic; font-size: 1.5rem; font-weight: bold; }
 
-        /* 2. Content Area (Redish Black BG) */
-        .content-layer {
-            background: linear-gradient(180deg, #1a0000 0%, #000000 100%);
-            position: relative; z-index: 20; padding-bottom: 120px; /* Space for bottom nav */
-            box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
+        /* Search Bar with Green Border */
+        .search-wrapper {
+            max-width: 95%;
+            margin: 10px auto;
+            display: flex;
+            border: 2px solid var(--neon-green);
+            border-radius: 30px;
+            overflow: hidden;
+            background: #fff;
         }
 
-        /* Circuit Switch Styling */
-        .circuit-container {
-            display: flex; justify-content: center; gap: 40px; padding: 80px 20px;
-            flex-wrap: wrap;
-        }
-        .circuit-switch {
-            position: relative; width: 160px; height: 100px;
-            cursor: pointer; text-align: center;
-        }
-        .wire { position: absolute; top: 50%; width: 40px; height: 4px; background: var(--circuit-grey); transition: 0.3s; }
-        .wire.left { left: 0; } .wire.right { right: 0; }
-        .switch-label {
-            position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
-            font-weight: bold; font-size: 1.5rem; letter-spacing: 2px;
-            transition: 0.3s; color: rgba(255, 215, 0, 0.4);
-        }
-        .circuit-switch:hover .wire, .circuit-switch:active .wire {
-            background: var(--gold); box-shadow: 0 0 15px var(--gold); width: 55px;
-        }
-        .circuit-switch:hover .switch-label, .circuit-switch:active .switch-label {
-            color: var(--gold); text-shadow: 0 0 20px var(--gold);
-        }
-        .glow-bg {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 100%; height: 100%; border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.15), transparent);
-            opacity: 0; transition: 0.4s; z-index: -1;
-        }
-        .circuit-switch:hover .glow-bg { opacity: 1; }
-
-        /* 3. Global Bottom Navigation (Sticky Footer) */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(42, 0, 0, 0.95);
-            border-top: 2px solid var(--maroon-bright);
-            z-index: 1000; padding: 10px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
+        .search-wrapper input {
+            flex: 1; border: none; padding: 10px 20px; outline: none; font-size: 1rem;
         }
 
-        .nav-wrapper {
-            max-width: 1200px; margin: 0 auto; display: flex;
-            justify-content: space-between; align-items: center; padding: 0 20px;
+        .search-wrapper button {
+            background: #cc0000; color: #fff; border: none; padding: 0 25px;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
         }
 
-        /* Left Side: AUST EEE-53 (Home Link) */
-        .nav-home-link {
-            font-size: 1.8rem; font-weight: 900; color: var(--gold);
-            text-decoration: none; text-shadow: 2px 2px 5px black;
+        /* --- NAVIGATION MENU --- */
+        .navbar { background: var(--maroon-dark); padding: 5px 0; position: relative; }
+        
+        .nav-menu {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            list-style: none; margin: 0; padding: 10px; gap: 5px;
         }
 
-        /* Middle: Developer Name (Small) */
-        .nav-dev {
-            font-size: 0.75rem; color: rgba(255, 215, 0, 0.7);
-            text-align: center; font-style: italic;
+        .nav-menu li a {
+            color: #fff; text-decoration: none; font-size: 14px; padding: 5px 12px;
+            transition: 0.3s; display: block;
         }
 
-        /* Right Side: Hamburger Menu */
-        .menu-icon { font-size: 1.8rem; cursor: pointer; color: var(--gold); }
+        .nav-menu li a:hover { color: var(--gold); }
 
-        /* Full Serialized Menu (Hidden initially) */
-        .mobile-menu-overlay {
-            position: fixed; bottom: 70px; right: 20px;
-            background: var(--maroon-dark); border: 2px solid var(--gold);
-            border-radius: 15px; width: 250px; display: none;
-            flex-direction: column; overflow: hidden; z-index: 1001;
-            box-shadow: 0 0 30px rgba(0,0,0,0.9);
-        }
-        .mobile-menu-overlay.active { display: flex; }
-        .mobile-menu-overlay a {
-            padding: 15px 20px; color: white; text-decoration: none;
-            border-bottom: 1px solid rgba(255,215,0,0.1); font-size: 0.9rem;
-        }
-        .mobile-menu-overlay a:hover { background: var(--maroon-bright); color: var(--gold); }
-
-        /* Calendar Frame */
-        .calendar-container {
-            max-width: 1000px; margin: 0 auto; background: white;
-            border-radius: 15px; overflow: hidden; border: 3px solid var(--gold);
+        /* Mobile Menu Icon (Hidden on PC) */
+        .menu-toggle {
+            display: none; font-size: 1.8rem; color: var(--gold);
+            cursor: pointer; padding: 10px; text-align: right; margin-right: 20px;
         }
 
-        @media (max-width: 600px) {
-            .nav-home-link { font-size: 1.4rem; }
-            .nav-dev { display: none; } /* Mobile এ জায়গা কম থাকলে হাইড হবে */
+        /* --- THEME SECTION --- */
+        .theme-section {
+            width: 100%; height: auto; min-height: 300px;
+            background-image: url('Theme.png');
+            background-size: cover; background-position: center;
+        }
+
+        /* --- FOOTER SECTION --- */
+        footer {
+            background: #000; border-top: 1px solid #333;
+            padding: 30px 20px 15px 20px; margin-top: 50px;
+        }
+
+        .footer-top {
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1200px; margin: 0 auto;
+        }
+
+        .footer-left { font-size: 1.5rem; font-weight: bold; color: var(--gold); }
+        .footer-right .mail-icon { font-size: 1.5rem; color: var(--gold); text-decoration: none; }
+
+        .footer-dev {
+            text-align: center; margin-top: 20px; font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* --- RESPONSIVE LOGIC --- */
+        @media screen and (max-width: 768px) {
+            .nav-menu {
+                display: none; /* মোবাইলে মেনু হাইড */
+                flex-direction: column; width: 100%; text-align: left;
+                background: var(--maroon-dark);
+            }
+            .nav-menu.active { display: flex; }
+            .menu-toggle { display: block; } /* মোবাইলে ৩ লাইন শো */
+            
+            .nav-menu li { border-bottom: 1px solid rgba(255,255,255,0.1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Parallax Hero -->
-    <section class="hero-section">
-        <div class="logo-wrapper">
-            <div class="smoke"></div>
-            <img src="Logo-batch.png" alt="Logo" class="batch-logo">
-            <h1 style="font-size: 2.5rem; text-shadow: 0 0 15px #000; margin-top: 15px;">AUST EEE-2.1</h1>
-        </div>
-    </section>
-
-    <!-- Content Area -->
-    <div class="content-layer">
-        
-        <!-- Interactive Circuit Switches -->
-        <div class="circuit-container">
-            <div class="circuit-switch" onclick="openLink('MID')">
-                <span class="switch-label">MID</span>
-                <div class="glow-bg"></div>
-                <div class="wire left"></div>
-                <div class="wire right"></div>
-                <i class="fas fa-microchip" style="font-size: 2rem; margin-top: 40px; opacity: 0.3;"></i>
-            </div>
-
-            <div class="circuit-switch" onclick="openLink('FINAL')">
-                <span class="switch-label">FINAL</span>
-                <div class="glow-bg"></div>
-                <div class="wire left"></div>
-                <div class="wire right"></div>
-                <i class="fas fa-bolt" style="font-size: 2rem; margin-top: 40px; opacity: 0.3;"></i>
-            </div>
+    <!-- Header Part -->
+    <header>
+        <div class="header-top">
+            <img src="Logo-batch.png" alt="Logo" class="main-logo">
+            <div class="header-title">AUST EEE-2.1</div>
         </div>
 
-        <!-- Google Calendar -->
-        <div class="calendar-container">
-            <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
-            style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
+        <div class="search-wrapper">
+            <input type="text" placeholder="Search...">
+            <button>Search</button>
         </div>
-    </div>
+    </header>
 
-    <!-- Global Bottom Navigation Bar -->
-    <nav class="bottom-nav">
-        <div class="nav-wrapper">
-            <!-- Left -->
-            <a href="index.html" class="nav-home-link">AUST EEE-53</a>
-
-            <!-- Middle -->
-            <div class="nav-dev">
-                Dev: Ratul Krishna Mojumder
-            </div>
-
-            <!-- Right -->
-            <div class="menu-icon" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
         </div>
+        <ul class="nav-menu" id="navLinks">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">2.1 Study Materials</a></li>
+            <li><a href="#">Previous Semester</a></li>
+            <li><a href="#">Routine</a></li>
+            <li><a href="#">Exams</a></li>
+            <li><a href="#">Faculty</a></li>
+            <li><a href="#">BUS Route</a></li>
+            <li><a href="#">Notice</a></li>
+            <li><a href="#">CR & GM Section</a></li>
+            <li><a href="#">Credits</a></li>
+            <li><a href="#">OBE Syllabus</a></li>
+            <li><a href="#">Helping Sites</a></li>
+            <li><a href="#">Waiver</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
     </nav>
 
-    <!-- Serialized Menu (Appears on click) -->
-    <div class="mobile-menu-overlay" id="mainMenu">
-        <a href="#">Home</a>
-        <a href="#">2.1 Study Materials</a>
-        <a href="#">Previous Semester</a>
-        <a href="#">Routine</a>
-        <a href="#">Faculty</a>
-        <a href="#">Notice</a>
-        <a href="#">CR & GM Section</a>
-        <a href="#">Credits</a>
-        <a href="#">OBE Syllabus</a>
-        <a href="mailto:aust53@gmail.com">Contact Us</a>
+    <!-- Theme Section -->
+    <div class="theme-section">
+        <!-- Theme.png image will show here -->
     </div>
 
-    <!-- Logic -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <!-- Main Content could be here -->
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBnx342TC2Iry0lBYDBEzTlu0t-BZPWETg",
-            authDomain: "spardho53.firebaseapp.com",
-            databaseURL: "https://spardho53-default-rtdb.firebaseio.com",
-            projectId: "spardho53",
-            storageBucket: "spardho53.firebasestorage.app",
-            messagingSenderId: "432228439641",
-            appId: "1:432228439641:web:9a558dc03eefde7c694348"
-        };
+    <!-- Footer Part -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-left">
+                <a href="index.html" style="color: inherit; text-decoration: none;">AUST EEE-53</a>
+            </div>
+            <div class="footer-right">
+                <a href="mailto:austeee53@gmail.com" class="mail-icon">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+        <div class="footer-dev">
+            Developed by: Ratul Krishna Mojumder
+        </div>
+    </footer>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // Links
-        const MID_LINK = "https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6";
-        const FINAL_LINK = "https://final-exam-psi-neon.vercel.app/";
-
-        window.openLink = (type) => {
-            const link = (type === 'FINAL') ? FINAL_LINK : MID_LINK;
-            window.open(link, '_blank');
-            set(ref(db, 'siteMode'), type);
-        };
-
-        // Menu Toggle
-        window.toggleMenu = () => {
-            document.getElementById('mainMenu').classList.toggle('active');
-        };
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('mainMenu');
-            const icon = document.querySelector('.menu-icon');
-            if (!menu.contains(e.target) && !icon.contains(e.target)) {
-                menu.classList.remove('active');
-            }
-        });
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navLinks');
+            menu.classList.toggle('active');
+        }
     </script>
+
 </body>
 </html>
