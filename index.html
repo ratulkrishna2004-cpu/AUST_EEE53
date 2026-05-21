@@ -106,7 +106,7 @@
         .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
 
         /* --- EXAM SYSTEM STYLES --- */
-        .exam-view-wrapper { padding-top: 200px; padding-bottom: 100px; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
+        .exam-view-wrapper { padding-top: 200px; padding-bottom: 60px; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
         
         /* 3D Switches System */
         .switch-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; padding: 0 20px; }
@@ -146,6 +146,17 @@
         /* Inputs styling */
         select, input[type="date"] { background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 5px; width: 100%; box-sizing: border-box; }
 
+        /* --- GLOBAL FOOTER STYLE --- */
+        footer { 
+            background: #000; padding: 30px 20px; 
+            border-top: 1px solid #1a1a1a; text-align: center;
+            position: relative; z-index: 20; /* ওপরে রাখার জন্য জেনুইন ইনডেক্স */
+        }
+        .footer-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none; }
+        .footer-mail-link { color: var(--gold); font-size: 1.6rem; }
+        .dev-credit { color: #fff; font-weight: bold; font-size: 0.9rem; border-top: 1px solid #222; padding-top: 10px; }
+
         /* --- MOBILE FIXES --- */
         @media screen and (max-width: 768px) {
             .menu-toggle { display: block; }
@@ -158,12 +169,6 @@
             .exam-view-wrapper { padding-top: 240px; }
             .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
         }
-
-        footer { background: #000; padding: 30px 20px; border-top: 1px solid #1a1a1a; text-align: center; }
-        .footer-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none; }
-        .footer-mail-link { color: var(--gold); font-size: 1.6rem; }
-        .dev-credit { color: #fff; font-weight: bold; font-size: 0.9rem; border-top: 1px solid #222; padding-top: 10px; }
     </style>
 </head>
 <body>
@@ -388,11 +393,10 @@
         const database = firebase.database();
 
         // --- DYNAMIC ADMIN PROFILES & CREDENTIALS MAPPING ---
-        // মামা, এখানে তুমি পাসওয়ার্ড এবং অ্যাডমিনদের আসল নাম নিজের মতো ইনপুট দিয়ে সেট করতে পারবে!
         const ADMIN_PROFILES = {
             "092418": { name: "Ratul Krishna Mojumder", sectionText: "Developer (All Sections Access)", scope: "ALL" },
-            "0616":  { name: "Istiak Ahmed Emon", sectionText: "Section A Tracker", scope: "A" },
-            "002":  { name: "Juharia Raisa", sectionText: "Section B Tracker", scope: "B" },
+            "passA":  { name: "Admin Section A", sectionText: "Section A Tracker", scope: "A" },
+            "passB":  { name: "Admin Section B", sectionText: "Section B Tracker", scope: "B" },
             "passC":  { name: "Admin Section C", sectionText: "Section C Tracker", scope: "C" },
             "passD":  { name: "Admin Section D", sectionText: "Section D Tracker", scope: "D" }
         };
@@ -475,7 +479,6 @@
             const passwordInput = prompt("Enter Administration Access Key:");
             if (!passwordInput) return;
 
-            // ভ্যালিডেশন চেক ডাইনামিক অবজেক্ট থেকে
             if (ADMIN_PROFILES[passwordInput]) {
                 const profile = ADMIN_PROFILES[passwordInput];
                 currentAdminState = { 
@@ -599,7 +602,6 @@
             }
         }
 
-        // Logout Reset
         function logoutAdmin() {
             currentAdminState = { isLogged: false, role: null, allowedSection: null };
             document.getElementById('adminDashboard').style.display = 'none';
