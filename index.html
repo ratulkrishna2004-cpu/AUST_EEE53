@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AUST EEE-53</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <style>
         :root {
             --maroon: #800000;
             --maroon-dark: #4d0000;
             --gold: #FFD700;
             --neon-green: #39FF14;
-            --flame-color: rgba(255, 215, 0, 0.6); /* Gold flame effect */
+            --flame-color: rgba(255, 215, 0, 0.6);
+            --neon-blue: #00F3FF;
         }
 
         body, html {
@@ -33,31 +37,12 @@
         }
         .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; position: relative; }
         
-        /* Logo with Flame Effect */
-        .logo-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .main-logo { 
-            height: 60px; /* Size increased from 45px to 60px */
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Smoke/Flame Animation */
+        .logo-container { position: relative; display: flex; align-items: center; justify-content: center; }
+        .main-logo { height: 60px; position: relative; z-index: 2; }
         .logo-container::after {
-            content: '';
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            background: var(--flame-color);
-            filter: blur(15px);
-            border-radius: 50%;
-            z-index: 1;
-            animation: flame-pulse 2s infinite ease-in-out;
+            content: ''; position: absolute; width: 70px; height: 70px;
+            background: var(--flame-color); filter: blur(15px); border-radius: 50%;
+            z-index: 1; animation: flame-pulse 2s infinite ease-in-out;
         }
 
         @keyframes flame-pulse {
@@ -67,7 +52,6 @@
         }
 
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
-
         .menu-toggle { display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer; }
 
         .search-wrapper {
@@ -79,21 +63,18 @@
         .search-wrapper button { background: #cc0000; color: #fff; border: none; padding: 0 15px; cursor: pointer; }
 
         .navbar { background: var(--maroon-dark); }
-        .nav-menu {
-            display: flex; flex-wrap: wrap; justify-content: center;
-            list-style: none; margin: 0; padding: 8px; gap: 5px;
-        }
-        .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; }
+        .nav-menu { display: flex; flex-wrap: wrap; justify-content: center; list-style: none; margin: 0; padding: 8px; gap: 5px; }
+        .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; cursor: pointer; }
         .nav-menu li a:hover { color: var(--gold); }
+
+        /* --- MAIN SYSTEM TOGGLES --- */
+        .content-section { display: none; }
+        .content-section.active-view { display: block; }
 
         /* --- THEME AREA --- */
         .theme-container {
-            position: fixed;
-            top: 185px; /* Adjusted slightly for larger logo */
-            left: 0; width: 100%; height: calc(100vh - 185px);
-            z-index: 1;
-            background: #000;
-            overflow: hidden;
+            position: fixed; top: 185px; left: 0; width: 100%; height: calc(100vh - 185px);
+            z-index: 1; background: #000; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
         }
         .theme-viewport { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
@@ -101,13 +82,8 @@
 
         /* --- SHUTTER PANEL --- */
         .shutter-panel {
-            position: relative;
-            margin-top: 100vh;
-            z-index: 10;
-            background: #050000;
-            padding: 60px 0 20px;
-            border-top: 5px solid var(--maroon);
-            box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
+            position: relative; margin-top: 100vh; z-index: 10; background: #050000;
+            padding: 60px 0 20px; border-top: 5px solid var(--maroon); box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
         }
 
         .circuit-container { display: flex; justify-content: center; gap: 100px; padding-bottom: 40px; flex-wrap: wrap; }
@@ -129,19 +105,58 @@
 
         .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
 
+        /* --- EXAM SYSTEM STYLES --- */
+        .exam-view-wrapper { padding-top: 200px; padding-bottom: 100px; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
+        
+        /* 3D Switches System */
+        .switch-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; padding: 0 20px; }
+        .switch-3d {
+            background: linear-gradient(135deg, #222, #111); color: #fff; border: 1px solid #444;
+            padding: 15px 35px; font-size: 1.1rem; font-weight: bold; border-radius: 10px; cursor: pointer;
+            box-shadow: 0 5px 0 #000, 0 10px 20px rgba(0,0,0,0.6); transition: all 0.2s ease;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+        }
+        .switch-3d:active, .switch-3d.active-btn {
+            transform: translateY(4px); box-shadow: 0 1px 0 #000, 0 5px 10px rgba(0,0,0,0.6);
+            border-color: var(--gold); color: var(--gold); text-shadow: 0 0 10px var(--gold);
+        }
+        .switch-admin { border-color: var(--neon-blue); color: var(--neon-blue); }
+        .switch-admin:active, .switch-admin.active-btn { border-color: var(--neon-blue); color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        
+        .switch-prev { border-color: #ff5722; color: #ff5722; }
+        .switch-prev:active, .switch-prev.active-btn { border-color: #ff5722; color: #ff5722; text-shadow: 0 0 10px #ff5722; }
+
+        /* Tables */
+        .table-container { background: #0d0d0d; border: 2px solid var(--maroon); border-radius: 12px; margin: 20px; overflow-x: auto; box-shadow: 0 0 30px rgba(128,0,0,0.3); }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 15px; border-bottom: 1px solid #222; }
+        th { background-color: var(--maroon-dark); color: var(--gold); font-size: 1.1rem; }
+        tr:hover { background-color: #161616; }
+
+        /* Admin Dashboard UI */
+        .admin-dashboard { background: #111; border: 2px solid var(--neon-blue); border-radius: 15px; padding: 30px; margin: 20px; }
+        .profile-banner { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #333; padding-bottom: 15px; margin-bottom: 20px; }
+        .profile-banner h2 { color: var(--neon-blue); margin: 0; }
+        .btn-action { padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 5px; }
+        .btn-add { background: var(--neon-green); color: #000; font-size: 1rem; margin-bottom: 20px; padding: 12px 24px; }
+        .btn-edit { background: var(--gold); color: #000; }
+        .btn-delete { background: #ff3333; color: #fff; }
+        .btn-submit { background: var(--neon-blue); color: #000; padding: 10px 20px; width: 100%; font-size: 1.1rem; margin-top: 15px; }
+        
+        /* Inputs styling */
+        select, input[type="date"] { background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 5px; width: 100%; box-sizing: border-box; }
+
         /* --- MOBILE FIXES --- */
         @media screen and (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--maroon-dark); }
             .nav-menu.active { display: flex; }
             .theme-container { top: 220px; }
-            .theme-viewport img { 
-                width: 100%; 
-                height: auto; 
-                object-fit: contain; 
-            }
+            .theme-viewport img { width: 100%; height: auto; object-fit: contain; }
             .circuit-container { gap: 40px; }
             .main-logo { height: 50px; }
+            .exam-view-wrapper { padding-top: 240px; }
+            .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
         }
 
         footer { background: #000; padding: 30px 20px; border-top: 1px solid #1a1a1a; text-align: center; }
@@ -167,11 +182,11 @@
         </div>
         <nav class="navbar">
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html">Home</a></li>
+                <li><a onclick="switchView('home')">Home</a></li>
                 <li><a href="#">2.1 Study Materials</a></li>
                 <li><a href="#">Previous Semester</a></li>
                 <li><a href="#">Routine</a></li>
-                <li><a href="#">Exams</a></li>
+                <li><a onclick="switchView('exams')">Exams</a></li>
                 <li><a href="#">Faculty</a></li>
                 <li><a href="#">BUS Route</a></li>
                 <li><a href="#">Notice</a></li>
@@ -185,51 +200,410 @@
         </nav>
     </header>
 
-    <div class="theme-container">
-        <div class="theme-viewport">
-            <img src="Theme.png" alt="AUST Theme">
+    <div id="homeView" class="content-section active-view">
+        <div class="theme-container">
+            <div class="theme-viewport">
+                <img src="Theme.png" alt="AUST Theme">
+            </div>
+        </div>
+
+        <div class="shutter-panel">
+            <section class="circuit-container">
+                <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
+                    <span class="switch-label">MID</span>
+                    <div class="wire-container">
+                        <div class="wire-piece"></div>
+                        <i class="fas fa-microchip chip-icon"></i>
+                        <div class="wire-piece"></div>
+                    </div>
+                </div>
+
+                <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
+                    <span class="switch-label">FINAL</span>
+                    <div class="wire-container">
+                        <div class="wire-piece"></div>
+                        <i class="fas fa-bolt chip-icon"></i>
+                        <div class="wire-piece"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="calendar-box">
+                <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
+                style="border: 0" width="100%" height="450" frameborder="0" scrolling="no"></iframe>
+            </div>
         </div>
     </div>
 
-    <div class="shutter-panel">
-        <section class="circuit-container">
-            <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
-                <span class="switch-label">MID</span>
-                <div class="wire-container">
-                    <div class="wire-piece"></div>
-                    <i class="fas fa-microchip chip-icon"></i>
-                    <div class="wire-piece"></div>
+    <div id="examsView" class="content-section">
+        <div class="exam-view-wrapper">
+            
+            <div class="switch-grid">
+                <button class="switch-3d active-btn" onclick="loadSectionData('A', this)">Section A</button>
+                <button class="switch-3d" onclick="loadSectionData('B', this)">Section B</button>
+                <button class="switch-3d" onclick="loadSectionData('C', this)">Section C</button>
+                <button class="switch-3d" onclick="loadSectionData('D', this)">Section D</button>
+                <button class="switch-3d switch-prev" onclick="loadPreviousExams(this)">Previous Exams</button>
+                <button class="switch-3d switch-admin" onclick="triggerAdminLogin()">Admin Switch</button>
+            </div>
+
+            <div id="userTableContainer" class="table-container">
+                <table id="examTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Course Title</th>
+                            <th>Section</th>
+                            <th>Exam Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="examTableBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+                <div class="profile-banner">
+                    <div>
+                        <h2 id="adminName">Dashboard</h2>
+                        <p id="adminSectionDisplay" style="color: var(--gold); margin: 5px 0 0 0; font-weight: bold;"></p>
+                    </div>
+                    <button class="btn-action btn-delete" onclick="logoutAdmin()">Logout</button>
+                </div>
+
+                <button class="btn-add" id="addNewBtn" onclick="showInputRow()">+ Add New Exam</button>
+
+                <div class="table-container" id="inputFormContainer" style="display: none; border-color: var(--neon-blue); margin-bottom: 30px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Course Title</th>
+                                <th>Section sub-group</th>
+                                <th>Exam Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="date" id="inputDate"></td>
+                                <td>
+                                    <select id="inputCourse">
+                                        <option value="EEE 2101: Electronic Circuits I">EEE 2101: Electronic Circuits I</option>
+                                        <option value="EEE 2103: Digital Electronics">EEE 2103: Digital Electronics</option>
+                                        <option value="EEE 2105: Electrical Machines I">EEE 2105: Electrical Machines I</option>
+                                        <option value="MATH 2111: Complex Variable and Fourier Analysis">MATH 2111: Complex Variable and Fourier Analysis</option>
+                                        <option value="HUM 2109: Industrial Management">HUM 2109: Industrial Management</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select id="inputSubSection">
+                                        </select>
+                                </td>
+                                <td>
+                                    <select id="inputExamType">
+                                        <option value="Q-1">Q-1</option>
+                                        <option value="Q-2">Q-2</option>
+                                        <option value="Q-3">Q-3</option>
+                                        <option value="Q-4">Q-4</option>
+                                        <option value="Setup-1">Setup-1</option>
+                                        <option value="Setup-2">Setup-2</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="btn-action btn-submit" id="submitExamBtn" onclick="submitExamData()">Submit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="color: var(--gold);">Manage Existing Inputs</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Course Title</th>
+                                <th>Section</th>
+                                <th>Exam Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                            </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
-                <span class="switch-label">FINAL</span>
-                <div class="wire-container">
-                    <div class="wire-piece"></div>
-                    <i class="fas fa-bolt chip-icon"></i>
-                    <div class="wire-piece"></div>
-                </div>
-            </div>
-        </section>
-
-        <div class="calendar-box">
-            <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
-            style="border: 0" width="100%" height="450" frameborder="0" scrolling="no"></iframe>
         </div>
-
-        <footer>
-            <div class="footer-top-row">
-                <a href="index.html" class="footer-logo-link">AUST EEE-53</a>
-                <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
-            </div>
-            <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
-        </footer>
     </div>
+
+    <footer>
+        <div class="footer-top-row">
+            <a onclick="switchView('home')" class="footer-logo-link" style="cursor: pointer;">AUST EEE-53</a>
+            <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
+        </div>
+        <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
+    </footer>
 
     <script>
-        function toggleMenu() {
+        // --- Navigation Controller ---
+        function switchView(viewName) {
+            document.getElementById('homeView').classList.remove('active-view');
+            document.getElementById('examsView').classList.remove('active-view');
+            
+            if(viewName === 'home') {
+                document.getElementById('homeView').classList.add('active-view');
+            } else if(viewName === 'exams') {
+                document.getElementById('examsView').classList.add('active-view');
+                loadSectionData('A', document.querySelector('.switch-grid .switch-3d')); 
+            }
+            toggleMenu(true); 
+        }
+
+        function toggleMenu(forceClose) {
             var menu = document.getElementById('navMenu');
-            menu.classList.toggle('active');
+            if(forceClose) {
+                menu.classList.remove('active');
+            } else {
+                menu.classList.toggle('active');
+            }
+        }
+
+        // --- FIREBASE LIVE CONFIGURATION INTERACTION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyA42cAhFc4ygHqmkZTIr2Rc87eEF_QA4R4",
+            authDomain: "spardho-53.firebaseapp.com",
+            databaseURL: "https://spardho-53-default-rtdb.firebaseio.com",
+            projectId: "spardho-53",
+            storageBucket: "spardho-53.firebasestorage.app",
+            messagingSenderId: "1042755226180",
+            appId: "1:1042755226180:web:76d4202bfc0352a240ca11"
+        };
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        // --- DYNAMIC ADMIN PROFILES & CREDENTIALS MAPPING ---
+        // মামা, এখানে তুমি পাসওয়ার্ড এবং অ্যাডমিনদের আসল নাম নিজের মতো ইনপুট দিয়ে সেট করতে পারবে!
+        const ADMIN_PROFILES = {
+            "092418": { name: "Ratul Krishna Mojumder", sectionText: "Developer (All Sections Access)", scope: "ALL" },
+            "0616":  { name: "Istiak Ahmed Emon", sectionText: "Section A Tracker", scope: "A" },
+            "002":  { name: "Juharia Raisa", sectionText: "Section B Tracker", scope: "B" },
+            "passC":  { name: "Admin Section C", sectionText: "Section C Tracker", scope: "C" },
+            "passD":  { name: "Admin Section D", sectionText: "Section D Tracker", scope: "D" }
+        };
+
+        let currentAdminState = {
+            isLogged: false,
+            role: null, 
+            allowedSection: null 
+        };
+        
+        let editingKey = null; 
+
+        function getTodayDateString() {
+            let today = new Date();
+            let yyyy = today.getFullYear();
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let dd = String(today.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function updateActiveButton(targetButton) {
+            document.querySelectorAll('.switch-grid .switch-3d').forEach(btn => btn.classList.remove('active-btn'));
+            targetButton.classList.add('active-btn');
+        }
+
+        // 1. User Read View
+        function loadSectionData(sectionLetter, element) {
+            updateActiveButton(element);
+            document.getElementById('userTableContainer').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+
+            database.ref('exams').on('value', (snapshot) => {
+                const tbody = document.getElementById('examTableBody');
+                tbody.innerHTML = '';
+                const today = getTodayDateString();
+
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    if (data.section.startsWith(sectionLetter) && data.date >= today) {
+                        let row = `<tr>
+                            <td>${data.date}</td>
+                            <td>${data.course}</td>
+                            <td>${data.section}</td>
+                            <td>${data.examType}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    }
+                });
+            });
+        }
+
+        // 2. Archived/Expired Views
+        function loadPreviousExams(element) {
+            updateActiveButton(element);
+            document.getElementById('userTableContainer').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+
+            database.ref('exams').on('value', (snapshot) => {
+                const tbody = document.getElementById('examTableBody');
+                tbody.innerHTML = '';
+                const today = getTodayDateString();
+
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    if (data.date < today) { 
+                        let row = `<tr>
+                            <td>${data.date}</td>
+                            <td>${data.course}</td>
+                            <td>${data.section}</td>
+                            <td>${data.examType}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    }
+                });
+            });
+        }
+
+        // 3. Login Control Router
+        function triggerAdminLogin() {
+            const passwordInput = prompt("Enter Administration Access Key:");
+            if (!passwordInput) return;
+
+            // ভ্যালিডেশন চেক ডাইনামিক অবজেক্ট থেকে
+            if (ADMIN_PROFILES[passwordInput]) {
+                const profile = ADMIN_PROFILES[passwordInput];
+                currentAdminState = { 
+                    isLogged: true, 
+                    role: profile.scope === 'ALL' ? 'developer' : 'section', 
+                    allowedSection: profile.scope 
+                };
+                setupDashboard(profile.name, profile.sectionText);
+            } else {
+                alert("Invalid Admin Key. Process Aborted.");
+            }
+        }
+
+        function setupDashboard(name, sectionText) {
+            document.getElementById('userTableContainer').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+            
+            document.getElementById('adminName').innerText = name;
+            document.getElementById('adminSectionDisplay').innerText = sectionText;
+            
+            const subSelect = document.getElementById('inputSubSection');
+            subSelect.innerHTML = '';
+            
+            if (currentAdminState.allowedSection === 'ALL') {
+                ['A','A1','A2','B','B1','B2','C','C1','C2','D','D1','D2'].forEach(sec => {
+                    subSelect.innerHTML += `<option value="${sec}">${sec}</option>`;
+                });
+            } else {
+                const s = currentAdminState.allowedSection;
+                [`${s}`, `${s}1`, `${s}2`].forEach(sec => {
+                    subSelect.innerHTML += `<option value="${sec}">${sec}</option>`;
+                });
+            }
+
+            renderAdminManagementTable();
+        }
+
+        function showInputRow() {
+            document.getElementById('inputFormContainer').style.display = 'block';
+            editingKey = null; 
+            document.getElementById('submitExamBtn').innerText = "Submit";
+        }
+
+        // 4. Data Layer Mutations
+        function submitExamData() {
+            const date = document.getElementById('inputDate').value;
+            const course = document.getElementById('inputCourse').value;
+            const section = document.getElementById('inputSubSection').value;
+            const examType = document.getElementById('inputExamType').value;
+
+            if(!date) {
+                alert("Please select a valid target execution Date.");
+                return;
+            }
+
+            const payload = { date, course, section, examType };
+
+            if (editingKey) {
+                database.ref('exams/' + editingKey).update(payload)
+                    .then(() => { alert("Entry Updated Successfully."); resetForm(); });
+            } else {
+                database.ref('exams').push(payload)
+                    .then(() => { alert("New Entry Cataloged."); resetForm(); });
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('inputDate').value = '';
+            document.getElementById('inputFormContainer').style.display = 'none';
+            editingKey = null;
+            renderAdminManagementTable();
+        }
+
+        function renderAdminManagementTable() {
+            database.ref('exams').once('value', (snapshot) => {
+                const tbody = document.getElementById('adminTableBody');
+                tbody.innerHTML = '';
+
+                snapshot.forEach((childSnapshot) => {
+                    const key = childSnapshot.key;
+                    const data = childSnapshot.val();
+
+                    const isDev = currentAdminState.allowedSection === 'ALL';
+                    const isAssignedSection = data.section.startsWith(currentAdminState.allowedSection);
+
+                    if (isDev || isAssignedSection) {
+                        let row = `<tr>
+                            <td>${data.date}</td>
+                            <td>${data.course}</td>
+                            <td>${data.section}</td>
+                            <td>${data.examType}</td>
+                            <td>
+                                <button class="btn-action btn-edit" onclick="editRow('${key}', '${data.date}', '${data.course}', '${data.section}', '${data.examType}')">Edit</button>
+                                <button class="btn-action btn-delete" onclick="deleteRow('${key}')">Delete</button>
+                            </td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    }
+                });
+            });
+        }
+
+        function editRow(key, date, course, section, examType) {
+            document.getElementById('inputFormContainer').style.display = 'block';
+            document.getElementById('inputDate').value = date;
+            document.getElementById('inputCourse').value = course;
+            document.getElementById('inputSubSection').value = section;
+            document.getElementById('inputExamType').value = examType;
+            
+            editingKey = key;
+            document.getElementById('submitExamBtn').innerText = "Update Entry";
+            window.scrollTo({ top: document.getElementById('inputFormContainer').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function deleteRow(key) {
+            if(confirm("Are you absolutely sure you want to scrub this entry from the database?")) {
+                database.ref('exams/' + key).remove().then(() => {
+                    alert("Entry Purged.");
+                    renderAdminManagementTable();
+                });
+            }
+        }
+
+        // Logout Reset
+        function logoutAdmin() {
+            currentAdminState = { isLogged: false, role: null, allowedSection: null };
+            document.getElementById('adminDashboard').style.display = 'none';
+            loadSectionData('A', document.querySelector('.switch-grid .switch-3d'));
         }
     </script>
 </body>
