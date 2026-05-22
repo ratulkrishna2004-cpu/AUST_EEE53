@@ -22,6 +22,7 @@
             --eee2204: #ff6b6b;
             --eee2213: #4cd964;
             --eee2200: #007aff;
+            --eee2200: #007aff;
             --eee2210: #5ac8fa;
             --eee2226: #ffcc00;
             --hum2201: #ff9500;
@@ -101,67 +102,36 @@
 
         /* --- STABLE 3D GLASSMORPHIC SYLLABUS TABLE --- */
         .syllabus-3d-wrapper {
-            max-width: 95%;
-            margin: 10px auto 40px auto;
-            padding: 0 15px;
+            max-width: 95%; margin: 10px auto 40px auto; padding: 0 15px;
         }
-        .syllabus-table-3d {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 12px;
-        }
+        .syllabus-table-3d { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
         .syllabus-table-3d th {
-            background: linear-gradient(135deg, var(--maroon-dark), #1a0000);
-            color: var(--gold);
-            padding: 16px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, var(--maroon-dark), #1a0000); color: var(--gold);
+            padding: 16px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;
+            border: 1px solid rgba(255, 215, 0, 0.3); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
         .syllabus-table-3d th:first-child { border-radius: 12px 0 0 12px; }
         .syllabus-table-3d th:last-child { border-radius: 0 12px 12px 0; }
 
-        .syllabus-table-3d tr {
-            transition: all 0.3s ease;
-        }
+        .syllabus-table-3d tr { transition: all 0.3s ease; }
         .syllabus-table-3d td {
-            padding: 16px;
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+            padding: 16px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: 600; position: relative;
+            overflow: hidden; transition: all 0.3s ease;
         }
         .syllabus-table-3d td::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 40%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0));
-            pointer-events: none;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 40%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0)); pointer-events: none;
         }
-        .syllabus-table-3d td:first-child { 
-            border-radius: 10px 0 0 10px; 
-            border-left: 4px solid var(--course-color, var(--gold));
-        }
-        .syllabus-table-3d td:last-child { 
-            border-radius: 0 10px 10px 0; 
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
+        .syllabus-table-3d td:first-child { border-radius: 10px 0 0 10px; border-left: 4px solid var(--course-color, var(--gold)); }
+        .syllabus-table-3d td:last-child { border-radius: 0 10px 10px 0; border-right: 1px solid rgba(255,255,255,0.1); }
 
         .syllabus-table-3d tr:hover td {
-            background: rgba(35, 35, 35, 0.9);
-            color: #fff !important;
-            box-shadow: 0 0 20px var(--course-shadow, rgba(255, 255, 255, 0.2)),
-                        inset 0 0 10px var(--course-shadow, rgba(255, 255, 255, 0.1));
-            border-top: 1px solid var(--course-color);
-            border-bottom: 1px solid var(--course-color);
+            background: rgba(35, 35, 35, 0.9); color: #fff !important;
+            box-shadow: 0 0 20px var(--course-shadow, rgba(255, 255, 255, 0.2)), inset 0 0 10px var(--course-shadow, rgba(255, 255, 255, 0.1));
+            border-top: 1px solid var(--course-color); border-bottom: 1px solid var(--course-color);
         }
         .syllabus-table-3d tr:hover td:last-child { border-right: 1px solid var(--course-color); }
 
@@ -285,6 +255,51 @@
         }
         .btn-download-pdf:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--gold); color: var(--gold); }
 
+        /* --- CR & GM ARCHITECTURE STYLES --- */
+        .crgm-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1200px; margin: 0 auto; min-height: 85vh; text-align: center; }
+        .crgm-btn-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; padding: 0 20px; }
+        .crgm-toggle-btn {
+            background: linear-gradient(135deg, #1f0000, #0a0000); color: #fff; border: 2px solid #555;
+            padding: 15px 40px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .crgm-toggle-btn.active-tab {
+            border-color: var(--gold); color: var(--gold); text-shadow: 0 0 10px var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); transform: translateY(-3px);
+        }
+        .crgm-display-box { display: none; padding: 0 20px; }
+        .crgm-display-box.active-pane { display: block; }
+        
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
+        .contact-card {
+            background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 25px; text-align: left;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .contact-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--maroon);
+        }
+        .contact-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(128,0,0,0.25); border-color: rgba(128,0,0,0.4); }
+        .card-tag { font-size: 0.8rem; background: var(--maroon-dark); color: var(--gold); padding: 4px 10px; border-radius: 12px; font-weight: bold; display: inline-block; margin-bottom: 12px; border: 1px solid rgba(255,215,0,0.2); }
+        .card-name { font-size: 1.3rem; font-weight: bold; margin: 0 0 10px 0; color: #fff; }
+        .card-phone-wrapper {
+            display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.4);
+            padding: 10px 15px; border-radius: 8px; border: 1px dashed #333; cursor: pointer; transition: 0.2s;
+        }
+        .card-phone-wrapper:hover { background: rgba(255,215,0,0.05); border-color: var(--gold); }
+        .card-phone-wrapper:hover .phone-num { color: var(--gold); }
+        .phone-num { font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; color: #ccc; font-weight: bold; }
+        .copy-icon { color: #666; font-size: 1rem; }
+        
+        /* Copy Notification Toast */
+        .toast-notification {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--neon-green); color: #000; padding: 12px 30px; border-radius: 30px;
+            font-weight: bold; font-size: 1rem; z-index: 2000; box-shadow: 0 10px 30px rgba(57,255,20,0.3);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0;
+        }
+        .toast-notification.show-toast { transform: translateX(-50%) translateY(0); opacity: 1; }
+
         /* --- GLOBAL FOOTER STYLE --- */
         footer { 
             background: #000; padding: 30px 20px; 
@@ -305,12 +320,12 @@
             .theme-viewport img { width: 100%; height: auto; object-fit: contain; }
             .circuit-container { gap: 40px; }
             .main-logo { height: 50px; }
-            .exam-view-wrapper, .pdf-view-wrapper, .prev-year-wrapper { padding-top: 240px; }
+            .exam-view-wrapper, .pdf-view-wrapper, .prev-year-wrapper, .crgm-wrapper { padding-top: 240px; }
             .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
             .pdf-frame-container { height: 50vh; margin: 15px 10px; }
             .glossy-btn-grid { grid-template-columns: 1fr; gap: 15px; padding: 10px; }
-            
             .syllabus-table-3d th, .syllabus-table-3d td { padding: 10px; font-size: 0.85rem; }
+            .crgm-toggle-btn { padding: 12px 25px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -333,10 +348,10 @@
                 <li><a onclick="switchView('home')">Home</a></li>
                 <li><a href="#">2.2 Study Materials</a></li>
                 <li><a onclick="switchView('prevYear')">Previous Year</a></li>
-                <li><a onclick="switchView('busRoute')">Bus Route</a></li> <li><a onclick="switchView('exams')">Exams</a></li>
+                <li><a href="#">Routine</a></li> <li><a onclick="switchView('busRoute')">Bus Route</a></li>
+                <li><a onclick="switchView('exams')">Exams</a></li>
                 <li><a href="#">Notice</a></li>
-                <li><a href="#">CR & GM Section</a></li>
-                <li><a href="#">Credits</a></li>
+                <li><a onclick="switchView('crgm')">CR & GM Section</a></li> <li><a href="#">Credits</a></li>
                 <li><a onclick="switchView('obe')">OBE Syllabus</a></li>
                 <li><a href="#">Helping Sites</a></li>
                 <li><a href="#">Waiver</a></li>
@@ -354,7 +369,6 @@
         </div>
 
         <div class="shutter-panel">
-            
             <div class="syllabus-3d-wrapper">
                 <table class="syllabus-table-3d">
                     <thead>
@@ -365,51 +379,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="row-eee2203">
-                            <td>EEE 2203</td>
-                            <td>Electronics II</td>
-                            <td>3.0</td>
-                        </tr>
-                        <tr class="row-eee2204">
-                            <td>EEE 2204</td>
-                            <td>Electronics II Lab</td>
-                            <td>1.5</td>
-                        </tr>
-                        <tr class="row-eee2213">
-                            <td>EEE 2213</td>
-                            <td>Electrical Properties of Materials</td>
-                            <td>3.0</td>
-                        </tr>
-                        <tr class="row-eee2200">
-                            <td>EEE 2200</td>
-                            <td>Electrical Installations</td>
-                            <td>1.5</td>
-                        </tr>
-                        <tr class="row-eee2210">
-                            <td>EEE 2210</td>
-                            <td>Electronic Circuits and Systems Simulation Lab.</td>
-                            <td>1.5</td>
-                        </tr>
-                        <tr class="row-eee2226">
-                            <td>EEE 2226</td>
-                            <td>Numerical Methods for Engineering Lab.</td>
-                            <td>1.5</td>
-                        </tr>
-                        <tr class="row-hum2201">
-                            <td>HUM 2201</td>
-                            <td>Bengali Language and Literature</td>
-                            <td>3.0</td>
-                        </tr>
-                        <tr class="row-math2203">
-                            <td>MATH 2203</td>
-                            <td>Mathematics V</td>
-                            <td>3.0</td>
-                        </tr>
-                        <tr class="row-hum2209">
-                            <td>HUM 2209</td>
-                            <td>Accounting and Economics</td>
-                            <td>3.0</td>
-                        </tr>
+                        <tr class="row-eee2203"><td>EEE 2203</td><td>Electronics II</td><td>3.0</td></tr>
+                        <tr class="row-eee2204"><td>EEE 2204</td><td>Electronics II Lab</td><td>1.5</td></tr>
+                        <tr class="row-eee2213"><td>EEE 2213</td><td>Electrical Properties of Materials</td><td>3.0</td></tr>
+                        <tr class="row-eee2200"><td>EEE 2200</td><td>Electrical Installations</td><td>1.5</td></tr>
+                        <tr class="row-eee2210"><td>EEE 2210</td><td>Electronic Circuits and Systems Simulation Lab.</td><td>1.5</td></tr>
+                        <tr class="row-eee2226"><td>EEE 2226</td><td>Numerical Methods for Engineering Lab.</td><td>1.5</td></tr>
+                        <tr class="row-hum2201"><td>HUM 2201</td><td>Bengali Language and Literature</td><td>3.0</td></tr>
+                        <tr class="row-math2203"><td>MATH 2203</td><td>Mathematics V</td><td>3.0</td></tr>
+                        <tr class="row-hum2209"><td>HUM 2209</td><td>Accounting and Economics</td><td>3.0</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -418,18 +396,13 @@
                 <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                     <span class="switch-label">MID</span>
                     <div class="wire-container">
-                        <div class="wire-piece"></div>
-                        <i class="fas fa-microchip chip-icon"></i>
-                        <div class="wire-piece"></div>
+                        <div class="wire-piece"></div><i class="fas fa-microchip chip-icon"></i><div class="wire-piece"></div>
                     </div>
                 </div>
-
                 <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
                     <span class="switch-label">FINAL</span>
                     <div class="wire-container">
-                        <div class="wire-piece"></div>
-                        <i class="fas fa-bolt chip-icon"></i>
-                        <div class="wire-piece"></div>
+                        <div class="wire-piece"></div><i class="fas fa-bolt chip-icon"></i><div class="wire-piece"></div>
                     </div>
                 </div>
             </section>
@@ -443,7 +416,6 @@
 
     <div id="examsView" class="content-section">
         <div class="exam-view-wrapper">
-            
             <div class="switch-grid">
                 <button class="switch-3d active-btn" onclick="loadSectionData('A', this)">Section A</button>
                 <button class="switch-3d" onclick="loadSectionData('B', this)">Section B</button>
@@ -456,15 +428,9 @@
             <div id="userTableContainer" class="table-container">
                 <table id="examTable">
                     <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Course Title</th>
-                            <th>Section</th>
-                            <th>Exam Type</th>
-                        </tr>
+                        <tr><th>Date</th><th>Course Title</th><th>Section</th><th>Exam Type</th></tr>
                     </thead>
-                    <tbody id="examTableBody">
-                    </tbody>
+                    <tbody id="examTableBody"></tbody>
                 </table>
             </div>
 
@@ -476,19 +442,12 @@
                     </div>
                     <button class="btn-action btn-delete" onclick="logoutAdmin()">Logout</button>
                 </div>
-
                 <button class="btn-add" id="addNewBtn" onclick="showInputRow()">+ Add New Exam</button>
 
                 <div class="table-container" id="inputFormContainer" style="display: none; border-color: var(--neon-blue); margin-bottom: 30px;">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Course Title</th>
-                                <th>Section sub-group</th>
-                                <th>Exam Type</th>
-                                <th>Action</th>
-                            </tr>
+                            <tr><th>Date</th><th>Course Title</th><th>Section sub-group</th><th>Exam Type</th><th>Action</th></tr>
                         </thead>
                         <tbody>
                             <tr>
@@ -506,23 +465,15 @@
                                         <option value="HUM 2209: Accounting and Economics">HUM 2209: Accounting and Economics</option>
                                     </select>
                                 </td>
-                                <td>
-                                    <select id="inputSubSection">
-                                    </select>
-                                </td>
+                                <td><select id="inputSubSection"></select></td>
                                 <td>
                                     <select id="inputExamType">
-                                        <option value="Q-1">Q-1</option>
-                                        <option value="Q-2">Q-2</option>
-                                        <option value="Q-3">Q-3</option>
-                                        <option value="Q-4">Q-4</option>
-                                        <option value="Setup-1">Setup-1</option>
-                                        <option value="Setup-2">Setup-2</option>
+                                        <option value="Q-1">Q-1</option><option value="Q-2">Q-2</option>
+                                        <option value="Q-3">Q-3</option><option value="Q-4">Q-4</option>
+                                        <option value="Setup-1">Setup-1</option><option value="Setup-2">Setup-2</option>
                                     </select>
                                 </td>
-                                <td>
-                                    <button class="btn-action btn-submit" id="submitExamBtn" onclick="submitExamData()">Submit</button>
-                                </td>
+                                <td><button class="btn-action btn-submit" id="submitExamBtn" onclick="submitExamData()">Submit</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -532,64 +483,150 @@
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Course Title</th>
-                                <th>Section</th>
-                                <th>Exam Type</th>
-                                <th>Actions</th>
-                            </tr>
+                            <tr><th>Date</th><th>Course Title</th><th>Section</th><th>Exam Type</th><th>Actions</th></tr>
                         </thead>
-                        <tbody id="adminTableBody">
-                        </tbody>
+                        <tbody id="adminTableBody"></tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div id="prevYearView" class="content-section">
         <div class="prev-year-wrapper">
-            <div class="prev-headline-box">
-                <h2>Previous Year by <span>EEE-53</span></h2>
-            </div>
-
+            <div class="prev-headline-box"><h2>Previous Year by <span>EEE-53</span></h2></div>
             <div id="devPrevYearPanel" class="dev-management-panel" style="display: none;">
-                <h3><i class="fas fa-tools"></i> Developer Dashboard: Add/Edit Cloud Button Components</h3>
+                <h3><i class="fas fa-tools"></i> Developer Dashboard</h3>
                 <button class="btn-add" style="margin-bottom: 15px; padding: 8px 16px; font-size: 0.9rem;" onclick="showDevBtnForm()">+ Add New Material</button>
-                
                 <div class="table-container" id="devBtnFormBox" style="display: none; border-color: var(--gold); padding: 15px; background: #161616;">
                     <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div>
-                            <label style="font-weight: bold; color: var(--gold);">Button Title:</label>
-                            <input type="text" id="devBtnTitle" placeholder="e.g., EEE 2101 Mid Semester Question Bank">
-                        </div>
-                        <div>
-                            <label style="font-weight: bold; color: var(--gold);">Resource Link (URL):</label>
-                            <input type="text" id="devBtnLink" placeholder="https://drive.google.com/...">
-                        </div>
-                        <button class="btn-action btn-submit" id="submitDevBtn" onclick="submitDevBtnData()" style="max-width: 200px; margin-top: 5px;">Save Button Blueprint</button>
+                        <div><label style="font-weight: bold; color: var(--gold);">Button Title:</label><input type="text" id="devBtnTitle"></div>
+                        <div><label style="font-weight: bold; color: var(--gold);">Resource Link (URL):</label><input type="text" id="devBtnLink"></div>
+                        <button class="btn-action btn-submit" id="submitDevBtn" onclick="submitDevBtnData()" style="max-width: 200px;">Save Button Blueprint</button>
                     </div>
                 </div>
+                <div class="table-container"><table style="min-width: 500px;"><thead><tr><th>Button Display Title</th><th>Actions</th></tr></thead><tbody id="devBtnTableBody"></tbody></table></div>
+            </div>
+            <div class="glossy-btn-grid" id="userGlossyBtnGrid"></div>
+        </div>
+    </div>
 
-                <h4 style="color: #fff; margin: 15px 0 5px 0;">Existing Resource Components Management:</h4>
-                <div class="table-container">
-                    <table style="min-width: 500px;">
-                        <thead>
-                            <tr>
-                                <th>Button Display Title</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="devBtnTableBody">
-                        </tbody>
-                    </table>
+    <div id="crgmView" class="content-section">
+        <div class="crgm-wrapper">
+            <div class="prev-headline-box">
+                <h2>CR & GM <span>Network Hub</span></h2>
+            </div>
+            
+            <div class="crgm-btn-container">
+                <button class="crgm-toggle-btn active-tab" id="crTabBtn" onclick="toggleCrgmTab('cr')"><i class="fas fa-users"></i> CR Contacts</button>
+                <button class="crgm-toggle-btn" id="gmTabBtn" onclick="toggleCrgmTab('gm')"><i class="fas fa-user-shield"></i> GM Contacts</button>
+            </div>
+
+            <div id="crPane" class="crgm-display-box active-pane">
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <span class="card-tag">Section A</span>
+                        <div class="card-name">Nesar Ahmed</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01864856834', this)">
+                            <span class="phone-num">01864856834</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">Section A</span>
+                        <div class="card-name">Eshal Tabannum Eusha</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01717291596', this)">
+                            <span class="phone-num">01717291596</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">Section B</span>
+                        <div class="card-name">Opu Tarafder</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01722265753', this)">
+                            <span class="phone-num">01722265753</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">Section B</span>
+                        <div class="card-name">Sanjana Islam Dola</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01773010187', this)">
+                            <span class="phone-num">01773010187</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">Section C</span>
+                        <div class="card-name">Tasrif Sahil</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01898331054', this)">
+                            <span class="phone-num">01898331054</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">Section C</span>
+                        <div class="card-name">Sirajam Munira</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01814698480', this)">
+                            <span class="phone-num">01814698480</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">Section D</span>
+                        <div class="card-name">Rushil Datta</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01764053477', this)">
+                            <span class="phone-num">01764053477</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">Section D</span>
+                        <div class="card-name">Sruti Saha</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01924293777', this)">
+                            <span class="phone-num">01924293777</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="glossy-btn-grid" id="userGlossyBtnGrid">
-                </div>
+            <div id="gmPane" class="crgm-display-box">
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <span class="card-tag">General Member-2.2</span>
+                        <div class="card-name">Loading</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('Number', this)">
+                            <span class="phone-num">Number</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">General Member</span>
+                        <div class="card-name">Quazi Alimuzzaman Aumi-2.1</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01676281095', this)">
+                            <span class="phone-num">01676281095</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">General Member</span>
+                        <div class="card-name">Rownok Hossain-1.2</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01732742201', this)">
+                            <span class="phone-num">01732742201</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <span class="card-tag">General Member</span>
+                        <div class="card-name">Ahmad Fahim Shahriar-1.1</div>
+                        <div class="card-phone-wrapper" onclick="copyContactNumber('01932234089', this)">
+                            <span class="phone-num">01932234089</span>
+                            <i class="far fa-copy copy-icon"></i>
+                        </div>
+                    </div>
+                                    </div>
+            </div>
         </div>
     </div>
 
@@ -603,9 +640,7 @@
                 <iframe src="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" title="AUST EEE OBE Syllabus Blueprint"></iframe>
             </div>
             <div class="download-btn-area">
-                <a href="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" download class="btn-download-pdf">
-                    <i class="fas fa-file-download"></i> Download Full Syllabus Blueprint PDF
-                </a>
+                <a href="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Full Syllabus Blueprint PDF</a>
             </div>
         </div>
     </div>
@@ -616,31 +651,23 @@
                 <h2>AUST Transport Network Panel</h2>
                 <p style="color: #bbb; margin: 0;">Official Bus and Shuttle Schedule Blueprint Frame</p>
             </div>
-            
             <div class="pdf-frame-container">
                 <iframe src="Bus_and_Shuttle_Schedule.pdf" title="AUST Transport Schedule Network Blueprint"></iframe>
             </div>
             <div class="download-btn-area">
-                <a href="Bus_and_Shuttle_Schedule.pdf" download class="btn-download-pdf">
-                    <i class="fas fa-file-download"></i> Download Bus & Shuttle Schedule PDF
-                </a>
+                <a href="Bus_and_Shuttle_Schedule.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Bus & Shuttle Schedule PDF</a>
             </div>
-
-            <div class="pdf-subheading-box">
-                <h3>Details Route</h3>
-            </div>
-            
+            <div class="pdf-subheading-box"><h3>Details Route</h3></div>
             <div class="pdf-frame-container">
                 <iframe src="AUST_All_Bus_Schedule.pdf" title="AUST All Bus Detailed Route Blueprint"></iframe>
             </div>
             <div class="download-btn-area">
-                <a href="AUST_All_Bus_Schedule.pdf" download class="btn-download-pdf">
-                    <i class="fas fa-file-download"></i> Download Detailed Route PDF
-                </a>
+                <a href="AUST_All_Bus_Schedule.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Detailed Route PDF</a>
             </div>
-            
         </div>
     </div>
+
+    <div id="copyToast" class="toast-notification">Copied to Clipboard!</div>
 
     <footer>
         <div class="footer-top-row">
@@ -658,6 +685,7 @@
             document.getElementById('prevYearView').classList.remove('active-view');
             document.getElementById('obeView').classList.remove('active-view');
             document.getElementById('busRouteView').classList.remove('active-view');
+            document.getElementById('crgmView').classList.remove('active-view');
             
             if(viewName === 'home') {
                 document.getElementById('homeView').classList.add('active-view');
@@ -672,17 +700,41 @@
                 document.getElementById('obeView').classList.add('active-view');
             } else if(viewName === 'busRoute') {
                 document.getElementById('busRouteView').classList.add('active-view');
+            } else if(viewName === 'crgm') {
+                document.getElementById('crgmView').classList.add('active-view');
             }
             toggleMenu(true); 
         }
 
         function toggleMenu(forceClose) {
             var menu = document.getElementById('navMenu');
-            if(forceClose) {
-                menu.classList.remove('active');
+            if(forceClose) { menu.classList.remove('active'); } else { menu.classList.toggle('active'); }
+        }
+
+        // --- CR & GM Tab Controller & Copy Mechanism ---
+        function toggleCrgmTab(mode) {
+            document.getElementById('crPane').classList.remove('active-pane');
+            document.getElementById('gmPane').classList.remove('active-pane');
+            document.getElementById('crTabBtn').classList.remove('active-tab');
+            document.getElementById('gmTabBtn').classList.remove('active-tab');
+
+            if(mode === 'cr') {
+                document.getElementById('crPane').classList.add('active-pane');
+                document.getElementById('crTabBtn').classList.add('active-tab');
             } else {
-                menu.classList.toggle('active');
+                document.getElementById('gmPane').classList.add('active-pane');
+                document.getElementById('gmTabBtn').classList.add('active-tab');
             }
+        }
+
+        function copyContactNumber(text, element) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.classList.add('show-toast');
+                setTimeout(() => { toast.classList.remove('show-toast'); }, 2000);
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+            });
         }
 
         // --- FIREBASE LIVE INTERACTION ---
@@ -696,9 +748,7 @@
             appId: "1:1042755226180:web:76d4202bfc0352a240ca11"
         };
         
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
         const ADMIN_PROFILES = {
@@ -710,8 +760,7 @@
         };
 
         let currentAdminState = { isLogged: false, role: null, allowedSection: null };
-        let editingKey = null; 
-        let editingDevBtnKey = null;
+        let editingKey = null; let editingDevBtnKey = null;
 
         function getTodayDateString() {
             let today = new Date();
@@ -732,11 +781,7 @@
             if(sessionStorage.getItem('adminKey')) {
                 const savedKey = sessionStorage.getItem('adminKey');
                 const profile = ADMIN_PROFILES[savedKey];
-                currentAdminState = { 
-                    isLogged: true, 
-                    role: profile.scope === 'ALL' ? 'developer' : 'section', 
-                    allowedSection: profile.scope 
-                };
+                currentAdminState = { isLogged: true, role: profile.scope === 'ALL' ? 'developer' : 'section', allowedSection: profile.scope };
                 setupDashboard(profile.name, profile.sectionText);
                 updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
             } else {
@@ -745,30 +790,19 @@
         }
 
         function loadSectionData(sectionLetter, element) {
-            if (element && element.classList.contains('switch-admin') && currentAdminState.isLogged) {
-                // Stabilized Frame Lock
-            } else {
+            if (!(element && element.classList.contains('switch-admin') && currentAdminState.isLogged)) {
                 document.getElementById('userTableContainer').style.display = 'block';
                 document.getElementById('adminDashboard').style.display = 'none';
             }
-            
             updateActiveButton(element);
 
             database.ref('exams').on('value', (snapshot) => {
                 const tbody = document.getElementById('examTableBody');
-                tbody.innerHTML = '';
-                const today = getTodayDateString();
-
+                tbody.innerHTML = ''; const today = getTodayDateString();
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
                     if (data.section.startsWith(sectionLetter) && data.date >= today) {
-                        let row = `<tr>
-                            <td>${data.date}</td>
-                            <td>${data.course}</td>
-                            <td>${data.section}</td>
-                            <td>${data.examType}</td>
-                        </tr>`;
-                        tbody.innerHTML += row;
+                        tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
                     }
                 });
             });
@@ -781,72 +815,49 @@
 
             database.ref('exams').on('value', (snapshot) => {
                 const tbody = document.getElementById('examTableBody');
-                tbody.innerHTML = '';
-                const today = getTodayDateString();
-
+                tbody.innerHTML = ''; const today = getTodayDateString();
                 snapshot.forEach((childSnapshot) => {
                     const data = childSnapshot.val();
                     if (data.date < today) { 
-                        let row = `<tr>
-                            <td>${data.date}</td>
-                            <td>${data.course}</td>
-                            <td>${data.section}</td>
-                            <td>${data.examType}</td>
-                        </tr>`;
-                        tbody.innerHTML += row;
+                        tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
                     }
                 });
             });
         }
 
         function triggerAdminLogin() {
-            if (sessionStorage.getItem('adminKey')) {
-                evalAdminSessionState();
-                return;
-            }
-
+            if (sessionStorage.getItem('adminKey')) { evalAdminSessionState(); return; }
             const passwordInput = prompt("Enter Administration Access Key:");
             if (!passwordInput) return;
-
             if (ADMIN_PROFILES[passwordInput]) {
                 sessionStorage.setItem('adminKey', passwordInput);
-                if(passwordInput === "092418") {
-                    updateDevMenuBtnText(true);
-                }
+                if(passwordInput === "092418") { updateDevMenuBtnText(true); }
                 evalAdminSessionState();
-            } else {
-                alert("Invalid Admin Key. Process Aborted.");
-            }
+            } else { alert("Invalid Admin Key. Process Aborted."); }
         }
 
         function setupDashboard(name, sectionText) {
             document.getElementById('userTableContainer').style.display = 'none';
             document.getElementById('adminDashboard').style.display = 'block';
-            
             document.getElementById('adminName').innerText = name;
             document.getElementById('adminSectionDisplay').innerText = sectionText;
             
             const subSelect = document.getElementById('inputSubSection');
             subSelect.innerHTML = '';
-            
             if (currentAdminState.allowedSection === 'ALL') {
                 ['A','A1','A2','B','B1','B2','C','C1','C2','D','D1','D2'].forEach(sec => {
                     subSelect.innerHTML += `<option value="${sec}">${sec}</option>`;
                 });
             } else {
                 const s = currentAdminState.allowedSection;
-                [`${s}`, `${s}1`, `${s}2`].forEach(sec => {
-                    subSelect.innerHTML += `<option value="${sec}">${sec}</option>`;
-                });
+                [`${s}`, `${s}1`, `${s}2`].forEach(sec => { subSelect.innerHTML += `<option value="${sec}">${sec}</option>`; });
             }
-
             renderAdminManagementTable();
         }
 
         function showInputRow() {
             document.getElementById('inputFormContainer').style.display = 'block';
-            editingKey = null; 
-            document.getElementById('submitExamBtn').innerText = "Submit";
+            editingKey = null; document.getElementById('submitExamBtn').innerText = "Submit";
         }
 
         function submitExamData() {
@@ -854,54 +865,35 @@
             const course = document.getElementById('inputCourse').value;
             const section = document.getElementById('inputSubSection').value;
             const examType = document.getElementById('inputExamType').value;
-
-            if(!date) {
-                alert("Please select a valid target execution Date.");
-                return;
-            }
-
+            if(!date) { alert("Please select a valid target execution Date."); return; }
             const payload = { date, course, section, examType };
 
             if (editingKey) {
-                database.ref('exams/' + editingKey).update(payload)
-                    .then(() => { alert("Entry Updated Successfully."); resetForm(); });
+                database.ref('exams/' + editingKey).update(payload).then(() => { alert("Entry Updated Successfully."); resetForm(); });
             } else {
-                database.ref('exams').push(payload)
-                    .then(() => { alert("New Entry Cataloged."); resetForm(); });
+                database.ref('exams').push(payload).then(() => { alert("New Entry Cataloged."); resetForm(); });
             }
         }
 
         function resetForm() {
             document.getElementById('inputDate').value = '';
             document.getElementById('inputFormContainer').style.display = 'none';
-            editingKey = null;
-            renderAdminManagementTable();
+            editingKey = null; renderAdminManagementTable();
         }
 
         function renderAdminManagementTable() {
             database.ref('exams').once('value', (snapshot) => {
-                const tbody = document.getElementById('adminTableBody');
-                tbody.innerHTML = '';
-
+                const tbody = document.getElementById('adminTableBody'); tbody.innerHTML = '';
                 snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key;
-                    const data = childSnapshot.val();
-
+                    const key = childSnapshot.key; const data = childSnapshot.val();
                     const isDev = currentAdminState.allowedSection === 'ALL';
                     const isAssignedSection = data.section.startsWith(currentAdminState.allowedSection);
-
                     if (isDev || isAssignedSection) {
-                        let row = `<tr>
-                            <td>${data.date}</td>
-                            <td>${data.course}</td>
-                            <td>${data.section}</td>
-                            <td>${data.examType}</td>
+                        tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td>
                             <td>
                                 <button class="btn-action btn-edit" onclick="editRow('${key}', '${data.date}', '${data.course}', '${data.section}', '${data.examType}')">Edit</button>
                                 <button class="btn-action btn-delete" onclick="deleteRow('${key}')">Delete</button>
-                            </td>
-                        </tr>`;
-                        tbody.innerHTML += row;
+                            </td></tr>`;
                     }
                 });
             });
@@ -913,186 +905,114 @@
             document.getElementById('inputCourse').value = course;
             document.getElementById('inputSubSection').value = section;
             document.getElementById('inputExamType').value = examType;
-            
-            editingKey = key;
-            document.getElementById('submitExamBtn').innerText = "Update Entry";
+            editingKey = key; document.getElementById('submitExamBtn').innerText = "Update Entry";
             window.scrollTo({ top: document.getElementById('inputFormContainer').offsetTop - 100, behavior: 'smooth' });
         }
 
         function deleteRow(key) {
-            if(confirm("Are you absolutely sure you want to scrub this entry from the database?")) {
-                database.ref('exams/' + key).remove().then(() => {
-                    alert("Entry Purged.");
-                    renderAdminManagementTable();
-                });
+            if(confirm("Are you absolutely sure you want to scrub this entry?")) {
+                database.ref('exams/' + key).remove().then(() => { alert("Entry Purged."); renderAdminManagementTable(); });
             }
         }
 
         function logoutAdmin() {
-            sessionStorage.removeItem('adminKey'); 
-            currentAdminState = { isLogged: false, role: null, allowedSection: null };
-            document.getElementById('adminDashboard').style.display = 'none';
-            updateDevMenuBtnText(false);
+            sessionStorage.removeItem('adminKey'); currentAdminState = { isLogged: false, role: null, allowedSection: null };
+            document.getElementById('adminDashboard').style.display = 'none'; updateDevMenuBtnText(false);
             loadSectionData('A', document.querySelector('.exam-view-wrapper .switch-grid .switch-3d'));
         }
 
-
-        // --- DYNAMIC PREVIOUS YEAR & DEVELOPER CONTROL FLOW ---
+        // --- DEVELOPER ENGINE ---
         function triggerDevLogin() {
             if(sessionStorage.getItem('adminKey') === "092418") {
                 if(confirm("You are currently logged in as Developer. Do you want to Log Out?")) {
-                    sessionStorage.removeItem('adminKey');
-                    updateDevMenuBtnText(false);
-                    evalDevSessionState();
-                    if(document.getElementById('examsView').classList.contains('active-view')) {
-                        logoutAdmin();
-                    }
+                    sessionStorage.removeItem('adminKey'); updateDevMenuBtnText(false); evalDevSessionState();
+                    if(document.getElementById('examsView').classList.contains('active-view')) { logoutAdmin(); }
                 }
                 return;
             }
-
             const input = prompt("Enter Developer Authentication Key:");
             if(input === "092418") {
-                sessionStorage.setItem('adminKey', "092418");
-                updateDevMenuBtnText(true);
-                alert("Developer Shell Initialized.");
-                evalDevSessionState();
-            } else if(input) {
-                alert("Access Denied. Incorrect Developer Credentials.");
-            }
+                sessionStorage.setItem('adminKey', "092418"); updateDevMenuBtnText(true); alert("Developer Shell Initialized."); evalDevSessionState();
+            } else if(input) { alert("Access Denied."); }
         }
 
         function updateDevMenuBtnText(isLogged) {
             const btn = document.getElementById('devLoginMenuBtn');
-            if(isLogged) {
-                btn.innerHTML = `<a onclick="triggerDevLogin()" style="color: #ff3333; border-color: #ff3333;"><i class="fas fa-sign-out-alt"></i> Dev Log Out</a>`;
-            } else {
-                btn.innerHTML = `<a onclick="triggerDevLogin()">Developer Log in</a>`;
-            }
+            if(isLogged) { btn.innerHTML = `<a onclick="triggerDevLogin()" style="color: #ff3333; border-color: #ff3333;"><i class="fas fa-sign-out-alt"></i> Dev Log Out</a>`; }
+            else { btn.innerHTML = `<a onclick="triggerDevLogin()">Developer Log in</a>`; }
         }
 
         function evalDevSessionState() {
             const isDev = sessionStorage.getItem('adminKey') === "092418";
             const devPanel = document.getElementById('devPrevYearPanel');
-            
-            if(isDev) {
-                devPanel.style.display = "block";
-                renderDevManagementGrid();
-                updateDevMenuBtnText(true);
-            } else {
-                devPanel.style.display = "none";
-                updateDevMenuBtnText(false);
-            }
+            if(isDev) { devPanel.style.display = "block"; renderDevManagementGrid(); updateDevMenuBtnText(true); } 
+            else { devPanel.style.display = "none"; updateDevMenuBtnText(false); }
         }
 
         function showDevBtnForm() {
             document.getElementById('devBtnFormBox').style.display = "block";
-            editingDevBtnKey = null;
-            document.getElementById('devBtnTitle').value = "";
-            document.getElementById('devBtnLink').value = "";
+            editingDevBtnKey = null; document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
             document.getElementById('submitDevBtn').innerText = "Save Button Blueprint";
         }
 
         function submitDevBtnData() {
             const title = document.getElementById('devBtnTitle').value.trim();
             const link = document.getElementById('devBtnLink').value.trim();
-
-            if(!title || !link) {
-                alert("Please map both Component Display Title and Hyperlink Network URL.");
-                return;
-            }
-
+            if(!title || !link) { alert("Please map both Title and URL."); return; }
             const payload = { title, link };
 
             if(editingDevBtnKey) {
-                database.ref('prev_years/' + editingDevBtnKey).update(payload)
-                    .then(() => {
-                        alert("Component Restructured Successfully.");
-                        resetDevBtnForm();
-                    });
+                database.ref('prev_years/' + editingDevBtnKey).update(payload).then(() => { alert("Component Restructured."); resetDevBtnForm(); });
             } else {
-                database.ref('prev_years').push(payload)
-                    .then(() => {
-                        alert("Cloud Button Component Integrated into Network Vector.");
-                        resetDevBtnForm();
-                    });
+                database.ref('prev_years').push(payload).then(() => { alert("Cloud Button Integrated."); resetDevBtnForm(); });
             }
         }
 
         function resetDevBtnForm() {
-            document.getElementById('devBtnTitle').value = "";
-            document.getElementById('devBtnLink').value = "";
-            document.getElementById('devBtnFormBox').style.display = "none";
-            editingDevBtnKey = null;
-            renderDevManagementGrid();
+            document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
+            document.getElementById('devBtnFormBox').style.display = "none"; editingDevBtnKey = null; renderDevManagementGrid();
         }
 
         function renderDevManagementGrid() {
             database.ref('prev_years').once('value', (snapshot) => {
-                const tbody = document.getElementById('devBtnTableBody');
-                tbody.innerHTML = '';
-
+                const tbody = document.getElementById('devBtnTableBody'); tbody.innerHTML = '';
                 snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key;
-                    const data = childSnapshot.val();
-
-                    let row = `<tr>
-                        <td style="font-weight:bold; color:var(--gold);">${data.title}</td>
+                    const key = childSnapshot.key; const data = childSnapshot.val();
+                    tbody.innerHTML += `<tr><td style="font-weight:bold; color:var(--gold);">${data.title}</td>
                         <td>
                             <button class="btn-action btn-edit" onclick="editDevBtn('${key}', '${data.title}', '${data.link}')">Edit Blueprint</button>
                             <button class="btn-action btn-delete" onclick="deleteDevBtn('${key}')">Purge</button>
-                        </td>
-                    </tr>`;
-                    tbody.innerHTML += row;
+                        </td></tr>`;
                 });
             });
         }
 
         function editDevBtn(key, title, link) {
             document.getElementById('devBtnFormBox').style.display = "block";
-            document.getElementById('devBtnTitle').value = title;
-            document.getElementById('devBtnLink').value = link;
-            editingDevBtnKey = key;
-            document.getElementById('submitDevBtn').innerText = "Update Component";
+            document.getElementById('devBtnTitle').value = title; document.getElementById('devBtnLink').value = link;
+            editingDevBtnKey = key; document.getElementById('submitDevBtn').innerText = "Update Component";
         }
 
         function deleteDevBtn(key) {
-            if(confirm("Are you sure you want to purge this button component from the active repository matrix?")) {
-                database.ref('prev_years/' + key).remove().then(() => {
-                    alert("Component Scrubbed.");
-                    renderDevManagementGrid();
-                });
+            if(confirm("Are you sure you want to purge this button?")) {
+                database.ref('prev_years/' + key).remove().then(() => { alert("Component Scrubbed."); renderDevManagementGrid(); });
             }
         }
 
         function listenPrevYearButtons() {
             database.ref('prev_years').on('value', (snapshot) => {
-                const grid = document.getElementById('userGlossyBtnGrid');
-                grid.innerHTML = '';
-
-                let counter = 0;
+                const grid = document.getElementById('userGlossyBtnGrid'); grid.innerHTML = ''; let counter = 0;
                 snapshot.forEach((childSnapshot) => {
-                    const data = childSnapshot.val();
-                    counter++;
-                    
-                    let buttonHtml = `<a href="${data.link}" target="_blank" class="glossy-resource-btn">
-                        <i class="fas fa-folder-open" style="color: var(--gold);"></i>
-                        <span>${data.title}</span>
-                    </a>`;
-                    grid.innerHTML += buttonHtml;
+                    const data = childSnapshot.val(); counter++;
+                    grid.innerHTML += `<a href="${data.link}" target="_blank" class="glossy-resource-btn"><i class="fas fa-folder-open" style="color: var(--gold);"></i><span>${data.title}</span></a>`;
                 });
-
-                if(counter === 0) {
-                    grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No cloud elements synced. Log in as developer to map database keys.</p>`;
-                }
+                if(counter === 0) { grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No cloud elements synced.</p>`; }
             });
         }
 
-        // --- WINDOW BOOTLOADER STRATEGY ---
+        // --- WINDOW BOOTLOADER ---
         window.addEventListener('DOMContentLoaded', (event) => {
-            if(sessionStorage.getItem('adminKey') === "092418") {
-                updateDevMenuBtnText(true);
-            }
+            if(sessionStorage.getItem('adminKey') === "092418") { updateDevMenuBtnText(true); }
         });
     </script>
 </body>
