@@ -204,7 +204,7 @@
         
         select, input[type="date"], input[type="text"] { background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 5px; width: 100%; box-sizing: border-box; }
 
-        /* --- PREVIOUS YEAR DYNAMIC BUTTON STYLES --- */
+        /* --- PREVIOUS YEAR & HELPING SITES DYNAMIC BUTTON STYLES --- */
         .prev-year-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1000px; margin: 0 auto; min-height: 85vh; text-align: center; }
         .prev-headline-box { margin: 20px auto 40px auto; padding: 15px; border-bottom: 2px dashed var(--maroon); }
         .prev-headline-box h2 { font-style: italic; font-weight: 800; color: #fff; font-size: 2.3rem; text-shadow: 0 0 15px rgba(255,255,255,0.2); margin: 0; }
@@ -233,7 +233,7 @@
         }
         .glossy-resource-btn:hover::before { left: 100%; top: 100%; }
 
-        /* Dev Management Panel Inside Prev Year */
+        /* Dev Management Panel Inside Dynamic Sections */
         .dev-management-panel { background: #111; border: 2px dashed var(--neon-blue); border-radius: 12px; padding: 20px; margin: 20px; text-align: left; }
         .dev-management-panel h3 { color: var(--neon-blue); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
         
@@ -348,12 +348,14 @@
                 <li><a onclick="switchView('home')">Home</a></li>
                 <li><a href="#">2.2 Study Materials</a></li>
                 <li><a onclick="switchView('prevYear')">Previous Year</a></li>
-                <li><a href="#">Routine</a></li> <li><a onclick="switchView('busRoute')">Bus Route</a></li>
+                <li><a href="#">Routine</a></li>
+                <li><a onclick="switchView('busRoute')">Bus Route</a></li>
                 <li><a onclick="switchView('exams')">Exams</a></li>
                 <li><a href="#">Notice</a></li>
-                <li><a onclick="switchView('crgm')">CR & GM Section</a></li> <li><a href="#">Credits</a></li>
+                <li><a onclick="switchView('crgm')">CR & GM Section</a></li>
+                <li><a href="#">Credits</a></li>
                 <li><a onclick="switchView('obe')">OBE Syllabus</a></li>
-                <li><a href="#">Helping Sites</a></li>
+                <li><a onclick="switchView('helpingSites')">Helping Sites</a></li>
                 <li><a href="#">Waiver</a></li>
                 <li><a href="#">Contact Us</a></li>
                 <li class="dev-login-item" id="devLoginMenuBtn"><a onclick="triggerDevLogin()">Developer Log in</a></li>
@@ -511,6 +513,34 @@
         </div>
     </div>
 
+    <div id="helpingSitesView" class="content-section">
+        <div class="prev-year-wrapper">
+            <div class="prev-headline-box"><h2>Helping Sites by <span>EEE-53</span></h2></div>
+            
+            <div id="devHelpingSitesPanel" class="dev-management-panel" style="display: none;">
+                <h3><i class="fas fa-tools"></i> Developer Dashboard (Helping Sites)</h3>
+                <button class="btn-add" style="margin-bottom: 15px; padding: 8px 16px; font-size: 0.9rem;" onclick="showHelpingSitesForm()">+ Add New Site Button</button>
+                
+                <div class="table-container" id="helpingSitesFormBox" style="display: none; border-color: var(--gold); padding: 15px; background: #161616;">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div><label style="font-weight: bold; color: var(--gold);">Button Name:</label><input type="text" id="helpingSitesTitle"></div>
+                        <div><label style="font-weight: bold; color: var(--gold);">Link (URL):</label><input type="text" id="helpingSitesLink"></div>
+                        <button class="btn-action btn-submit" id="submitHelpingSitesBtn" onclick="submitHelpingSitesData()" style="max-width: 200px;">Save Site Blueprint</button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table style="min-width: 500px;">
+                        <thead><tr><th>Button Display Name</th><th>Actions</th></tr></thead>
+                        <tbody id="helpingSitesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="glossy-btn-grid" id="userHelpingSitesGrid"></div>
+        </div>
+    </div>
+
     <div id="crgmView" class="content-section">
         <div class="crgm-wrapper">
             <div class="prev-headline-box">
@@ -625,7 +655,7 @@
                             <i class="far fa-copy copy-icon"></i>
                         </div>
                     </div>
-                                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -686,6 +716,7 @@
             document.getElementById('obeView').classList.remove('active-view');
             document.getElementById('busRouteView').classList.remove('active-view');
             document.getElementById('crgmView').classList.remove('active-view');
+            document.getElementById('helpingSitesView').classList.remove('active-view');
             
             if(viewName === 'home') {
                 document.getElementById('homeView').classList.add('active-view');
@@ -702,6 +733,10 @@
                 document.getElementById('busRouteView').classList.add('active-view');
             } else if(viewName === 'crgm') {
                 document.getElementById('crgmView').classList.add('active-view');
+            } else if(viewName === 'helpingSites') {
+                document.getElementById('helpingSitesView').classList.add('active-view');
+                evalDevSessionState();
+                listenHelpingSitesButtons();
             }
             toggleMenu(true); 
         }
@@ -760,7 +795,9 @@
         };
 
         let currentAdminState = { isLogged: false, role: null, allowedSection: null };
-        let editingKey = null; let editingDevBtnKey = null;
+        let editingKey = null; 
+        let editingDevBtnKey = null;
+        let editingHelpingSiteKey = null;
 
         function getTodayDateString() {
             let today = new Date();
@@ -921,7 +958,7 @@
             loadSectionData('A', document.querySelector('.exam-view-wrapper .switch-grid .switch-3d'));
         }
 
-        // --- DEVELOPER ENGINE ---
+        // --- DEVELOPER ENGINE & SESSION CONTROLLER ---
         function triggerDevLogin() {
             if(sessionStorage.getItem('adminKey') === "092418") {
                 if(confirm("You are currently logged in as Developer. Do you want to Log Out?")) {
@@ -944,11 +981,25 @@
 
         function evalDevSessionState() {
             const isDev = sessionStorage.getItem('adminKey') === "092418";
-            const devPanel = document.getElementById('devPrevYearPanel');
-            if(isDev) { devPanel.style.display = "block"; renderDevManagementGrid(); updateDevMenuBtnText(true); } 
-            else { devPanel.style.display = "none"; updateDevMenuBtnText(false); }
+            
+            // Sync Dev Panel View for Previous Year
+            const devPrevPanel = document.getElementById('devPrevYearPanel');
+            if(devPrevPanel) {
+                if(isDev) { devPrevPanel.style.display = "block"; renderDevManagementGrid(); } 
+                else { devPrevPanel.style.display = "none"; }
+            }
+
+            // Sync Dev Panel View for Helping Sites
+            const devHelpingPanel = document.getElementById('devHelpingSitesPanel');
+            if(devHelpingPanel) {
+                if(isDev) { devHelpingPanel.style.display = "block"; renderHelpingSitesGrid(); }
+                else { devHelpingPanel.style.display = "none"; }
+            }
+
+            if(isDev) { updateDevMenuBtnText(true); } else { updateDevMenuBtnText(false); }
         }
 
+        // --- PREVIOUS YEARS LINK MANAGEMENT ENGINE ---
         function showDevBtnForm() {
             document.getElementById('devBtnFormBox').style.display = "block";
             editingDevBtnKey = null; document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
@@ -1007,6 +1058,84 @@
                     grid.innerHTML += `<a href="${data.link}" target="_blank" class="glossy-resource-btn"><i class="fas fa-folder-open" style="color: var(--gold);"></i><span>${data.title}</span></a>`;
                 });
                 if(counter === 0) { grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No cloud elements synced.</p>`; }
+            });
+        }
+
+        // --- HELPING SITES ENGINE ---
+        function showHelpingSitesForm() {
+            document.getElementById('helpingSitesFormBox').style.display = "block";
+            editingHelpingSiteKey = null; 
+            document.getElementById('helpingSitesTitle').value = ""; 
+            document.getElementById('helpingSitesLink').value = "";
+            document.getElementById('submitHelpingSitesBtn').innerText = "Save Site Blueprint";
+        }
+
+        function submitHelpingSitesData() {
+            const title = document.getElementById('helpingSitesTitle').value.trim();
+            const link = document.getElementById('helpingSitesLink').value.trim();
+            if(!title || !link) { alert("Please define both Button Name and URL."); return; }
+            const payload = { title, link };
+
+            if(editingHelpingSiteKey) {
+                database.ref('helping_sites/' + editingHelpingSiteKey).update(payload).then(() => { 
+                    alert("Site Blueprint Restructured."); 
+                    resetHelpingSitesForm(); 
+                });
+            } else {
+                database.ref('helping_sites').push(payload).then(() => { 
+                    alert("Helping Site Cloud Element Integrated."); 
+                    resetHelpingSitesForm(); 
+                });
+            }
+        }
+
+        function resetHelpingSitesForm() {
+            document.getElementById('helpingSitesTitle').value = ""; 
+            document.getElementById('helpingSitesLink').value = "";
+            document.getElementById('helpingSitesFormBox').style.display = "none"; 
+            editingHelpingSiteKey = null; 
+            renderHelpingSitesGrid();
+        }
+
+        function renderHelpingSitesGrid() {
+            database.ref('helping_sites').once('value', (snapshot) => {
+                const tbody = document.getElementById('helpingSitesTableBody'); tbody.innerHTML = '';
+                snapshot.forEach((childSnapshot) => {
+                    const key = childSnapshot.key; const data = childSnapshot.val();
+                    tbody.innerHTML += `<tr><td style="font-weight:bold; color:var(--gold);">${data.title}</td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="editHelpingSite('${key}', '${data.title}', '${data.link}')">Edit Blueprint</button>
+                            <button class="btn-action btn-delete" onclick="deleteHelpingSite('${key}')">Purge</button>
+                        </td></tr>`;
+                });
+            });
+        }
+
+        function editHelpingSite(key, title, link) {
+            document.getElementById('helpingSitesFormBox').style.display = "block";
+            document.getElementById('helpingSitesTitle').value = title; 
+            document.getElementById('helpingSitesLink').value = link;
+            editingHelpingSiteKey = key; 
+            document.getElementById('submitHelpingSitesBtn').innerText = "Update Component";
+        }
+
+        function deleteHelpingSite(key) {
+            if(confirm("Are you sure you want to completely purge this site component?")) {
+                database.ref('helping_sites/' + key).remove().then(() => { 
+                    alert("Helping Site Data Purged."); 
+                    renderHelpingSitesGrid(); 
+                });
+            }
+        }
+
+        function listenHelpingSitesButtons() {
+            database.ref('helping_sites').on('value', (snapshot) => {
+                const grid = document.getElementById('userHelpingSitesGrid'); grid.innerHTML = ''; let counter = 0;
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val(); counter++;
+                    grid.innerHTML += `<a href="${data.link}" target="_blank" class="glossy-resource-btn"><i class="fas fa-globe" style="color: var(--neon-blue);"></i><span>${data.title}</span></a>`;
+                });
+                if(counter === 0) { grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No site paths linked yet.</p>`; }
             });
         }
 
