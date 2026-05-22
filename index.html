@@ -16,6 +16,17 @@
             --neon-green: #39FF14;
             --flame-color: rgba(255, 215, 0, 0.6);
             --neon-blue: #00F3FF;
+            
+            /* Syllabus Table Glowing Metallic Colors */
+            --eee2203: #ff3b30;
+            --eee2204: #ff6b6b;
+            --eee2213: #4cd964;
+            --eee2200: #007aff;
+            --eee2210: #5ac8fa;
+            --eee2226: #ffcc00;
+            --hum2201: #ff9500;
+            --math2203: #5856d6;
+            --hum2209: #ff2d55;
         }
 
         body, html {
@@ -86,7 +97,91 @@
             padding: 60px 0 20px; border-top: 5px solid var(--maroon); box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
         }
 
-        .circuit-container { display: flex; justify-content: center; gap: 100px; padding-bottom: 40px; flex-wrap: wrap; }
+        /* --- NEW JOOSS 3D GLASSMOPRHIC SYLLABUS TABLE --- */
+        .syllabus-3d-wrapper {
+            max-width: 95%;
+            margin: 10px auto 40px auto;
+            perspective: 1200px;
+            padding: 0 15px;
+        }
+        .syllabus-table-3d {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            transform: rotateX(10deg) rotateY(-2deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s;
+        }
+        .syllabus-table-3d:hover {
+            transform: rotateX(0deg) rotateY(0deg) scale(1.01);
+        }
+        .syllabus-table-3d th {
+            background: linear-gradient(135deg, var(--maroon-dark), #1a0000);
+            color: var(--gold);
+            padding: 16px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .syllabus-table-3d th:first-child { border-radius: 12px 0 0 12px; }
+        .syllabus-table-3d th:last-child { border-radius: 0 12px 12px 0; }
+
+        .syllabus-table-3d tr {
+            transition: transform 0.3s;
+            transform-style: preserve-3d;
+        }
+        .syllabus-table-3d td {
+            padding: 16px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Glossy Highlight Reflection Upper Overlay */
+        .syllabus-table-3d td::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 40%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0));
+            pointer-events: none;
+        }
+        .syllabus-table-3d td:first-child { 
+            border-radius: 10px 0 0 10px; 
+            border-left: 4px solid var(--course-color, var(--gold));
+        }
+        .syllabus-table-3d td:last-child { 
+            border-radius: 0 10px 10px 0; 
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Hover Elevation Effects */
+        .syllabus-table-3d tr:hover td {
+            background: rgba(30, 30, 30, 0.85);
+            color: #fff !important;
+            box-shadow: 0 8px 25px var(--course-shadow, rgba(255,255,255,0.1));
+            transform: translateZ(15px);
+        }
+
+        /* Distinct Color Triggers Mapping */
+        .row-eee2203 { --course-color: var(--eee2203); --course-shadow: rgba(255, 59, 48, 0.4); color: #ff8b85; }
+        .row-eee2204 { --course-color: var(--eee2204); --course-shadow: rgba(255, 107, 107, 0.4); color: #ffb3b3; }
+        .row-eee2213 { --course-color: var(--eee2213); --course-shadow: rgba(76, 217, 100, 0.4); color: #a1f0ae; }
+        .row-eee2200 { --course-color: var(--eee2200); --course-shadow: rgba(0, 122, 255, 0.4); color: #80bfff; }
+        .row-eee2210 { --course-color: var(--eee2210); --course-shadow: rgba(90, 200, 250, 0.4); color: #b3e5fc; }
+        .row-eee2226 { --course-color: var(--eee2226); --course-shadow: rgba(255, 204, 0, 0.4); color: #ffe680; }
+        .row-hum2201 { --course-color: var(--hum2201); --course-shadow: rgba(255, 149, 0, 0.4); color: #ffd199; }
+        .row-math2203 { --course-color: var(--math2203); --course-shadow: rgba(88, 86, 214, 0.4); color: #b3b2f2; }
+        .row-hum2209 { --course-color: var(--hum2209); --course-shadow: rgba(255, 45, 85, 0.4); color: #ff99ad; }
+
+        /* --- SWITCH CONTAINER --- */
+        .circuit-container { display: flex; justify-content: center; gap: 100px; padding-top: 20px; padding-bottom: 40px; flex-wrap: wrap; }
         .circuit-switch { position: relative; text-align: center; cursor: pointer; padding: 20px; }
         .switch-label { font-weight: bold; font-size: 1.5rem; color: #fff; display: block; margin-bottom: 25px; }
         .wire-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
@@ -150,7 +245,7 @@
         footer { 
             background: #000; padding: 30px 20px; 
             border-top: 1px solid #1a1a1a; text-align: center;
-            position: relative; z-index: 20; /* ওপরে রাখার জন্য জেনুইন ইনডেক্স */
+            position: relative; z-index: 20;
         }
         .footer-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .footer-logo-link { color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none; }
@@ -168,6 +263,10 @@
             .main-logo { height: 50px; }
             .exam-view-wrapper { padding-top: 240px; }
             .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
+            
+            /* Responsive Table Tweaks */
+            .syllabus-table-3d { transform: none !important; }
+            .syllabus-table-3d th, .syllabus-table-3d td { padding: 10px; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -213,6 +312,66 @@
         </div>
 
         <div class="shutter-panel">
+            
+            <div class="syllabus-3d-wrapper">
+                <table class="syllabus-table-3d">
+                    <thead>
+                        <tr>
+                            <th>Course No.</th>
+                            <th>Course Title</th>
+                            <th>Credit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="row-eee2203">
+                            <td>EEE 2203</td>
+                            <td>Electronics II</td>
+                            <td>3.0</td>
+                        </tr>
+                        <tr class="row-eee2204">
+                            <td>EEE 2204</td>
+                            <td>Electronics II Lab</td>
+                            <td>1.5</td>
+                        </tr>
+                        <tr class="row-eee2213">
+                            <td>EEE 2213</td>
+                            <td>Electrical Properties of Materials</td>
+                            <td>3.0</td>
+                        </tr>
+                        <tr class="row-eee2200">
+                            <td>EEE 2200</td>
+                            <td>Electrical Installations</td>
+                            <td>1.5</td>
+                        </tr>
+                        <tr class="row-eee2210">
+                            <td>EEE 2210</td>
+                            <td>Electronic Circuits and Systems Simulation Lab.</td>
+                            <td>1.5</td>
+                        </tr>
+                        <tr class="row-eee2226">
+                            <td>EEE 2226</td>
+                            <td>Numerical Methods for Engineering Lab.</td>
+                            <td>1.5</td>
+                        </tr>
+                        <tr class="row-hum2201">
+                            <td>HUM 2201</td>
+                            <td>Bengali Language and Literature</td>
+                            <td>3.0</td>
+                        </tr>
+                        <tr class="row-math2203">
+                            <td>MATH 2203</td>
+                            <td>Mathematics V</td>
+                            <td>3.0</td>
+                        </tr>
+                        <tr class="row-hum2209">
+                            <td>HUM 2209</td>
+                            <td>Accounting and Economics</td>
+                            <td>3.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <section class="circuit-container">
                 <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                     <span class="switch-label">MID</span>
@@ -295,14 +454,14 @@
                                 <td>
                                     <select id="inputCourse">
                                         <option value="EEE 2203: Electronics II">EEE 2203: Electronics II</option>
-<option value="EEE 2204: Electronics II Lab">EEE 2204: Electronics II Lab</option>
-<option value="EEE 2213: Electrical Properties of Materials">EEE 2213: Electrical Properties of Materials</option>
-<option value="EEE 2200: Electrical Installations">EEE 2200: Electrical Installations</option>
-<option value="EEE 2210: Electronic Circuits and Systems Simulation Lab.">EEE 2210: Electronic Circuits and Systems Simulation Lab.</option>
-<option value="EEE 2226: Numerical Methods for Engineering Lab.">EEE 2226: Numerical Methods for Engineering Lab.</option>
-<option value="HUM 2201: Bengali Language and Literature">HUM 2201: Bengali Language and Literature</option>
-<option value="MATH 2203: Mathematics V">MATH 2203: Mathematics V</option>
-<option value="HUM 2209: Accounting and Economics">HUM 2209: Accounting and Economics</option>
+                                        <option value="EEE 2204: Electronics II Lab">EEE 2204: Electronics II Lab</option>
+                                        <option value="EEE 2213: Electrical Properties of Materials">EEE 2213: Electrical Properties of Materials</option>
+                                        <option value="EEE 2200: Electrical Installations">EEE 2200: Electrical Installations</option>
+                                        <option value="EEE 2210: Electronic Circuits and Systems Simulation Lab.">EEE 2210: Electronic Circuits and Systems Simulation Lab.</option>
+                                        <option value="EEE 2226: Numerical Methods for Engineering Lab.">EEE 2226: Numerical Methods for Engineering Lab.</option>
+                                        <option value="HUM 2201: Bengali Language and Literature">HUM 2201: Bengali Language and Literature</option>
+                                        <option value="MATH 2203: Mathematics V">MATH 2203: Mathematics V</option>
+                                        <option value="HUM 2209: Accounting and Economics">HUM 2209: Accounting and Economics</option>
                                     </select>
                                 </td>
                                 <td>
@@ -556,6 +715,7 @@
             renderAdminManagementTable();
         }
 
+        // Realtime Management View Generator
         function renderAdminManagementTable() {
             database.ref('exams').once('value', (snapshot) => {
                 const tbody = document.getElementById('adminTableBody');
@@ -597,6 +757,7 @@
             window.scrollTo({ top: document.getElementById('inputFormContainer').offsetTop - 100, behavior: 'smooth' });
         }
 
+        // Scrub element sequence
         function deleteRow(key) {
             if(confirm("Are you absolutely sure you want to scrub this entry from the database?")) {
                 database.ref('exams/' + key).remove().then(() => {
