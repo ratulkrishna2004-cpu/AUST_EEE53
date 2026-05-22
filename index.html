@@ -1144,5 +1144,237 @@
             if(sessionStorage.getItem('adminKey') === "092418") { updateDevMenuBtnText(true); }
         });
     </script>
-</body>
+<div id="creditsView" class="content-section" style="display: none;">
+        <div class="pdf-view-wrapper" style="padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center;">
+            <div class="pdf-header-box" style="margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold);">
+                <h2 style="color: var(--gold); font-size: 2.2rem; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin: 0; text-transform: uppercase; letter-spacing: 2px;">
+                    Credits
+                </h2>
+            </div>
+            
+            <div class="credits-image-container" style="max-width: 90%; margin: 30px auto; border: 3px solid var(--maroon); border-radius: 15px; overflow: hidden; box-shadow: 0 0 35px rgba(128,0,0,0.6); background: #000; display: inline-block;">
+                <img src="Credits.png" alt="System Developer Credits" style="width: 100%; height: auto; display: block; object-fit: contain;">
+            </div>
+        </div>
+
+        <footer style="background: #000; padding: 30px 20px; border-top: 1px solid #1a1a1a; text-align: center; position: relative; z-index: 20;">
+            <div class="footer-top-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <a href="#" class="footer-logo-link" style="color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none;">AUST EEE-53</a>
+                <a href="mailto:support@eee53.com" class="footer-mail-link" style="color: var(--gold); font-size: 1.6rem;"><i class="fas fa-envelope"></i></a>
+            </div>
+            <div class="dev-credit" style="color: #fff; font-weight: bold; font-size: 0.9rem; border-top: 1px solid #222; padding-top: 10px;">Designed & Maintained by Ratul Krishna Mojumder</div>
+        </footer>
+    </div>
+
+    <script>
+        // 2. Heavy-Duty Dynamic Router Engine
+        (function injectCreditsCore() {
+            function enforceCreditsRoute(viewName) {
+                if (viewName === 'credits') {
+                    // Hide all other views
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active-view');
+                        section.style.display = 'none';
+                    });
+                    
+                    // Show our custom credits screen with footer inside
+                    const creditsEl = document.getElementById('creditsView');
+                    if (creditsEl) {
+                        creditsEl.classList.add('active-view');
+                        creditsEl.style.display = 'block';
+                    }
+                    
+                    // Close mobile navbar
+                    const navMenu = document.getElementById('navMenu');
+                    if (navMenu) navMenu.classList.remove('active');
+                    
+                    window.scrollTo(0, 0);
+                    return true;
+                }
+                return false;
+            }
+
+            // Hook smoothly into your native switchView matrix
+            const nativeSwitchView = window.switchView;
+            window.switchView = function(view) {
+                const intercepted = enforceCreditsRoute(view);
+                if (!intercepted && typeof nativeSwitchView === 'function') {
+                    nativeSwitchView(view);
+                }
+            };
+
+            // Dynamic bindings for menu click
+            document.addEventListener("DOMContentLoaded", () => {
+                document.querySelectorAll("a, button, li").forEach(element => {
+                    if (element.textContent && element.textContent.trim().toLowerCase() === "credits") {
+                        element.removeAttribute("onclick");
+                        element.addEventListener("click", (e) => {
+                            e.preventDefault();
+                            window.switchView('credits');
+                        });
+                        element.style.cursor = "pointer";
+                    }
+                });
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll("a, button, li").forEach(element => {
+                    if (element.textContent && element.textContent.trim().toLowerCase() === "credits") {
+                        element.onclick = function(e) {
+                            e.preventDefault();
+                            window.switchView('credits');
+                        };
+                    }
+                });
+            }, 1500);
+        })();
+    </script>
+<script>
+        (function injectMaterialsRedirect() {
+            // 1. PLACE YOUR GOOGLE DRIVE LINK HERE
+            const myDriveLink = "https://drive.google.com/drive/folders/11IT7WRavcqKYkkKaiQX9yH3Ax9yX8hHT?usp=drive_link";
+
+            function setupMaterialsClick() {
+                // Menu bar-er shob components high-accuracy scan korbe
+                document.querySelectorAll("a, button, li").forEach(element => {
+                    const text = element.textContent ? element.textContent.trim().toLowerCase() : "";
+                    
+                    // Button name-e "2.2 materials" ba "study materials" thakle intercept korbe
+                    if (text.includes("2.2") && (text.includes("materials") || text.includes("study"))) {
+                        element.removeAttribute("onclick"); // Old iframe function purge korbe
+                        
+                        // New behavior bind korbe (srasori new tab-e link open hobe)
+                        element.addEventListener("click", (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.open(myDriveLink, '_blank');
+                            
+                            // Mobile menu bar active thakle collapse kore dibe safely
+                            const navMenu = document.getElementById('navMenu');
+                            if (navMenu) navMenu.classList.remove('active');
+                        });
+                        
+                        element.style.cursor = "pointer";
+                    }
+                });
+            }
+
+            // Standard DOM Loader check
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", setupMaterialsClick);
+            } else {
+                setupMaterialsClick();
+            }
+
+            // Firebase stream delay filter bypass protection
+            setTimeout(setupMaterialsClick, 1500);
+            setTimeout(setupMaterialsClick, 3000);
+        })();
+    </script>
+<script>
+    // SEARCH ENGINE INITIALIZATION
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.querySelector('.search-wrapper input');
+        const searchBtn = document.querySelector('.search-wrapper button');
+        
+        // Website-er shob page index
+        const searchIndex = [
+            { name: "home", view: "home" },
+            { name: "study materials", view: "studyMaterials" },
+            { name: "previous year", view: "prevYear" },
+            { name: "routine", view: "routine" },
+            { name: "bus route", view: "busRoute" },
+            { name: "exams", view: "exams" },
+            { name: "notice", view: "notice" },
+            { name: "credits", view: "credits" }
+        ];
+
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            if (!query) return;
+
+            const match = searchIndex.find(item => item.name.includes(query));
+
+            if (match) {
+                window.switchView(match.view); 
+                searchInput.value = ""; 
+            } else {
+                alert("দুঃখিত, কোনো পেজ পাওয়া যায়নি!");
+            }
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.querySelector('.search-wrapper input');
+        const searchBtn = document.querySelector('.search-wrapper button');
+        
+        // Ekhane page-er naam er sathe content-o add kora holo
+        const searchIndex = [
+            { name: "Home", view: "home", keywords: "main page welcome dashboard" },
+            { name: "Study Materials", view: "studyMaterials", keywords: "syllabus pdf 2.2 course notes" },
+            { name: "Previous Year", view: "prevYear", keywords: "question paper past year exam" },
+            { name: "Routine", view: "routine", keywords: "class schedule timetable" },
+            { name: "Bus Route", view: "busRoute", keywords: "transport shuttle bus" },
+            { name: "Exams", view: "exams", keywords: "test date assignment" },
+            { name: "Notice", view: "notice", keywords: "official news update" },
+            { name: "Credits", view: "credits", keywords: "developer info team" }
+{ name: "CR & GM Section", view: "CR", keywords: "Nesar Eusha Dola Opu Sruti Sahil Rushil Samiha" }
+{ name: "CR & GM Section", view: "GM", keywords: "Fahim Aumi Rownak" }
+
+
+
+
+        ];
+
+        // Suggestion box create kora
+        const suggestionBox = document.createElement('div');
+        suggestionBox.id = 'search-suggestions';
+        suggestionBox.style.position = 'absolute';
+        suggestionBox.style.background = '#fff';
+        suggestionBox.style.color = '#000';
+        suggestionBox.style.width = searchInput.offsetWidth + 'px';
+        suggestionBox.style.zIndex = '9999';
+        searchInput.parentNode.appendChild(suggestionBox);
+
+        function performSearch(query) {
+            const match = searchIndex.find(item => 
+                item.name.toLowerCase().includes(query) || 
+                item.keywords.toLowerCase().includes(query)
+            );
+            if (match) {
+                window.switchView(match.view);
+                suggestionBox.innerHTML = "";
+            }
+        }
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+            suggestionBox.innerHTML = "";
+            if (query.length > 0) {
+                const matches = searchIndex.filter(item => 
+                    item.name.toLowerCase().includes(query) || 
+                    item.keywords.toLowerCase().includes(query)
+                );
+                matches.forEach(m => {
+                    const div = document.createElement('div');
+                    div.innerHTML = m.name;
+                    div.style.padding = '10px';
+                    div.style.cursor = 'pointer';
+                    div.onclick = () => { window.switchView(m.view); suggestionBox.innerHTML = ""; searchInput.value = ""; };
+                    suggestionBox.appendChild(div);
+                });
+            }
+        });
+
+        searchBtn.addEventListener('click', () => performSearch(searchInput.value.toLowerCase()));
+    });
+</script>
+
+    </body>
 </html>
