@@ -157,8 +157,8 @@
         .syllabus-table-3d tr:hover td {
             background: rgba(35, 35, 35, 0.9);
             color: #fff !important;
-            box-shadow: 0 0 20px var(--course-shadow, rgba(255,255,255,0.2)),
-                        inset 0 0 10px var(--course-shadow, rgba(255,255,255,0.1));
+            box-shadow: 0 0 20px var(--course-shadow, rgba(255, 255, 255, 0.2)),
+                        inset 0 0 10px var(--course-shadow, rgba(255, 255, 255, 0.1));
             border-top: 1px solid var(--course-color);
             border-bottom: 1px solid var(--course-color);
         }
@@ -239,6 +239,11 @@
         .pdf-view-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center; }
         .pdf-header-box { margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold); }
         .pdf-header-box h2 { color: var(--gold); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); margin: 0 0 10px 0; }
+        
+        /* Subheading Style for Detailed Route Section */
+        .pdf-subheading-box { margin-top: 50px; margin-bottom: 20px; padding: 10px; border-top: 1px dashed #444; }
+        .pdf-subheading-box h3 { color: var(--neon-blue); font-size: 1.5rem; text-shadow: 0 0 8px rgba(0, 243, 255, 0.4); margin: 15px 0 5px 0; text-transform: uppercase; }
+
         .pdf-frame-container { background: #111; border: 2px solid var(--maroon); border-radius: 12px; margin: 25px 20px; height: 70vh; overflow: hidden; box-shadow: 0 0 35px rgba(128,0,0,0.5); }
         .pdf-frame-container iframe { width: 100%; height: 100%; border: none; }
         .download-btn-area { margin: 30px auto; }
@@ -537,6 +542,7 @@
                 <h2>AUST Transport Network Panel</h2>
                 <p style="color: #bbb; margin: 0;">Official Bus and Shuttle Schedule Blueprint Frame</p>
             </div>
+            
             <div class="pdf-frame-container">
                 <iframe src="Bus_and_Shuttle_Schedule.pdf" title="AUST Transport Schedule Network Blueprint"></iframe>
             </div>
@@ -545,6 +551,20 @@
                     <i class="fas fa-file-download"></i> Download Bus & Shuttle Schedule PDF
                 </a>
             </div>
+
+            <div class="pdf-subheading-box">
+                <h3>Details Route</h3>
+            </div>
+            
+            <div class="pdf-frame-container">
+                <iframe src="AUST_All_Bus_Schedule.pdf" title="AUST All Bus Detailed Route Blueprint"></iframe>
+            </div>
+            <div class="download-btn-area">
+                <a href="AUST_All_Bus_Schedule.pdf" download class="btn-download-pdf">
+                    <i class="fas fa-file-download"></i> Download Detailed Route PDF
+                </a>
+            </div>
+            
         </div>
     </div>
 
