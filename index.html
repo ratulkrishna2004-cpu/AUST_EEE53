@@ -97,23 +97,16 @@
             padding: 60px 0 20px; border-top: 5px solid var(--maroon); box-shadow: 0 -20px 40px rgba(0,0,0,0.9);
         }
 
-        /* --- NEW JOOSS 3D GLASSMOPRHIC SYLLABUS TABLE --- */
+        /* --- STABLE 3D GLASSMORPHIC SYLLABUS TABLE --- */
         .syllabus-3d-wrapper {
             max-width: 95%;
             margin: 10px auto 40px auto;
-            perspective: 1200px;
             padding: 0 15px;
         }
         .syllabus-table-3d {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0 12px;
-            transform: rotateX(10deg) rotateY(-2deg);
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s;
-        }
-        .syllabus-table-3d:hover {
-            transform: rotateX(0deg) rotateY(0deg) scale(1.01);
         }
         .syllabus-table-3d th {
             background: linear-gradient(135deg, var(--maroon-dark), #1a0000);
@@ -130,8 +123,7 @@
         .syllabus-table-3d th:last-child { border-radius: 0 12px 12px 0; }
 
         .syllabus-table-3d tr {
-            transition: transform 0.3s;
-            transform-style: preserve-3d;
+            transition: all 0.3s ease;
         }
         .syllabus-table-3d td {
             padding: 16px;
@@ -143,8 +135,9 @@
             font-weight: 600;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
-        /* Glossy Highlight Reflection Upper Overlay */
+        /* Glossy Highlight Reflection Overlay */
         .syllabus-table-3d td::before {
             content: '';
             position: absolute;
@@ -161,24 +154,29 @@
             border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Hover Elevation Effects */
+        /* SMART GLOWING HOVER EFFECT (No Flip, Only Color Burn/Glow) */
         .syllabus-table-3d tr:hover td {
-            background: rgba(30, 30, 30, 0.85);
+            background: rgba(35, 35, 35, 0.9);
             color: #fff !important;
-            box-shadow: 0 8px 25px var(--course-shadow, rgba(255,255,255,0.1));
-            transform: translateZ(15px);
+            box-shadow: 0 0 20px var(--course-shadow, rgba(255,255,255,0.2)),
+                        inset 0 0 10px var(--course-shadow, rgba(255,255,255,0.1));
+            border-top: 1px solid var(--course-color);
+            border-bottom: 1px solid var(--course-color);
+        }
+        .syllabus-table-3d tr:hover td:last-child {
+            border-right: 1px solid var(--course-color);
         }
 
         /* Distinct Color Triggers Mapping */
-        .row-eee2203 { --course-color: var(--eee2203); --course-shadow: rgba(255, 59, 48, 0.4); color: #ff8b85; }
-        .row-eee2204 { --course-color: var(--eee2204); --course-shadow: rgba(255, 107, 107, 0.4); color: #ffb3b3; }
-        .row-eee2213 { --course-color: var(--eee2213); --course-shadow: rgba(76, 217, 100, 0.4); color: #a1f0ae; }
-        .row-eee2200 { --course-color: var(--eee2200); --course-shadow: rgba(0, 122, 255, 0.4); color: #80bfff; }
-        .row-eee2210 { --course-color: var(--eee2210); --course-shadow: rgba(90, 200, 250, 0.4); color: #b3e5fc; }
-        .row-eee2226 { --course-color: var(--eee2226); --course-shadow: rgba(255, 204, 0, 0.4); color: #ffe680; }
-        .row-hum2201 { --course-color: var(--hum2201); --course-shadow: rgba(255, 149, 0, 0.4); color: #ffd199; }
-        .row-math2203 { --course-color: var(--math2203); --course-shadow: rgba(88, 86, 214, 0.4); color: #b3b2f2; }
-        .row-hum2209 { --course-color: var(--hum2209); --course-shadow: rgba(255, 45, 85, 0.4); color: #ff99ad; }
+        .row-eee2203 { --course-color: var(--eee2203); --course-shadow: rgba(255, 59, 48, 0.5); color: #ff8b85; }
+        .row-eee2204 { --course-color: var(--eee2204); --course-shadow: rgba(255, 107, 107, 0.5); color: #ffb3b3; }
+        .row-eee2213 { --course-color: var(--eee2213); --course-shadow: rgba(76, 217, 100, 0.5); color: #a1f0ae; }
+        .row-eee2200 { --course-color: var(--eee2200); --course-shadow: rgba(0, 122, 255, 0.5); color: #80bfff; }
+        .row-eee2210 { --course-color: var(--eee2210); --course-shadow: rgba(90, 200, 250, 0.5); color: #b3e5fc; }
+        .row-eee2226 { --course-color: var(--eee2226); --course-shadow: rgba(255, 204, 0, 0.5); color: #ffe680; }
+        .row-hum2201 { --course-color: var(--hum2201); --course-shadow: rgba(255, 149, 0, 0.5); color: #ffd199; }
+        .row-math2203 { --course-color: var(--math2203); --course-shadow: rgba(88, 86, 214, 0.5); color: #b3b2f2; }
+        .row-hum2209 { --course-color: var(--hum2209); --course-shadow: rgba(255, 45, 85, 0.5); color: #ff99ad; }
 
         /* --- SWITCH CONTAINER --- */
         .circuit-container { display: flex; justify-content: center; gap: 100px; padding-top: 20px; padding-bottom: 40px; flex-wrap: wrap; }
@@ -265,7 +263,6 @@
             .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
             
             /* Responsive Table Tweaks */
-            .syllabus-table-3d { transform: none !important; }
             .syllabus-table-3d th, .syllabus-table-3d td { padding: 10px; font-size: 0.85rem; }
         }
     </style>
@@ -422,7 +419,7 @@
                         </tr>
                     </thead>
                     <tbody id="examTableBody">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
 
@@ -466,7 +463,7 @@
                                 </td>
                                 <td>
                                     <select id="inputSubSection">
-                                        </select>
+                                    </select>
                                 </td>
                                 <td>
                                     <select id="inputExamType">
@@ -499,7 +496,7 @@
                             </tr>
                         </thead>
                         <tbody id="adminTableBody">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -525,7 +522,21 @@
                 document.getElementById('homeView').classList.add('active-view');
             } else if(viewName === 'exams') {
                 document.getElementById('examsView').classList.add('active-view');
-                loadSectionData('A', document.querySelector('.switch-grid .switch-3d')); 
+                
+                // Session Persistence Check during inner view switching
+                if(sessionStorage.getItem('adminKey')) {
+                    const savedKey = sessionStorage.getItem('adminKey');
+                    const profile = ADMIN_PROFILES[savedKey];
+                    currentAdminState = { 
+                        isLogged: true, 
+                        role: profile.scope === 'ALL' ? 'developer' : 'section', 
+                        allowedSection: profile.scope 
+                    };
+                    setupDashboard(profile.name, profile.sectionText);
+                    updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
+                } else {
+                    loadSectionData('A', document.querySelector('.switch-grid .switch-3d')); 
+                }
             }
             toggleMenu(true); 
         }
@@ -581,15 +592,23 @@
         }
 
         function updateActiveButton(targetButton) {
+            if(!targetButton) return;
             document.querySelectorAll('.switch-grid .switch-3d').forEach(btn => btn.classList.remove('active-btn'));
             targetButton.classList.add('active-btn');
         }
 
         // 1. User Read View
         function loadSectionData(sectionLetter, element) {
+            // If admin is active, don't break view unless manually triggered
+            if (element && element.classList.contains('switch-admin') && currentAdminState.isLogged) {
+                // Keep admin active
+            } else {
+                // If switching sections, bypass admin dashboard interface visual block
+                document.getElementById('userTableContainer').style.display = 'block';
+                document.getElementById('adminDashboard').style.display = 'none';
+            }
+            
             updateActiveButton(element);
-            document.getElementById('userTableContainer').style.display = 'block';
-            document.getElementById('adminDashboard').style.display = 'none';
 
             database.ref('exams').on('value', (snapshot) => {
                 const tbody = document.getElementById('examTableBody');
@@ -637,12 +656,29 @@
             });
         }
 
-        // 3. Login Control Router
+        // 3. Login Control Router with Persistent Session
         function triggerAdminLogin() {
+            // Check if session token already exists
+            if (sessionStorage.getItem('adminKey')) {
+                const savedKey = sessionStorage.getItem('adminKey');
+                const profile = ADMIN_PROFILES[savedKey];
+                currentAdminState = { 
+                    isLogged: true, 
+                    role: profile.scope === 'ALL' ? 'developer' : 'section', 
+                    allowedSection: profile.scope 
+                };
+                setupDashboard(profile.name, profile.sectionText);
+                updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
+                return;
+            }
+
             const passwordInput = prompt("Enter Administration Access Key:");
             if (!passwordInput) return;
 
             if (ADMIN_PROFILES[passwordInput]) {
+                // Save token to sessionStorage so it survives menu routing and only clears on reload/refresh
+                sessionStorage.setItem('adminKey', passwordInput);
+                
                 const profile = ADMIN_PROFILES[passwordInput];
                 currentAdminState = { 
                     isLogged: true, 
@@ -650,6 +686,7 @@
                     allowedSection: profile.scope 
                 };
                 setupDashboard(profile.name, profile.sectionText);
+                updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
             } else {
                 alert("Invalid Admin Key. Process Aborted.");
             }
@@ -768,6 +805,7 @@
         }
 
         function logoutAdmin() {
+            sessionStorage.removeItem('adminKey'); // Clear persistent session storage key explicitly
             currentAdminState = { isLogged: false, role: null, allowedSection: null };
             document.getElementById('adminDashboard').style.display = 'none';
             loadSectionData('A', document.querySelector('.switch-grid .switch-3d'));
