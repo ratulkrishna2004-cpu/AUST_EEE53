@@ -77,6 +77,8 @@
         .nav-menu { display: flex; flex-wrap: wrap; justify-content: center; list-style: none; margin: 0; padding: 8px; gap: 5px; }
         .nav-menu li a { color: #fff; text-decoration: none; font-size: 12px; padding: 5px 8px; transition: 0.3s; cursor: pointer; }
         .nav-menu li a:hover { color: var(--gold); }
+        .nav-menu li.dev-login-item a { color: var(--neon-blue); font-weight: bold; border: 1px dashed var(--neon-blue); border-radius: 4px; padding: 4px 6px; }
+        .nav-menu li.dev-login-item a:hover { background: rgba(0, 243, 255, 0.1); color: #fff; }
 
         /* --- MAIN SYSTEM TOGGLES --- */
         .content-section { display: none; }
@@ -153,7 +155,6 @@
             border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* SMART GLOWING HOVER EFFECT */
         .syllabus-table-3d tr:hover td {
             background: rgba(35, 35, 35, 0.9);
             color: #fff !important;
@@ -162,9 +163,7 @@
             border-top: 1px solid var(--course-color);
             border-bottom: 1px solid var(--course-color);
         }
-        .syllabus-table-3d tr:hover td:last-child {
-            border-right: 1px solid var(--course-color);
-        }
+        .syllabus-table-3d tr:hover td:last-child { border-right: 1px solid var(--course-color); }
 
         .row-eee2203 { --course-color: var(--eee2203); --course-shadow: rgba(255, 59, 48, 0.5); color: #ff8b85; }
         .row-eee2204 { --course-color: var(--eee2204); --course-shadow: rgba(255, 107, 107, 0.5); color: #ffb3b3; }
@@ -233,14 +232,46 @@
         .btn-delete { background: #ff3333; color: #fff; }
         .btn-submit { background: var(--neon-blue); color: #000; padding: 10px 20px; width: 100%; font-size: 1.1rem; margin-top: 15px; }
         
-        select, input[type="date"] { background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 5px; width: 100%; box-sizing: border-box; }
+        select, input[type="date"], input[type="text"] { background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 5px; width: 100%; box-sizing: border-box; }
 
+        /* --- PREVIOUS YEAR DYNAMIC BUTTON STYLES --- */
+        .prev-year-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1000px; margin: 0 auto; min-height: 85vh; text-align: center; }
+        .prev-headline-box { margin: 20px auto 40px auto; padding: 15px; border-bottom: 2px dashed var(--maroon); }
+        .prev-headline-box h2 { font-style: italic; font-weight: 800; color: #fff; font-size: 2.3rem; text-shadow: 0 0 15px rgba(255,255,255,0.2); margin: 0; }
+        .prev-headline-box h2 span { color: var(--gold); text-shadow: 0 0 20px var(--gold); }
+        
+        .glossy-btn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; margin-top: 20px; }
+        .glossy-resource-btn {
+            position: relative; overflow: hidden; padding: 22px; border-radius: 15px;
+            background: linear-gradient(135deg, rgba(128, 0, 0, 0.4), rgba(30, 0, 0, 0.6));
+            border: 1px solid rgba(255, 215, 0, 0.3); color: #fff; font-size: 1.2rem; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; text-decoration: none;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glossy-resource-btn::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.13), rgba(255,255,255,0));
+            transform: rotate(30deg); transition: 0.5s; pointer-events: none;
+        }
+        .glossy-resource-btn:hover {
+            transform: translateY(-6px) scale(1.02); border-color: var(--gold);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, var(--maroon), var(--maroon-dark));
+            color: var(--gold); text-shadow: 0 0 10px var(--gold);
+        }
+        .glossy-resource-btn:hover::before { left: 100%; top: 100%; }
+
+        /* Dev Management Panel Inside Prev Year */
+        .dev-management-panel { background: #111; border: 2px dashed var(--neon-blue); border-radius: 12px; padding: 20px; margin: 20px; text-align: left; }
+        .dev-management-panel h3 { color: var(--neon-blue); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
+        
         /* --- OBE & BUS SYLLABUS PDF VIEW GLOBAL STYLES --- */
         .pdf-view-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center; }
         .pdf-header-box { margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold); }
         .pdf-header-box h2 { color: var(--gold); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); margin: 0 0 10px 0; }
         
-        /* Subheading Style for Detailed Route Section */
         .pdf-subheading-box { margin-top: 50px; margin-bottom: 20px; padding: 10px; border-top: 1px dashed #444; }
         .pdf-subheading-box h3 { color: var(--neon-blue); font-size: 1.5rem; text-shadow: 0 0 8px rgba(0, 243, 255, 0.4); margin: 15px 0 5px 0; text-transform: uppercase; }
 
@@ -274,9 +305,10 @@
             .theme-viewport img { width: 100%; height: auto; object-fit: contain; }
             .circuit-container { gap: 40px; }
             .main-logo { height: 50px; }
-            .exam-view-wrapper, .pdf-view-wrapper { padding-top: 240px; }
+            .exam-view-wrapper, .pdf-view-wrapper, .prev-year-wrapper { padding-top: 240px; }
             .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
             .pdf-frame-container { height: 50vh; margin: 15px 10px; }
+            .glossy-btn-grid { grid-template-columns: 1fr; gap: 15px; padding: 10px; }
             
             .syllabus-table-3d th, .syllabus-table-3d td { padding: 10px; font-size: 0.85rem; }
         }
@@ -300,11 +332,9 @@
             <ul class="nav-menu" id="navMenu">
                 <li><a onclick="switchView('home')">Home</a></li>
                 <li><a href="#">2.2 Study Materials</a></li>
-                <li><a href="#">Previous Semester</a></li>
+                <li><a onclick="switchView('prevYear')">Previous Year</a></li>
                 <li><a href="#">Routine</a></li>
                 <li><a onclick="switchView('exams')">Exams</a></li>
-                <li><a href="#">Faculty</a></li>
-                <li><a onclick="switchView('busRoute')">BUS Route</a></li>
                 <li><a href="#">Notice</a></li>
                 <li><a href="#">CR & GM Section</a></li>
                 <li><a href="#">Credits</a></li>
@@ -312,6 +342,7 @@
                 <li><a href="#">Helping Sites</a></li>
                 <li><a href="#">Waiver</a></li>
                 <li><a href="#">Contact Us</a></li>
+                <li class="dev-login-item" id="devLoginMenuBtn"><a onclick="triggerDevLogin()">Developer Log in</a></li>
             </ul>
         </nav>
     </header>
@@ -519,6 +550,50 @@
         </div>
     </div>
 
+    <div id="prevYearView" class="content-section">
+        <div class="prev-year-wrapper">
+            <div class="prev-headline-box">
+                <h2>Previous Year by <span>EEE-53</span></h2>
+            </div>
+
+            <div id="devPrevYearPanel" class="dev-management-panel" style="display: none;">
+                <h3><i class="fas fa-tools"></i> Developer Dashboard: Add/Edit Cloud Button Components</h3>
+                <button class="btn-add" style="margin-bottom: 15px; padding: 8px 16px; font-size: 0.9rem;" onclick="showDevBtnForm()">+ Add New Material</button>
+                
+                <div class="table-container" id="devBtnFormBox" style="display: none; border-color: var(--gold); padding: 15px; background: #161616;">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label style="font-weight: bold; color: var(--gold);">Button Title:</label>
+                            <input type="text" id="devBtnTitle" placeholder="e.g., EEE 2101 Mid Semester Question Bank">
+                        </div>
+                        <div>
+                            <label style="font-weight: bold; color: var(--gold);">Resource Link (URL):</label>
+                            <input type="text" id="devBtnLink" placeholder="https://drive.google.com/...">
+                        </div>
+                        <button class="btn-action btn-submit" id="submitDevBtn" onclick="submitDevBtnData()" style="max-width: 200px; margin-top: 5px;">Save Button Blueprint</button>
+                    </div>
+                </div>
+
+                <h4 style="color: #fff; margin: 15px 0 5px 0;">Existing Resource Components Management:</h4>
+                <div class="table-container">
+                    <table style="min-width: 500px;">
+                        <thead>
+                            <tr>
+                                <th>Button Display Title</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="devBtnTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glossy-btn-grid" id="userGlossyBtnGrid">
+                </div>
+        </div>
+    </div>
+
     <div id="obeView" class="content-section">
         <div class="pdf-view-wrapper">
             <div class="pdf-header-box">
@@ -581,6 +656,7 @@
         function switchView(viewName) {
             document.getElementById('homeView').classList.remove('active-view');
             document.getElementById('examsView').classList.remove('active-view');
+            document.getElementById('prevYearView').classList.remove('active-view');
             document.getElementById('obeView').classList.remove('active-view');
             document.getElementById('busRouteView').classList.remove('active-view');
             
@@ -588,20 +664,11 @@
                 document.getElementById('homeView').classList.add('active-view');
             } else if(viewName === 'exams') {
                 document.getElementById('examsView').classList.add('active-view');
-                
-                if(sessionStorage.getItem('adminKey')) {
-                    const savedKey = sessionStorage.getItem('adminKey');
-                    const profile = ADMIN_PROFILES[savedKey];
-                    currentAdminState = { 
-                        isLogged: true, 
-                        role: profile.scope === 'ALL' ? 'developer' : 'section', 
-                        allowedSection: profile.scope 
-                    };
-                    setupDashboard(profile.name, profile.sectionText);
-                    updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
-                } else {
-                    loadSectionData('A', document.querySelector('.switch-grid .switch-3d')); 
-                }
+                evalAdminSessionState();
+            } else if(viewName === 'prevYear') {
+                document.getElementById('prevYearView').classList.add('active-view');
+                evalDevSessionState();
+                listenPrevYearButtons();
             } else if(viewName === 'obe') {
                 document.getElementById('obeView').classList.add('active-view');
             } else if(viewName === 'busRoute') {
@@ -645,6 +712,7 @@
 
         let currentAdminState = { isLogged: false, role: null, allowedSection: null };
         let editingKey = null; 
+        let editingDevBtnKey = null;
 
         function getTodayDateString() {
             let today = new Date();
@@ -660,9 +728,26 @@
             targetButton.classList.add('active-btn');
         }
 
+        // --- EXAMS SYSTEM ENGINE ---
+        function evalAdminSessionState() {
+            if(sessionStorage.getItem('adminKey')) {
+                const savedKey = sessionStorage.getItem('adminKey');
+                const profile = ADMIN_PROFILES[savedKey];
+                currentAdminState = { 
+                    isLogged: true, 
+                    role: profile.scope === 'ALL' ? 'developer' : 'section', 
+                    allowedSection: profile.scope 
+                };
+                setupDashboard(profile.name, profile.sectionText);
+                updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
+            } else {
+                loadSectionData('A', document.querySelector('.switch-grid .switch-3d')); 
+            }
+        }
+
         function loadSectionData(sectionLetter, element) {
             if (element && element.classList.contains('switch-admin') && currentAdminState.isLogged) {
-                // Layout lock stabilization
+                // Stabilized Frame Lock
             } else {
                 document.getElementById('userTableContainer').style.display = 'block';
                 document.getElementById('adminDashboard').style.display = 'none';
@@ -717,15 +802,7 @@
 
         function triggerAdminLogin() {
             if (sessionStorage.getItem('adminKey')) {
-                const savedKey = sessionStorage.getItem('adminKey');
-                const profile = ADMIN_PROFILES[savedKey];
-                currentAdminState = { 
-                    isLogged: true, 
-                    role: profile.scope === 'ALL' ? 'developer' : 'section', 
-                    allowedSection: profile.scope 
-                };
-                setupDashboard(profile.name, profile.sectionText);
-                updateActiveButton(document.querySelector('.exam-view-wrapper .switch-grid .switch-admin'));
+                evalAdminSessionState();
                 return;
             }
 
@@ -734,15 +811,10 @@
 
             if (ADMIN_PROFILES[passwordInput]) {
                 sessionStorage.setItem('adminKey', passwordInput);
-                
-                const profile = ADMIN_PROFILES[passwordInput];
-                currentAdminState = { 
-                    isLogged: true, 
-                    role: profile.scope === 'ALL' ? 'developer' : 'section', 
-                    allowedSection: profile.scope 
-                };
-                setupDashboard(profile.name, profile.sectionText);
-                updateActiveButton(document.querySelector('.exam-view-wrapper .switch-grid .switch-admin'));
+                if(passwordInput === "092418") {
+                    updateDevMenuBtnText(true);
+                }
+                evalAdminSessionState();
             } else {
                 alert("Invalid Admin Key. Process Aborted.");
             }
@@ -861,8 +933,168 @@
             sessionStorage.removeItem('adminKey'); 
             currentAdminState = { isLogged: false, role: null, allowedSection: null };
             document.getElementById('adminDashboard').style.display = 'none';
+            updateDevMenuBtnText(false);
             loadSectionData('A', document.querySelector('.exam-view-wrapper .switch-grid .switch-3d'));
         }
+
+
+        // --- DYNAMIC PREVIOUS YEAR & DEVELOPER CONTROL FLOW ---
+        function triggerDevLogin() {
+            if(sessionStorage.getItem('adminKey') === "092418") {
+                if(confirm("You are currently logged in as Developer. Do you want to Log Out?")) {
+                    sessionStorage.removeItem('adminKey');
+                    updateDevMenuBtnText(false);
+                    evalDevSessionState();
+                    if(document.getElementById('examsView').classList.contains('active-view')) {
+                        logoutAdmin();
+                    }
+                }
+                return;
+            }
+
+            const input = prompt("Enter Developer Authentication Key:");
+            if(input === "092418") {
+                sessionStorage.setItem('adminKey', "092418");
+                updateDevMenuBtnText(true);
+                alert("Developer Shell Initialized.");
+                evalDevSessionState();
+            } else if(input) {
+                alert("Access Denied. Incorrect Developer Credentials.");
+            }
+        }
+
+        function updateDevMenuBtnText(isLogged) {
+            const btn = document.getElementById('devLoginMenuBtn');
+            if(isLogged) {
+                btn.innerHTML = `<a onclick="triggerDevLogin()" style="color: #ff3333; border-color: #ff3333;"><i class="fas fa-sign-out-alt"></i> Dev Log Out</a>`;
+            } else {
+                btn.innerHTML = `<a onclick="triggerDevLogin()">Developer Log in</a>`;
+            }
+        }
+
+        function evalDevSessionState() {
+            const isDev = sessionStorage.getItem('adminKey') === "092418";
+            const devPanel = document.getElementById('devPrevYearPanel');
+            
+            if(isDev) {
+                devPanel.style.display = "block";
+                renderDevManagementGrid();
+                updateDevMenuBtnText(true);
+            } else {
+                devPanel.style.display = "none";
+                updateDevMenuBtnText(false);
+            }
+        }
+
+        function showDevBtnForm() {
+            document.getElementById('devBtnFormBox').style.display = "block";
+            editingDevBtnKey = null;
+            document.getElementById('devBtnTitle').value = "";
+            document.getElementById('devBtnLink').value = "";
+            document.getElementById('submitDevBtn').innerText = "Save Button Blueprint";
+        }
+
+        function submitDevBtnData() {
+            const title = document.getElementById('devBtnTitle').value.trim();
+            const link = document.getElementById('devBtnLink').value.trim();
+
+            if(!title || !link) {
+                alert("Please map both Component Display Title and Hyperlink Network URL.");
+                return;
+            }
+
+            const payload = { title, link };
+
+            if(editingDevBtnKey) {
+                database.ref('prev_years/' + editingDevBtnKey).update(payload)
+                    .then(() => {
+                        alert("Component Restructured Successfully.");
+                        resetDevBtnForm();
+                    });
+            } else {
+                database.ref('prev_years').push(payload)
+                    .then(() => {
+                        alert("Cloud Button Component Integrated into Network Vector.");
+                        resetDevBtnForm();
+                    });
+            }
+        }
+
+        function resetDevBtnForm() {
+            document.getElementById('devBtnTitle').value = "";
+            document.getElementById('devBtnLink').value = "";
+            document.getElementById('devBtnFormBox').style.display = "none";
+            editingDevBtnKey = null;
+            renderDevManagementGrid();
+        }
+
+        function renderDevManagementGrid() {
+            database.ref('prev_years').once('value', (snapshot) => {
+                const tbody = document.getElementById('devBtnTableBody');
+                tbody.innerHTML = '';
+
+                snapshot.forEach((childSnapshot) => {
+                    const key = childSnapshot.key;
+                    const data = childSnapshot.val();
+
+                    let row = `<tr>
+                        <td style="font-weight:bold; color:var(--gold);">${data.title}</td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="editDevBtn('${key}', '${data.title}', '${data.link}')">Edit Blueprint</button>
+                            <button class="btn-action btn-delete" onclick="deleteDevBtn('${key}')">Purge</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+        }
+
+        function editDevBtn(key, title, link) {
+            document.getElementById('devBtnFormBox').style.display = "block";
+            document.getElementById('devBtnTitle').value = title;
+            document.getElementById('devBtnLink').value = link;
+            editingDevBtnKey = key;
+            document.getElementById('submitDevBtn').innerText = "Update Component";
+        }
+
+        function deleteDevBtn(key) {
+            if(confirm("Are you sure you want to purge this button component from the active repository matrix?")) {
+                database.ref('prev_years/' + key).remove().then(() => {
+                    alert("Component Scrubbed.");
+                    renderDevManagementGrid();
+                });
+            }
+        }
+
+        function listenPrevYearButtons() {
+            database.ref('prev_years').on('value', (snapshot) => {
+                const grid = document.getElementById('userGlossyBtnGrid');
+                grid.innerHTML = '';
+
+                let counter = 0;
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    counter++;
+                    
+                    let buttonHtml = `<a href="${data.link}" target="_blank" class="glossy-resource-btn">
+                        <i class="fas fa-folder-open" style="color: var(--gold);"></i>
+                        <span>${data.title}</span>
+                    </a>`;
+                    grid.innerHTML += buttonHtml;
+                });
+
+                if(counter === 0) {
+                    grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No cloud elements synced. Log in as developer to map database keys.</p>`;
+                }
+            });
+        }
+
+        // --- WINDOW BOOTLOADER STRATEGY ---
+        window.addEventListener('DOMContentLoaded', (event) => {
+            if(sessionStorage.getItem('adminKey') === "092418") {
+                updateDevMenuBtnText(true);
+            }
+        });
     </script>
 </body>
 </html>
