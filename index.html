@@ -137,7 +137,6 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
-        /* Glossy Highlight Reflection Overlay */
         .syllabus-table-3d td::before {
             content: '';
             position: absolute;
@@ -154,7 +153,7 @@
             border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* SMART GLOWING HOVER EFFECT (No Flip, Only Color Burn/Glow) */
+        /* SMART GLOWING HOVER EFFECT */
         .syllabus-table-3d tr:hover td {
             background: rgba(35, 35, 35, 0.9);
             color: #fff !important;
@@ -167,7 +166,6 @@
             border-right: 1px solid var(--course-color);
         }
 
-        /* Distinct Color Triggers Mapping */
         .row-eee2203 { --course-color: var(--eee2203); --course-shadow: rgba(255, 59, 48, 0.5); color: #ff8b85; }
         .row-eee2204 { --course-color: var(--eee2204); --course-shadow: rgba(255, 107, 107, 0.5); color: #ffb3b3; }
         .row-eee2213 { --course-color: var(--eee2213); --course-shadow: rgba(76, 217, 100, 0.5); color: #a1f0ae; }
@@ -201,7 +199,6 @@
         /* --- EXAM SYSTEM STYLES --- */
         .exam-view-wrapper { padding-top: 200px; padding-bottom: 60px; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
         
-        /* 3D Switches System */
         .switch-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; padding: 0 20px; }
         .switch-3d {
             background: linear-gradient(135deg, #222, #111); color: #fff; border: 1px solid #444;
@@ -236,22 +233,21 @@
         .btn-delete { background: #ff3333; color: #fff; }
         .btn-submit { background: var(--neon-blue); color: #000; padding: 10px 20px; width: 100%; font-size: 1.1rem; margin-top: 15px; }
         
-        /* Inputs styling */
         select, input[type="date"] { background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 5px; width: 100%; box-sizing: border-box; }
 
-        /* --- OBE SYLLABUS PEGE VIEW --- */
-        .obe-view-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center; }
-        .obe-header-box { margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold); }
-        .obe-header-box h2 { color: var(--gold); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); margin: 0 0 10px 0; }
+        /* --- OBE & BUS SYLLABUS PDF VIEW GLOBAL STYLES --- */
+        .pdf-view-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center; }
+        .pdf-header-box { margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold); }
+        .pdf-header-box h2 { color: var(--gold); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); margin: 0 0 10px 0; }
         .pdf-frame-container { background: #111; border: 2px solid var(--maroon); border-radius: 12px; margin: 25px 20px; height: 70vh; overflow: hidden; box-shadow: 0 0 35px rgba(128,0,0,0.5); }
         .pdf-frame-container iframe { width: 100%; height: 100%; border: none; }
         .download-btn-area { margin: 30px auto; }
-        .btn-download-obe {
+        .btn-download-pdf {
             display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--maroon), #b30000);
             color: #fff; font-size: 1.2rem; font-weight: bold; text-decoration: none; padding: 15px 35px; border-radius: 50px;
             border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); transition: all 0.3s ease;
         }
-        .btn-download-obe:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--gold); color: var(--gold); }
+        .btn-download-pdf:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--gold); color: var(--gold); }
 
         /* --- GLOBAL FOOTER STYLE --- */
         footer { 
@@ -273,11 +269,10 @@
             .theme-viewport img { width: 100%; height: auto; object-fit: contain; }
             .circuit-container { gap: 40px; }
             .main-logo { height: 50px; }
-            .exam-view-wrapper, .obe-view-wrapper { padding-top: 240px; }
+            .exam-view-wrapper, .pdf-view-wrapper { padding-top: 240px; }
             .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
             .pdf-frame-container { height: 50vh; margin: 15px 10px; }
             
-            /* Responsive Table Tweaks */
             .syllabus-table-3d th, .syllabus-table-3d td { padding: 10px; font-size: 0.85rem; }
         }
     </style>
@@ -299,15 +294,17 @@
         <nav class="navbar">
             <ul class="nav-menu" id="navMenu">
                 <li><a onclick="switchView('home')">Home</a></li>
-                <li><a href="#">2.2 Study Materials</a></li> <li><a href="#">Previous Semester</a></li>
+                <li><a href="#">2.2 Study Materials</a></li>
+                <li><a href="#">Previous Semester</a></li>
                 <li><a href="#">Routine</a></li>
                 <li><a onclick="switchView('exams')">Exams</a></li>
                 <li><a href="#">Faculty</a></li>
-                <li><a href="#">BUS Route</a></li>
+                <li><a onclick="switchView('busRoute')">BUS Route</a></li>
                 <li><a href="#">Notice</a></li>
                 <li><a href="#">CR & GM Section</a></li>
                 <li><a href="#">Credits</a></li>
-                <li><a onclick="switchView('obe')">OBE Syllabus</a></li> <li><a href="#">Helping Sites</a></li>
+                <li><a onclick="switchView('obe')">OBE Syllabus</a></li>
+                <li><a href="#">Helping Sites</a></li>
                 <li><a href="#">Waiver</a></li>
                 <li><a href="#">Contact Us</a></li>
             </ul>
@@ -518,19 +515,34 @@
     </div>
 
     <div id="obeView" class="content-section">
-        <div class="obe-view-wrapper">
-            <div class="obe-header-box">
+        <div class="pdf-view-wrapper">
+            <div class="pdf-header-box">
                 <h2>OBE Course Curriculum Outline</h2>
                 <p style="color: #bbb; margin: 0;">Department of Electrical and Electronic Engineering (EEE), AUST</p>
             </div>
-            
             <div class="pdf-frame-container">
                 <iframe src="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" title="AUST EEE OBE Syllabus Blueprint"></iframe>
             </div>
-
             <div class="download-btn-area">
-                <a href="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" download class="btn-download-obe">
+                <a href="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" download class="btn-download-pdf">
                     <i class="fas fa-file-download"></i> Download Full Syllabus Blueprint PDF
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="busRouteView" class="content-section">
+        <div class="pdf-view-wrapper">
+            <div class="pdf-header-box">
+                <h2>AUST Transport Network Panel</h2>
+                <p style="color: #bbb; margin: 0;">Official Bus and Shuttle Schedule Blueprint Frame</p>
+            </div>
+            <div class="pdf-frame-container">
+                <iframe src="Bus_and_Shuttle_Schedule.pdf" title="AUST Transport Schedule Network Blueprint"></iframe>
+            </div>
+            <div class="download-btn-area">
+                <a href="Bus_and_Shuttle_Schedule.pdf" download class="btn-download-pdf">
+                    <i class="fas fa-file-download"></i> Download Bus & Shuttle Schedule PDF
                 </a>
             </div>
         </div>
@@ -549,14 +561,14 @@
         function switchView(viewName) {
             document.getElementById('homeView').classList.remove('active-view');
             document.getElementById('examsView').classList.remove('active-view');
-            document.getElementById('obeView').classList.remove('active-view'); // Reset obe layer
+            document.getElementById('obeView').classList.remove('active-view');
+            document.getElementById('busRouteView').classList.remove('active-view');
             
             if(viewName === 'home') {
                 document.getElementById('homeView').classList.add('active-view');
             } else if(viewName === 'exams') {
                 document.getElementById('examsView').classList.add('active-view');
                 
-                // Session Persistence Check during inner view switching
                 if(sessionStorage.getItem('adminKey')) {
                     const savedKey = sessionStorage.getItem('adminKey');
                     const profile = ADMIN_PROFILES[savedKey];
@@ -572,6 +584,8 @@
                 }
             } else if(viewName === 'obe') {
                 document.getElementById('obeView').classList.add('active-view');
+            } else if(viewName === 'busRoute') {
+                document.getElementById('busRouteView').classList.add('active-view');
             }
             toggleMenu(true); 
         }
@@ -585,7 +599,7 @@
             }
         }
 
-        // --- FIREBASE LIVE CONFIGURATION INTERACTION ---
+        // --- FIREBASE LIVE INTERACTION ---
         const firebaseConfig = {
             apiKey: "AIzaSyA42cAhFc4ygHqmkZTIr2Rc87eEF_QA4R4",
             authDomain: "spardho-53.firebaseapp.com",
@@ -601,7 +615,6 @@
         }
         const database = firebase.database();
 
-        // --- DYNAMIC ADMIN PROFILES & CREDENTIALS MAPPING ---
         const ADMIN_PROFILES = {
             "092418": { name: "Ratul Krishna Mojumder", sectionText: "Developer (All Sections Access)", scope: "ALL" },
             "407":  { name: "Ishtiaq Ahmed Emon", sectionText: "Section A Tracker", scope: "A" },
@@ -610,12 +623,7 @@
             "passD":  { name: "Admin Section D", sectionText: "Section D Tracker", scope: "D" }
         };
 
-        let currentAdminState = {
-            isLogged: false,
-            role: null, 
-            allowedSection: null 
-        };
-        
+        let currentAdminState = { isLogged: false, role: null, allowedSection: null };
         let editingKey = null; 
 
         function getTodayDateString() {
@@ -628,14 +636,13 @@
 
         function updateActiveButton(targetButton) {
             if(!targetButton) return;
-            document.querySelectorAll('.switch-grid .switch-3d').forEach(btn => btn.classList.remove('active-btn'));
+            document.querySelectorAll('.exam-view-wrapper .switch-grid .switch-3d').forEach(btn => btn.classList.remove('active-btn'));
             targetButton.classList.add('active-btn');
         }
 
-        // 1. User Read View
         function loadSectionData(sectionLetter, element) {
             if (element && element.classList.contains('switch-admin') && currentAdminState.isLogged) {
-                // Keep admin dashboard layer active
+                // Layout lock stabilization
             } else {
                 document.getElementById('userTableContainer').style.display = 'block';
                 document.getElementById('adminDashboard').style.display = 'none';
@@ -663,7 +670,6 @@
             });
         }
 
-        // 2. Archived/Expired Views
         function loadPreviousExams(element) {
             updateActiveButton(element);
             document.getElementById('userTableContainer').style.display = 'block';
@@ -689,7 +695,6 @@
             });
         }
 
-        // 3. Login Control Router with Persistent Session
         function triggerAdminLogin() {
             if (sessionStorage.getItem('adminKey')) {
                 const savedKey = sessionStorage.getItem('adminKey');
@@ -700,7 +705,7 @@
                     allowedSection: profile.scope 
                 };
                 setupDashboard(profile.name, profile.sectionText);
-                updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
+                updateActiveButton(document.querySelector('.exam-view-wrapper .switch-grid .switch-admin'));
                 return;
             }
 
@@ -717,7 +722,7 @@
                     allowedSection: profile.scope 
                 };
                 setupDashboard(profile.name, profile.sectionText);
-                updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
+                updateActiveButton(document.querySelector('.exam-view-wrapper .switch-grid .switch-admin'));
             } else {
                 alert("Invalid Admin Key. Process Aborted.");
             }
@@ -753,7 +758,6 @@
             document.getElementById('submitExamBtn').innerText = "Submit";
         }
 
-        // 4. Data Layer Mutations
         function submitExamData() {
             const date = document.getElementById('inputDate').value;
             const course = document.getElementById('inputCourse').value;
@@ -837,7 +841,7 @@
             sessionStorage.removeItem('adminKey'); 
             currentAdminState = { isLogged: false, role: null, allowedSection: null };
             document.getElementById('adminDashboard').style.display = 'none';
-            loadSectionData('A', document.querySelector('.switch-grid .switch-3d'));
+            loadSectionData('A', document.querySelector('.exam-view-wrapper .switch-grid .switch-3d'));
         }
     </script>
 </body>
