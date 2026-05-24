@@ -16,7 +16,6 @@
             --neon-green: #39FF14;
             --flame-color: rgba(255, 215, 0, 0.6);
             --neon-blue: #00F3FF;
-            
             --eee2203: #ff3b30;
             --eee2204: #ff6b6b;
             --eee2213: #4cd964;
@@ -46,7 +45,6 @@
             border-bottom: 2px solid var(--gold);
         }
         .header-top { display: flex; justify-content: center; align-items: center; gap: 15px; position: relative; }
-        
         .logo-container { position: relative; display: flex; align-items: center; justify-content: center; }
         .main-logo { height: 60px; position: relative; z-index: 2; }
         .logo-container::after {
@@ -54,23 +52,57 @@
             background: var(--flame-color); filter: blur(15px); border-radius: 50%;
             z-index: 1; animation: flame-pulse 2s infinite ease-in-out;
         }
-
         @keyframes flame-pulse {
             0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 20px var(--gold); }
             50% { transform: scale(1.2) translateY(-5px); opacity: 0.8; box-shadow: 0 0 40px var(--gold); }
             100% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 20px var(--gold); }
         }
-
         .header-title { color: var(--gold); font-style: italic; font-size: 1.4rem; font-weight: bold; }
         .menu-toggle { display: none; position: absolute; right: 20px; font-size: 24px; color: #fff; cursor: pointer; }
 
+        /* --- IMPROVED SEARCH BAR --- */
         .search-wrapper {
             max-width: 90%; margin: 10px auto; display: flex;
             border: 2px solid #00FF00; border-radius: 30px;
-            overflow: hidden; background: #fff;
+            overflow: visible; background: #fff; position: relative;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .search-wrapper input { flex: 1; border: none; padding: 8px 15px; outline: none; color: #000; }
-        .search-wrapper button { background: #cc0000; color: #fff; border: none; padding: 0 15px; cursor: pointer; }
+        .search-wrapper:focus-within {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(255,215,0,0.4);
+        }
+        .search-wrapper input {
+            flex: 1; border: none; padding: 8px 15px; outline: none; color: #000;
+            border-radius: 30px 0 0 30px; font-size: 0.95rem;
+            background: #fff;
+        }
+        .search-wrapper button {
+            background: #cc0000; color: #fff; border: none;
+            padding: 0 18px; cursor: pointer; border-radius: 0 28px 28px 0;
+            font-weight: bold; transition: background 0.2s;
+        }
+        .search-wrapper button:hover { background: var(--maroon); }
+        #search-suggestions {
+            position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+            background: #fff; color: #000; z-index: 9999;
+            border-radius: 12px; overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            border: 1.5px solid var(--gold);
+            display: none;
+        }
+        #search-suggestions.visible { display: block; }
+        .suggestion-item {
+            padding: 10px 16px; cursor: pointer;
+            border-bottom: 1px solid #eee; font-size: 0.92rem;
+            display: flex; align-items: center; gap: 10px;
+            transition: background 0.15s;
+        }
+        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item:hover, .suggestion-item.highlighted { background: #fff5cc; }
+        .suggestion-item .sug-icon { color: var(--maroon); font-size: 0.85rem; min-width: 16px; }
+        .suggestion-item .sug-name { font-weight: 600; color: #333; }
+        .suggestion-item .sug-hint { font-size: 0.78rem; color: #888; margin-left: auto; }
+        .search-no-result { padding: 12px 16px; color: #999; font-size: 0.88rem; font-style: italic; }
 
         .navbar { background: var(--maroon-dark); }
         .nav-menu { display: flex; flex-wrap: wrap; justify-content: center; list-style: none; margin: 0; padding: 8px; gap: 5px; }
@@ -99,9 +131,7 @@
         }
 
         /* --- SYLLABUS TABLE --- */
-        .syllabus-3d-wrapper {
-            max-width: 95%; margin: 10px auto 40px auto; padding: 0 15px;
-        }
+        .syllabus-3d-wrapper { max-width: 95%; margin: 10px auto 40px auto; padding: 0 15px; }
         .syllabus-table-3d { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
         .syllabus-table-3d th {
             background: linear-gradient(135deg, var(--maroon-dark), #1a0000); color: var(--gold);
@@ -111,7 +141,6 @@
         }
         .syllabus-table-3d th:first-child { border-radius: 12px 0 0 12px; }
         .syllabus-table-3d th:last-child { border-radius: 0 12px 12px 0; }
-
         .syllabus-table-3d tr { transition: all 0.3s ease; }
         .syllabus-table-3d td {
             padding: 16px; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(12px);
@@ -125,23 +154,21 @@
         }
         .syllabus-table-3d td:first-child { border-radius: 10px 0 0 10px; border-left: 4px solid var(--course-color, var(--gold)); }
         .syllabus-table-3d td:last-child { border-radius: 0 10px 10px 0; border-right: 1px solid rgba(255,255,255,0.1); }
-
         .syllabus-table-3d tr:hover td {
             background: rgba(35, 35, 35, 0.9); color: #fff !important;
-            box-shadow: 0 0 20px var(--course-shadow, rgba(255, 255, 255, 0.2)), inset 0 0 10px var(--course-shadow, rgba(255, 255, 255, 0.1));
+            box-shadow: 0 0 20px var(--course-shadow, rgba(255,255,255,0.2)), inset 0 0 10px var(--course-shadow, rgba(255,255,255,0.1));
             border-top: 1px solid var(--course-color); border-bottom: 1px solid var(--course-color);
         }
         .syllabus-table-3d tr:hover td:last-child { border-right: 1px solid var(--course-color); }
-
-        .row-eee2203 { --course-color: var(--eee2203); --course-shadow: rgba(255, 59, 48, 0.5); color: #ff8b85; }
-        .row-eee2204 { --course-color: var(--eee2204); --course-shadow: rgba(255, 107, 107, 0.5); color: #ffb3b3; }
-        .row-eee2213 { --course-color: var(--eee2213); --course-shadow: rgba(76, 217, 100, 0.5); color: #a1f0ae; }
-        .row-eee2200 { --course-color: var(--eee2200); --course-shadow: rgba(0, 122, 255, 0.5); color: #80bfff; }
-        .row-eee2210 { --course-color: var(--eee2210); --course-shadow: rgba(90, 200, 250, 0.5); color: #b3e5fc; }
-        .row-eee2226 { --course-color: var(--eee2226); --course-shadow: rgba(255, 204, 0, 0.5); color: #ffe680; }
-        .row-hum2201 { --course-color: var(--hum2201); --course-shadow: rgba(255, 149, 0, 0.5); color: #ffd199; }
-        .row-math2203 { --course-color: var(--math2203); --course-shadow: rgba(88, 86, 214, 0.5); color: #b3b2f2; }
-        .row-hum2209 { --course-color: var(--hum2209); --course-shadow: rgba(255, 45, 85, 0.5); color: #ff99ad; }
+        .row-eee2203 { --course-color: var(--eee2203); --course-shadow: rgba(255,59,48,0.5); color: #ff8b85; }
+        .row-eee2204 { --course-color: var(--eee2204); --course-shadow: rgba(255,107,107,0.5); color: #ffb3b3; }
+        .row-eee2213 { --course-color: var(--eee2213); --course-shadow: rgba(76,217,100,0.5); color: #a1f0ae; }
+        .row-eee2200 { --course-color: var(--eee2200); --course-shadow: rgba(0,122,255,0.5); color: #80bfff; }
+        .row-eee2210 { --course-color: var(--eee2210); --course-shadow: rgba(90,200,250,0.5); color: #b3e5fc; }
+        .row-eee2226 { --course-color: var(--eee2226); --course-shadow: rgba(255,204,0,0.5); color: #ffe680; }
+        .row-hum2201 { --course-color: var(--hum2201); --course-shadow: rgba(255,149,0,0.5); color: #ffd199; }
+        .row-math2203 { --course-color: var(--math2203); --course-shadow: rgba(88,86,214,0.5); color: #b3b2f2; }
+        .row-hum2209 { --course-color: var(--hum2209); --course-shadow: rgba(255,45,85,0.5); color: #ff99ad; }
 
         /* --- SWITCH CONTAINER --- */
         .circuit-container { display: flex; justify-content: center; gap: 100px; padding-top: 20px; padding-bottom: 40px; flex-wrap: wrap; }
@@ -152,20 +179,16 @@
         .circuit-switch:hover .wire-piece:first-child { transform: translateX(12px); }
         .circuit-switch:hover .wire-piece:last-child { transform: translateX(-12px); }
         .chip-icon { font-size: 2.8rem; color: #333; transition: 0.5s; }
-
         .mid-switch:hover .switch-label { color: var(--gold); text-shadow: 0 0 15px var(--gold); }
         .mid-switch:hover .wire-piece { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
         .mid-switch:hover .chip-icon { color: var(--gold); transform: scale(1.1); }
-
         .final-switch:hover .switch-label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
         .final-switch:hover .wire-piece { background: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); }
         .final-switch:hover .chip-icon { color: var(--neon-green); transform: scale(1.1); }
-
         .calendar-box { max-width: 95%; margin: 20px auto; border: 2px solid var(--maroon); }
 
         /* --- EXAM SYSTEM STYLES --- */
         .exam-view-wrapper { padding-top: 200px; padding-bottom: 60px; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
-        
         .switch-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; padding: 0 20px; }
         .switch-3d {
             background: linear-gradient(135deg, #222, #111); color: #fff; border: 1px solid #444;
@@ -179,18 +202,15 @@
         }
         .switch-admin { border-color: var(--neon-blue); color: var(--neon-blue); }
         .switch-admin:active, .switch-admin.active-btn { border-color: var(--neon-blue); color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
-        
         .switch-prev { border-color: #ff5722; color: #ff5722; }
         .switch-prev:active, .switch-prev.active-btn { border-color: #ff5722; color: #ff5722; text-shadow: 0 0 10px #ff5722; }
 
-        /* Tables */
         .table-container { background: #0d0d0d; border: 2px solid var(--maroon); border-radius: 12px; margin: 20px; overflow-x: auto; box-shadow: 0 0 30px rgba(128,0,0,0.3); }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 15px; border-bottom: 1px solid #222; }
         th { background-color: var(--maroon-dark); color: var(--gold); font-size: 1.1rem; }
         tr:hover { background-color: #161616; }
 
-        /* Admin Dashboard UI */
         .admin-dashboard { background: #111; border: 2px solid var(--neon-blue); border-radius: 15px; padding: 30px; margin: 20px; }
         .profile-banner { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #333; padding-bottom: 15px; margin-bottom: 20px; }
         .profile-banner h2 { color: var(--neon-blue); margin: 0; }
@@ -199,24 +219,23 @@
         .btn-edit { background: var(--gold); color: #000; }
         .btn-delete { background: #ff3333; color: #fff; }
         .btn-submit { background: var(--neon-blue); color: #000; padding: 10px 20px; width: 100%; font-size: 1.1rem; margin-top: 15px; }
-        
         select, input[type="date"], input[type="text"] { background: #222; color: #fff; border: 1px solid #444; padding: 8px; border-radius: 5px; width: 100%; box-sizing: border-box; }
 
-        /* --- PREVIOUS YEAR & HELPING SITES --- */
+        /* --- PREVIOUS YEAR --- */
         .prev-year-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1000px; margin: 0 auto; min-height: 85vh; text-align: center; }
         .prev-headline-box { margin: 20px auto 40px auto; padding: 15px; border-bottom: 2px dashed var(--maroon); }
         .prev-headline-box h2 { font-style: italic; font-weight: 800; color: #fff; font-size: 2.3rem; text-shadow: 0 0 15px rgba(255,255,255,0.2); margin: 0; }
         .prev-headline-box h2 span { color: var(--gold); text-shadow: 0 0 20px var(--gold); }
-        
         .glossy-btn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; margin-top: 20px; }
         .glossy-resource-btn {
             position: relative; overflow: hidden; padding: 22px; border-radius: 15px;
-            background: linear-gradient(135deg, rgba(128, 0, 0, 0.4), rgba(30, 0, 0, 0.6));
-            border: 1px solid rgba(255, 215, 0, 0.3); color: #fff; font-size: 1.2rem; font-weight: bold;
+            background: linear-gradient(135deg, rgba(128,0,0,0.4), rgba(30,0,0,0.6));
+            border: 1px solid rgba(255,215,0,0.3); color: #fff; font-size: 1.2rem; font-weight: bold;
             text-transform: uppercase; letter-spacing: 1px; cursor: pointer; text-decoration: none;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
             backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
         }
         .glossy-resource-btn::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -225,30 +244,29 @@
         }
         .glossy-resource-btn:hover {
             transform: translateY(-6px) scale(1.02); border-color: var(--gold);
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.3);
+            box-shadow: 0 15px 30px rgba(255,215,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
             background: linear-gradient(135deg, var(--maroon), var(--maroon-dark));
             color: var(--gold); text-shadow: 0 0 10px var(--gold);
         }
         .glossy-resource-btn:hover::before { left: 100%; top: 100%; }
-
         .dev-management-panel { background: #111; border: 2px dashed var(--neon-blue); border-radius: 12px; padding: 20px; margin: 20px; text-align: left; }
         .dev-management-panel h3 { color: var(--neon-blue); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
-        
+
         /* --- PDF VIEW --- */
         .pdf-view-wrapper { padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center; }
         .pdf-header-box { margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold); }
-        .pdf-header-box h2 { color: var(--gold); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); margin: 0 0 10px 0; }
-        
+        .pdf-header-box h2 { color: var(--gold); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255,215,0,0.4); margin: 0 0 10px 0; }
         .pdf-subheading-box { margin-top: 50px; margin-bottom: 20px; padding: 10px; border-top: 1px dashed #444; }
-        .pdf-subheading-box h3 { color: var(--neon-blue); font-size: 1.5rem; text-shadow: 0 0 8px rgba(0, 243, 255, 0.4); margin: 15px 0 5px 0; text-transform: uppercase; }
-
+        .pdf-subheading-box h3 { color: var(--neon-blue); font-size: 1.5rem; text-shadow: 0 0 8px rgba(0,243,255,0.4); margin: 15px 0 5px 0; text-transform: uppercase; }
         .pdf-frame-container { background: #111; border: 2px solid var(--maroon); border-radius: 12px; margin: 25px 20px; height: 70vh; overflow: hidden; box-shadow: 0 0 35px rgba(128,0,0,0.5); }
         .pdf-frame-container iframe { width: 100%; height: 100%; border: none; }
         .download-btn-area { margin: 30px auto; }
         .btn-download-pdf {
-            display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--maroon), #b30000);
-            color: #fff; font-size: 1.2rem; font-weight: bold; text-decoration: none; padding: 15px 35px; border-radius: 50px;
-            border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, var(--maroon), #b30000);
+            color: #fff; font-size: 1.2rem; font-weight: bold; text-decoration: none;
+            padding: 15px 35px; border-radius: 50px; border: 2px solid var(--gold);
+            box-shadow: 0 0 20px rgba(255,215,0,0.3); transition: all 0.3s ease;
         }
         .btn-download-pdf:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--gold); color: var(--gold); }
 
@@ -258,240 +276,108 @@
         .crgm-toggle-btn {
             background: linear-gradient(135deg, #1f0000, #0a0000); color: #fff; border: 2px solid #555;
             padding: 15px 40px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.5); transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
         }
         .crgm-toggle-btn.active-tab {
             border-color: var(--gold); color: var(--gold); text-shadow: 0 0 10px var(--gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(255,215,0,0.3); transform: translateY(-3px);
         }
         .crgm-display-box { display: none; padding: 0 20px; }
         .crgm-display-box.active-pane { display: block; }
-        
         .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
         .contact-card {
-            background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            background: rgba(15,15,15,0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 25px; text-align: left;
             box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: all 0.3s ease; position: relative; overflow: hidden;
         }
-        .contact-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--maroon);
-        }
+        .contact-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--maroon); }
         .contact-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(128,0,0,0.25); border-color: rgba(128,0,0,0.4); }
         .card-tag { font-size: 0.8rem; background: var(--maroon-dark); color: var(--gold); padding: 4px 10px; border-radius: 12px; font-weight: bold; display: inline-block; margin-bottom: 12px; border: 1px solid rgba(255,215,0,0.2); }
         .card-name { font-size: 1.3rem; font-weight: bold; margin: 0 0 10px 0; color: #fff; }
         .card-phone-wrapper {
-            display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.4);
-            padding: 10px 15px; border-radius: 8px; border: 1px dashed #333; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(0,0,0,0.4); padding: 10px 15px; border-radius: 8px;
+            border: 1px dashed #333; cursor: pointer; transition: 0.2s;
         }
         .card-phone-wrapper:hover { background: rgba(255,215,0,0.05); border-color: var(--gold); }
         .card-phone-wrapper:hover .phone-num { color: var(--gold); }
         .phone-num { font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; color: #ccc; font-weight: bold; }
         .copy-icon { color: #666; font-size: 1rem; }
-        
+
+        /* --- TOAST --- */
         .toast-notification {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
             background: var(--neon-green); color: #000; padding: 12px 30px; border-radius: 30px;
             font-weight: bold; font-size: 1rem; z-index: 2000; box-shadow: 0 10px 30px rgba(57,255,20,0.3);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); opacity: 0;
         }
         .toast-notification.show-toast { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* ============================================================
-           ROUTINE PAGE — NEW STYLES
+           ROUTINE PAGE
            ============================================================ */
-        .routine-wrapper {
-            padding-top: 195px;
-            padding-bottom: 80px;
-            max-width: 1100px;
-            margin: 0 auto;
-            min-height: 85vh;
-            text-align: center;
-        }
-
-        /* Heading */
-        .routine-heading-box {
-            margin: 20px auto 50px auto;
-            padding: 20px 10px 25px;
-            position: relative;
-        }
+        .routine-wrapper { padding-top: 195px; padding-bottom: 80px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center; }
+        .routine-heading-box { margin: 20px auto 50px auto; padding: 20px 10px 25px; position: relative; }
         .routine-heading-box::after {
-            content: '';
-            display: block;
-            width: 120px;
-            height: 3px;
+            content: ''; display: block; width: 120px; height: 3px;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 18px auto 0;
-            border-radius: 2px;
-            animation: line-glow 2.5s ease-in-out infinite;
+            margin: 18px auto 0; border-radius: 2px; animation: line-glow 2.5s ease-in-out infinite;
         }
         @keyframes line-glow {
             0%, 100% { box-shadow: 0 0 8px var(--gold); opacity: 0.7; }
             50% { box-shadow: 0 0 22px var(--gold), 0 0 40px rgba(255,215,0,0.3); opacity: 1; }
         }
         .routine-heading-box h1 {
-            font-size: clamp(2.2rem, 6vw, 3.8rem);
-            font-weight: 900;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            margin: 0;
-            background: linear-gradient(135deg, #fff 20%, var(--gold) 50%, #fff 80%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shine-text 3s linear infinite;
-            text-shadow: none;
+            font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 900; letter-spacing: 0.18em;
+            text-transform: uppercase; margin: 0;
+            background: linear-gradient(135deg, #fff 20%, var(--gold) 50%, #fff 80%); background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: shine-text 3s linear infinite; text-shadow: none;
         }
-        @keyframes shine-text {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-        .routine-heading-box p {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.85rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            margin: 10px 0 0;
-        }
-
-        /* Section Switch Buttons */
-        .routine-switch-bar {
-            display: flex;
-            justify-content: center;
-            gap: 18px;
-            flex-wrap: wrap;
-            margin-bottom: 45px;
-            padding: 0 20px;
-        }
-
+        @keyframes shine-text { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        .routine-heading-box p { color: rgba(255,255,255,0.4); font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase; margin: 10px 0 0; }
+        .routine-switch-bar { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 45px; padding: 0 20px; }
         .routine-sec-btn {
-            position: relative;
-            padding: 14px 40px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; padding: 14px 40px; font-size: 1.1rem; font-weight: 800;
+            letter-spacing: 0.12em; text-transform: uppercase; border: none; border-radius: 14px; cursor: pointer;
+            overflow: hidden; transition: all 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
             background: linear-gradient(135deg, #1a0000 0%, #2d0000 50%, #1a0000 100%);
             color: rgba(255,255,255,0.6);
-            box-shadow:
-                0 4px 0 rgba(0,0,0,0.8),
-                0 8px 20px rgba(0,0,0,0.5),
-                inset 0 1px 0 rgba(255,255,255,0.07);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.8), 0 8px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
             border: 1px solid rgba(255,255,255,0.08);
         }
-
-        /* Glossy shine overlay */
         .routine-sec-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -75%;
-            width: 50%; height: 100%;
+            content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
             background: linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
-            transform: skewX(-20deg);
-            transition: left 0.5s ease;
+            transform: skewX(-20deg); transition: left 0.5s ease;
         }
         .routine-sec-btn:hover::before { left: 125%; }
-
-        /* Section-specific accent colors */
         .routine-sec-btn[data-sec="A"] { --sec-color: #FFD700; --sec-glow: rgba(255,215,0,0.4); }
         .routine-sec-btn[data-sec="B"] { --sec-color: #00F3FF; --sec-glow: rgba(0,243,255,0.35); }
         .routine-sec-btn[data-sec="C"] { --sec-color: #39FF14; --sec-glow: rgba(57,255,20,0.35); }
         .routine-sec-btn[data-sec="D"] { --sec-color: #FF6B35; --sec-glow: rgba(255,107,53,0.4); }
-
-        .routine-sec-btn:hover {
-            transform: translateY(-4px) scale(1.04);
-            color: var(--sec-color);
-            border-color: var(--sec-color);
-            box-shadow:
-                0 8px 0 rgba(0,0,0,0.6),
-                0 14px 30px var(--sec-glow),
-                inset 0 1px 0 rgba(255,255,255,0.12);
-            text-shadow: 0 0 12px var(--sec-color);
-        }
-
-        .routine-sec-btn.routine-active {
-            transform: translateY(3px);
-            color: var(--sec-color);
-            border-color: var(--sec-color);
-            box-shadow:
-                0 1px 0 rgba(0,0,0,0.8),
-                0 4px 20px var(--sec-glow),
-                inset 0 0 15px rgba(0,0,0,0.3);
-            text-shadow: 0 0 15px var(--sec-color);
-            background: linear-gradient(135deg, #0d0000, #1a0000);
-        }
-
-        /* Image Display Area */
+        .routine-sec-btn:hover { transform: translateY(-4px) scale(1.04); color: var(--sec-color); border-color: var(--sec-color); box-shadow: 0 8px 0 rgba(0,0,0,0.6), 0 14px 30px var(--sec-glow), inset 0 1px 0 rgba(255,255,255,0.12); text-shadow: 0 0 12px var(--sec-color); }
+        .routine-sec-btn.routine-active { transform: translateY(3px); color: var(--sec-color); border-color: var(--sec-color); box-shadow: 0 1px 0 rgba(0,0,0,0.8), 0 4px 20px var(--sec-glow), inset 0 0 15px rgba(0,0,0,0.3); text-shadow: 0 0 15px var(--sec-color); background: linear-gradient(135deg, #0d0000, #1a0000); }
         .routine-img-frame {
-            position: relative;
-            margin: 0 20px;
-            border-radius: 20px;
-            overflow: hidden;
+            position: relative; margin: 0 20px; border-radius: 20px; overflow: hidden;
             border: 2px solid rgba(255,255,255,0.06);
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.04),
-                0 25px 60px rgba(0,0,0,0.8),
-                0 0 40px rgba(128,0,0,0.2);
-            background: #0a0000;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 25px 60px rgba(0,0,0,0.8), 0 0 40px rgba(128,0,0,0.2);
+            background: #0a0000; min-height: 300px; display: flex; align-items: center; justify-content: center;
             transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
-
-        /* Active section border color match */
         #routineView[data-active="A"] .routine-img-frame { border-color: rgba(255,215,0,0.25); box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 50px rgba(255,215,0,0.08); }
         #routineView[data-active="B"] .routine-img-frame { border-color: rgba(0,243,255,0.2); box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 50px rgba(0,243,255,0.07); }
         #routineView[data-active="C"] .routine-img-frame { border-color: rgba(57,255,20,0.2); box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 50px rgba(57,255,20,0.07); }
         #routineView[data-active="D"] .routine-img-frame { border-color: rgba(255,107,53,0.25); box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 50px rgba(255,107,53,0.08); }
-
-        .routine-img-frame img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: opacity 0.35s ease, transform 0.35s ease;
-        }
-        .routine-img-frame img.fade-out {
-            opacity: 0;
-            transform: scale(0.97);
-        }
-
-        /* Placeholder when no section selected */
-        .routine-placeholder {
-            padding: 80px 20px;
-            color: rgba(255,255,255,0.18);
-        }
-        .routine-placeholder i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .routine-placeholder p {
-            font-size: 1.1rem;
-            letter-spacing: 0.08em;
-        }
-
-        /* Section label badge shown over image */
+        .routine-img-frame img { width: 100%; height: auto; display: block; transition: opacity 0.35s ease, transform 0.35s ease; }
+        .routine-img-frame img.fade-out { opacity: 0; transform: scale(0.97); }
+        .routine-placeholder { padding: 80px 20px; color: rgba(255,255,255,0.18); }
+        .routine-placeholder i { font-size: 4rem; margin-bottom: 20px; display: block; }
+        .routine-placeholder p { font-size: 1.1rem; letter-spacing: 0.08em; }
         .routine-section-badge {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            padding: 6px 18px;
-            border-radius: 30px;
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid currentColor;
-            display: none;
+            position: absolute; top: 16px; left: 16px; padding: 6px 18px; border-radius: 30px;
+            font-size: 0.78rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid currentColor; display: none;
         }
         #routineView[data-active="A"] .routine-section-badge { display: inline-block; color: var(--gold); background: rgba(255,215,0,0.12); }
         #routineView[data-active="B"] .routine-section-badge { display: inline-block; color: var(--neon-blue); background: rgba(0,243,255,0.1); }
@@ -501,28 +387,10 @@
         /* ============================================================
            CONTACT US PAGE
            ============================================================ */
-        .contact-us-wrapper {
-            padding-top: 195px;
-            padding-bottom: 80px;
-            max-width: 900px;
-            margin: 0 auto;
-            min-height: 85vh;
-            text-align: center;
-        }
-
-        /* Heading */
-        .contact-us-heading-box {
-            margin: 20px auto 55px auto;
-            padding: 20px 10px 28px;
-            position: relative;
-        }
+        .contact-us-wrapper { padding-top: 195px; padding-bottom: 80px; max-width: 900px; margin: 0 auto; min-height: 85vh; text-align: center; }
+        .contact-us-heading-box { margin: 20px auto 55px auto; padding: 20px 10px 28px; position: relative; }
         .contact-us-heading-box::after {
-            content: '';
-            display: block;
-            width: 140px;
-            height: 3px;
-            margin: 18px auto 0;
-            border-radius: 2px;
+            content: ''; display: block; width: 140px; height: 3px; margin: 18px auto 0; border-radius: 2px;
             background: linear-gradient(90deg, transparent, var(--gold), var(--maroon), var(--gold), transparent);
             animation: cu-line-glow 3s ease-in-out infinite;
         }
@@ -531,198 +399,248 @@
             50% { opacity: 1; box-shadow: 0 0 25px var(--gold), 0 0 50px rgba(255,215,0,0.2); }
         }
         .contact-us-heading-box h1 {
-            font-size: clamp(2.5rem, 7vw, 4.2rem);
-            font-weight: 900;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin: 0;
-            background: linear-gradient(135deg, #fff 0%, var(--gold) 40%, #fff 60%, var(--gold) 100%);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: cu-shine 4s linear infinite;
+            font-size: clamp(2.5rem, 7vw, 4.2rem); font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; margin: 0;
+            background: linear-gradient(135deg, #fff 0%, var(--gold) 40%, #fff 60%, var(--gold) 100%); background-size: 300% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: cu-shine 4s linear infinite;
         }
-        @keyframes cu-shine {
-            0% { background-position: 0% center; }
-            100% { background-position: 300% center; }
-        }
-        .contact-us-heading-box p {
-            color: rgba(255,255,255,0.35);
-            font-size: 0.8rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            margin: 12px 0 0;
-        }
-
-        /* Contact Card Grid */
-        .cu-card-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 28px;
-            padding: 0 20px;
-        }
-
-        /* Each contact card / glossy button */
+        @keyframes cu-shine { 0% { background-position: 0% center; } 100% { background-position: 300% center; } }
+        .contact-us-heading-box p { color: rgba(255,255,255,0.35); font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; margin: 12px 0 0; }
+        .cu-card-grid { display: flex; flex-direction: column; gap: 28px; padding: 0 20px; }
         .cu-contact-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            padding: 28px 32px;
+            position: relative; overflow: hidden; border-radius: 20px; padding: 28px 32px;
             background: linear-gradient(135deg, rgba(20,0,0,0.85) 0%, rgba(40,5,5,0.7) 50%, rgba(20,0,0,0.85) 100%);
             border: 1px solid rgba(255,215,0,0.15);
-            box-shadow:
-                0 10px 40px rgba(0,0,0,0.6),
-                inset 0 1px 0 rgba(255,255,255,0.08),
-                inset 0 -1px 0 rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            text-align: left;
-            cursor: default;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); text-align: left; cursor: default;
+            transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
         }
-
-        /* Glossy shine sweep */
         .cu-contact-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -80%;
-            width: 60%; height: 100%;
+            content: ''; position: absolute; top: 0; left: -80%; width: 60%; height: 100%;
             background: linear-gradient(120deg, transparent, rgba(255,255,255,0.07), transparent);
-            transform: skewX(-15deg);
-            transition: left 0.6s ease;
-            pointer-events: none;
+            transform: skewX(-15deg); transition: left 0.6s ease; pointer-events: none;
         }
         .cu-contact-card:hover::before { left: 130%; }
-
-        /* Left glow bar */
         .cu-contact-card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px; height: 100%;
-            background: var(--cu-accent, var(--gold));
-            border-radius: 20px 0 0 20px;
-            box-shadow: 0 0 12px var(--cu-accent, var(--gold));
-            transition: box-shadow 0.3s ease;
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--cu-accent, var(--gold)); border-radius: 20px 0 0 20px;
+            box-shadow: 0 0 12px var(--cu-accent, var(--gold)); transition: box-shadow 0.3s ease;
         }
-
-        .cu-contact-card:hover {
-            transform: translateY(-6px) scale(1.01);
-            border-color: var(--cu-accent, var(--gold));
-            box-shadow:
-                0 20px 50px rgba(0,0,0,0.7),
-                0 0 30px rgba(255,215,0,0.08),
-                inset 0 1px 0 rgba(255,255,255,0.12);
-        }
-
-        /* Accent colors per card */
-        .cu-card-cr   { --cu-accent: var(--gold); }
-        .cu-card-dev  { --cu-accent: #00F3FF; }
-        .cu-card-mat  { --cu-accent: #39FF14; }
-
-        /* Card tag pill */
-        .cu-card-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            padding: 5px 14px;
-            border-radius: 30px;
-            margin-bottom: 16px;
-            border: 1px solid currentColor;
-        }
-        .cu-card-cr .cu-card-tag   { color: var(--gold); background: rgba(255,215,0,0.1); }
-        .cu-card-dev .cu-card-tag  { color: var(--neon-blue); background: rgba(0,243,255,0.08); }
-        .cu-card-mat .cu-card-tag  { color: var(--neon-green); background: rgba(57,255,20,0.08); }
-
-        /* Card title (big name) */
-        .cu-card-name {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #fff;
-            margin: 0 0 18px 0;
-            letter-spacing: 0.02em;
-        }
-
-        /* Phone row */
+        .cu-contact-card:hover { transform: translateY(-6px) scale(1.01); border-color: var(--cu-accent, var(--gold)); box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(255,215,0,0.08), inset 0 1px 0 rgba(255,255,255,0.12); }
+        .cu-card-cr { --cu-accent: var(--gold); }
+        .cu-card-dev { --cu-accent: #00F3FF; }
+        .cu-card-mat { --cu-accent: #39FF14; }
+        .cu-card-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; padding: 5px 14px; border-radius: 30px; margin-bottom: 16px; border: 1px solid currentColor; }
+        .cu-card-cr .cu-card-tag { color: var(--gold); background: rgba(255,215,0,0.1); }
+        .cu-card-dev .cu-card-tag { color: var(--neon-blue); background: rgba(0,243,255,0.08); }
+        .cu-card-mat .cu-card-tag { color: var(--neon-green); background: rgba(57,255,20,0.08); }
+        .cu-card-name { font-size: 1.4rem; font-weight: 800; color: #fff; margin: 0 0 18px 0; letter-spacing: 0.02em; }
         .cu-phone-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.35);
-            border: 1px dashed rgba(255,255,255,0.12);
-            border-radius: 12px;
-            padding: 12px 18px;
-            cursor: pointer;
-            transition: all 0.25s ease;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(0,0,0,0.35); border: 1px dashed rgba(255,255,255,0.12);
+            border-radius: 12px; padding: 12px 18px; cursor: pointer; transition: all 0.25s ease;
         }
-        .cu-card-cr .cu-phone-row:hover  { border-color: var(--gold); background: rgba(255,215,0,0.05); }
+        .cu-card-cr .cu-phone-row:hover { border-color: var(--gold); background: rgba(255,215,0,0.05); }
         .cu-card-dev .cu-phone-row:hover { border-color: var(--neon-blue); background: rgba(0,243,255,0.05); }
         .cu-card-mat .cu-phone-row:hover { border-color: var(--neon-green); background: rgba(57,255,20,0.05); }
-
         .cu-phone-row:hover .cu-phone-num { color: #fff; }
-
-        .cu-phone-num {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.2s;
-        }
-
-        .cu-copy-icon {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.3);
-            transition: color 0.2s, transform 0.2s;
-        }
-        .cu-phone-row:hover .cu-copy-icon {
-            color: rgba(255,255,255,0.8);
-            transform: scale(1.15);
-        }
-
-        /* CR button — acts like a link button */
+        .cu-phone-num { font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; font-weight: 700; color: rgba(255,255,255,0.7); transition: color 0.2s; }
+        .cu-copy-icon { font-size: 1rem; color: rgba(255,255,255,0.3); transition: color 0.2s, transform 0.2s; }
+        .cu-phone-row:hover .cu-copy-icon { color: rgba(255,255,255,0.8); transform: scale(1.15); }
         .cu-link-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 13px 28px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            cursor: pointer;
-            background: linear-gradient(135deg, var(--maroon), #b30000);
-            color: #fff;
-            border: 1px solid rgba(255,215,0,0.3);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px rgba(255,215,0,0.08);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex; align-items: center; gap: 10px; padding: 13px 28px; border: none; border-radius: 12px;
+            font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; cursor: pointer;
+            background: linear-gradient(135deg, var(--maroon), #b30000); color: #fff;
+            border: 1px solid rgba(255,215,0,0.3); box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 15px rgba(255,215,0,0.08);
+            transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
         }
-        .cu-link-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            border-color: var(--gold);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 25px rgba(255,215,0,0.2);
-            color: var(--gold);
-            text-shadow: 0 0 10px rgba(255,215,0,0.5);
-        }
+        .cu-link-btn:hover { transform: translateY(-3px) scale(1.03); border-color: var(--gold); box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 25px rgba(255,215,0,0.2); color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.5); }
         .cu-link-btn:active { transform: translateY(1px); }
 
-        @media screen and (max-width: 768px) {
-            .contact-us-wrapper { padding-top: 240px; }
-            .cu-card-name { font-size: 1.2rem; }
-            .cu-phone-num { font-size: 1rem; }
-            .cu-contact-card { padding: 22px 20px; }
+        /* ============================================================
+           CG CALCULATOR PAGE
+           ============================================================ */
+        .cgcalc-wrapper {
+            padding-top: 195px; padding-bottom: 80px; max-width: 800px;
+            margin: 0 auto; min-height: 85vh; text-align: center;
         }
+        .cgcalc-heading-box { margin: 20px auto 40px auto; padding: 20px 10px 25px; position: relative; }
+        .cgcalc-heading-box::after {
+            content: ''; display: block; width: 130px; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            margin: 15px auto 0; border-radius: 2px; animation: cg-line-glow 2.5s ease-in-out infinite;
+        }
+        @keyframes cg-line-glow {
+            0%, 100% { box-shadow: 0 0 8px var(--neon-green); opacity: 0.7; }
+            50% { box-shadow: 0 0 22px var(--neon-green), 0 0 40px rgba(57,255,20,0.3); opacity: 1; }
+        }
+        .cgcalc-heading-box h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 900; letter-spacing: 0.15em;
+            text-transform: uppercase; margin: 0;
+            background: linear-gradient(135deg, #fff 20%, var(--neon-green) 50%, #fff 80%); background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: shine-text 3s linear infinite;
+        }
+        .cgcalc-heading-box p { color: rgba(255,255,255,0.4); font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase; margin: 10px 0 0; }
+
+        .cgcalc-step1 { padding: 0 20px 30px; }
+        .cgcalc-step1 label { display: block; font-size: 1.1rem; color: #ccc; margin-bottom: 18px; letter-spacing: 0.05em; }
+        .cgcalc-num-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
+        .cgcalc-num-btn {
+            width: 60px; height: 60px; border-radius: 50%; border: 2px solid rgba(57,255,20,0.4);
+            background: rgba(20,30,20,0.8); color: var(--neon-green); font-size: 1.4rem; font-weight: 800;
+            cursor: pointer; transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        .cgcalc-num-btn:hover { background: rgba(57,255,20,0.15); border-color: var(--neon-green); box-shadow: 0 0 20px rgba(57,255,20,0.3); transform: scale(1.1); }
+        .cgcalc-num-btn.active-num { background: rgba(57,255,20,0.25); border-color: var(--neon-green); box-shadow: 0 0 25px rgba(57,255,20,0.5); transform: scale(1.05); }
+
+        .cgcalc-courses-container { padding: 0 20px 30px; }
+        .cgcalc-course-row {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+            background: rgba(15,20,15,0.7); border: 1px solid rgba(57,255,20,0.15);
+            border-radius: 14px; padding: 16px 20px; transition: border-color 0.3s;
+        }
+        .cgcalc-course-row:hover { border-color: rgba(57,255,20,0.35); }
+        .cgcalc-course-num {
+            width: 32px; height: 32px; border-radius: 50%; background: rgba(57,255,20,0.1);
+            border: 1px solid rgba(57,255,20,0.4); color: var(--neon-green); font-weight: 800;
+            display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0;
+        }
+        .cgcalc-course-row input[type="number"], .cgcalc-course-row select {
+            background: rgba(0,0,0,0.5); color: #fff; border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 12px; border-radius: 10px; font-size: 1rem;
+        }
+        .cgcalc-credit-input { width: 80px; text-align: center; }
+        .cgcalc-grade-select { flex: 1; min-width: 120px; }
+        .cgcalc-credit-label, .cgcalc-grade-label { color: rgba(255,255,255,0.5); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .cgcalc-field-group { display: flex; flex-direction: column; gap: 5px; }
+
+        .cgcalc-calc-btn {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: linear-gradient(135deg, #003300, #005500);
+            color: var(--neon-green); font-size: 1.2rem; font-weight: 800;
+            border: 2px solid var(--neon-green); border-radius: 50px; cursor: pointer;
+            padding: 16px 50px; margin: 20px auto; letter-spacing: 0.1em;
+            box-shadow: 0 0 20px rgba(57,255,20,0.2), 0 8px 25px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        .cgcalc-calc-btn:hover { transform: translateY(-4px); box-shadow: 0 0 40px rgba(57,255,20,0.4), 0 12px 35px rgba(0,0,0,0.6); }
+
+        .cgcalc-result-box {
+            margin: 30px 20px; padding: 35px 20px;
+            background: linear-gradient(135deg, rgba(0,40,0,0.6), rgba(0,20,0,0.8));
+            border: 2px solid var(--neon-green); border-radius: 20px;
+            box-shadow: 0 0 40px rgba(57,255,20,0.2); display: none;
+        }
+        .cgcalc-result-box.show-result { display: block; }
+        .cgcalc-result-label { color: rgba(255,255,255,0.5); font-size: 0.85rem; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 10px; }
+        .cgcalc-result-num { font-size: 5rem; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 30px rgba(57,255,20,0.6); letter-spacing: 0.05em; line-height: 1; }
+        .cgcalc-result-grade { margin-top: 15px; font-size: 1.3rem; font-weight: 700; color: #fff; }
+        .cgcalc-reset-btn {
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 25px;
+            background: transparent; color: rgba(255,255,255,0.5); border: 1px dashed rgba(255,255,255,0.3);
+            border-radius: 30px; padding: 10px 25px; cursor: pointer; font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .cgcalc-reset-btn:hover { color: #fff; border-color: #fff; }
+
+        /* ============================================================
+           NOTICE PAGE
+           ============================================================ */
+        .notice-wrapper { padding-top: 195px; padding-bottom: 80px; max-width: 1000px; margin: 0 auto; min-height: 85vh; text-align: center; }
+        .notice-heading-box { margin: 20px auto 40px auto; padding: 20px 10px 25px; position: relative; }
+        .notice-heading-box::after {
+            content: ''; display: block; width: 130px; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            margin: 15px auto 0; border-radius: 2px; animation: notice-glow 2.5s ease-in-out infinite;
+        }
+        @keyframes notice-glow {
+            0%, 100% { box-shadow: 0 0 8px var(--neon-blue); opacity: 0.7; }
+            50% { box-shadow: 0 0 22px var(--neon-blue), 0 0 40px rgba(0,243,255,0.3); opacity: 1; }
+        }
+        .notice-heading-box h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 900; letter-spacing: 0.15em;
+            text-transform: uppercase; margin: 0;
+            background: linear-gradient(135deg, #fff 20%, var(--neon-blue) 50%, #fff 80%); background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: shine-text 3s linear infinite;
+        }
+        .notice-heading-box p { color: rgba(255,255,255,0.4); font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase; margin: 10px 0 0; }
+
+        .notice-dev-panel { background: #111; border: 2px dashed var(--neon-blue); border-radius: 12px; padding: 20px; margin: 0 20px 30px; text-align: left; }
+        .notice-dev-panel h3 { color: var(--neon-blue); margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
+        .notice-form-box { background: #161616; border: 1px solid rgba(0,243,255,0.3); border-radius: 10px; padding: 20px; margin-top: 15px; }
+        .notice-form-row { display: flex; flex-direction: column; gap: 12px; }
+        .notice-form-row label { color: var(--gold); font-weight: bold; font-size: 0.9rem; }
+        .notice-type-toggle { display: flex; gap: 10px; margin-top: 5px; }
+        .notice-type-btn {
+            padding: 8px 20px; border-radius: 8px; border: 1px solid #444; background: #222;
+            color: #fff; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .notice-type-btn.active-type { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0,243,255,0.1); }
+        .notice-view-section { display: none; }
+        .notice-view-section.active-type-view { display: block; }
+
+        .notice-table-container { margin: 0 20px; background: #0d0d0d; border: 2px solid rgba(0,243,255,0.3); border-radius: 12px; overflow-x: auto; }
+        .notice-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .notice-table th { background: linear-gradient(135deg, #001a2e, #002a40); color: var(--neon-blue); padding: 15px; font-size: 1rem; border-bottom: 1px solid rgba(0,243,255,0.3); }
+        .notice-table td { padding: 14px 15px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #ccc; }
+        .notice-table tr:hover td { background: rgba(0,243,255,0.04); }
+        .notice-date-cell { color: rgba(255,255,255,0.5); font-size: 0.88rem; white-space: nowrap; font-family: 'Courier New', monospace; }
+        .notice-topic-cell { font-weight: 600; color: #fff; }
+        .notice-view-btn {
+            display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px;
+            border-radius: 8px; background: rgba(0,243,255,0.1); border: 1px solid rgba(0,243,255,0.4);
+            color: var(--neon-blue); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            text-decoration: none; transition: all 0.2s; white-space: nowrap;
+        }
+        .notice-view-btn:hover { background: rgba(0,243,255,0.2); box-shadow: 0 0 15px rgba(0,243,255,0.2); }
+        .notice-empty { padding: 50px 20px; color: rgba(255,255,255,0.3); font-style: italic; }
+
+        /* Notice Modal (text viewer) */
+        .notice-modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+            z-index: 3000; display: flex; align-items: center; justify-content: center;
+            padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .notice-modal-overlay.modal-open { opacity: 1; pointer-events: all; }
+        .notice-modal-box {
+            background: linear-gradient(135deg, #050010, #001020);
+            border: 2px solid var(--neon-blue); border-radius: 20px;
+            max-width: 700px; width: 100%; max-height: 80vh;
+            box-shadow: 0 0 60px rgba(0,243,255,0.2), 0 30px 60px rgba(0,0,0,0.8);
+            transform: scale(0.9); transition: transform 0.3s ease; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .notice-modal-overlay.modal-open .notice-modal-box { transform: scale(1); }
+        .notice-modal-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding: 22px 28px 18px; border-bottom: 1px solid rgba(0,243,255,0.2);
+            flex-shrink: 0;
+        }
+        .notice-modal-title { color: var(--neon-blue); font-size: 1.2rem; font-weight: 700; line-height: 1.4; text-align: left; }
+        .notice-modal-date { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-top: 4px; }
+        .notice-modal-close {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%; width: 36px; height: 36px; color: #fff; cursor: pointer;
+            font-size: 1.1rem; flex-shrink: 0; transition: all 0.2s; margin-left: 15px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .notice-modal-close:hover { background: rgba(255,0,0,0.2); border-color: #ff4444; color: #ff4444; }
+        .notice-modal-body {
+            padding: 25px 28px; overflow-y: auto; flex: 1;
+            color: #ddd; font-size: 1.05rem; line-height: 1.8;
+            white-space: pre-wrap; word-break: break-word; text-align: left;
+        }
+        .notice-modal-body::-webkit-scrollbar { width: 6px; }
+        .notice-modal-body::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .notice-modal-body::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 3px; }
 
         /* ============================================================
            FOOTER
            ============================================================ */
-        footer { 
-            background: #000; padding: 30px 20px; 
+        footer {
+            background: #000; padding: 30px 20px;
             border-top: 1px solid #1a1a1a; text-align: center;
             position: relative; z-index: 20;
         }
@@ -731,7 +649,7 @@
         .footer-mail-link { color: var(--gold); font-size: 1.6rem; }
         .dev-credit { color: #fff; font-weight: bold; font-size: 0.9rem; border-top: 1px solid #222; padding-top: 10px; }
 
-        /* --- MOBILE FIXES --- */
+        /* --- MOBILE --- */
         @media screen and (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-menu { display: none; flex-direction: column; width: 100%; background: var(--maroon-dark); }
@@ -740,7 +658,8 @@
             .theme-viewport img { width: 100%; height: auto; object-fit: contain; }
             .circuit-container { gap: 40px; }
             .main-logo { height: 50px; }
-            .exam-view-wrapper, .pdf-view-wrapper, .prev-year-wrapper, .crgm-wrapper, .routine-wrapper { padding-top: 240px; }
+            .exam-view-wrapper, .pdf-view-wrapper, .prev-year-wrapper, .crgm-wrapper,
+            .routine-wrapper, .cgcalc-wrapper, .notice-wrapper, .contact-us-wrapper { padding-top: 240px; }
             .switch-3d { width: 45%; padding: 12px 10px; font-size: 0.9rem; }
             .pdf-frame-container { height: 50vh; margin: 15px 10px; }
             .glossy-btn-grid { grid-template-columns: 1fr; gap: 15px; padding: 10px; }
@@ -748,6 +667,11 @@
             .crgm-toggle-btn { padding: 12px 25px; font-size: 1rem; }
             .routine-sec-btn { padding: 12px 28px; font-size: 1rem; }
             .routine-img-frame { margin: 0 10px; }
+            .cgcalc-course-row { flex-wrap: wrap; }
+            .cgcalc-result-num { font-size: 3.5rem; }
+            .notice-table th, .notice-table td { padding: 10px 10px; font-size: 0.85rem; }
+            .notice-modal-header { padding: 16px 18px 14px; }
+            .notice-modal-body { padding: 18px; }
         }
     </style>
 </head>
@@ -761,9 +685,10 @@
             <div class="header-title">AUST EEE-53</div>
             <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
-        <div class="search-wrapper">
-            <input type="text" placeholder="Search resources...">
-            <button>Search</button>
+        <div class="search-wrapper" id="searchWrapper">
+            <input type="text" id="searchInput" placeholder="Search any page, topic, person..." autocomplete="off">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+            <div id="search-suggestions"></div>
         </div>
         <nav class="navbar">
             <ul class="nav-menu" id="navMenu">
@@ -773,12 +698,12 @@
                 <li><a onclick="switchView('routine')">Routine</a></li>
                 <li><a onclick="switchView('busRoute')">Bus Route</a></li>
                 <li><a onclick="switchView('exams')">Exams</a></li>
-                <li><a href="#">Notice</a></li>
+                <li><a onclick="switchView('notice')">Notice</a></li>
                 <li><a onclick="switchView('crgm')">CR & GM Section</a></li>
                 <li><a href="#">Credits</a></li>
                 <li><a onclick="switchView('obe')">OBE Syllabus</a></li>
                 <li><a onclick="switchView('helpingSites')">Helping Sites</a></li>
-                <li><a href="#">Waiver</a></li>
+                <li><a onclick="switchView('cgcalc')">CG Calculator</a></li>
                 <li><a onclick="switchView('contactUs')">Contact Us</a></li>
                 <li class="dev-login-item" id="devLoginMenuBtn"><a onclick="triggerDevLogin()">Developer Log in</a></li>
             </ul>
@@ -792,17 +717,10 @@
                 <img src="Theme.png" alt="AUST Theme">
             </div>
         </div>
-
         <div class="shutter-panel">
             <div class="syllabus-3d-wrapper">
                 <table class="syllabus-table-3d">
-                    <thead>
-                        <tr>
-                            <th>Course No.</th>
-                            <th>Course Title</th>
-                            <th>Credit</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Course No.</th><th>Course Title</th><th>Credit</th></tr></thead>
                     <tbody>
                         <tr class="row-eee2203"><td>EEE 2203</td><td>Electronics II</td><td>3.0</td></tr>
                         <tr class="row-eee2204"><td>EEE 2204</td><td>Electronics II Lab</td><td>1.5</td></tr>
@@ -816,25 +734,18 @@
                     </tbody>
                 </table>
             </div>
-
             <section class="circuit-container">
                 <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                     <span class="switch-label">MID</span>
-                    <div class="wire-container">
-                        <div class="wire-piece"></div><i class="fas fa-microchip chip-icon"></i><div class="wire-piece"></div>
-                    </div>
+                    <div class="wire-container"><div class="wire-piece"></div><i class="fas fa-microchip chip-icon"></i><div class="wire-piece"></div></div>
                 </div>
                 <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
                     <span class="switch-label">FINAL</span>
-                    <div class="wire-container">
-                        <div class="wire-piece"></div><i class="fas fa-bolt chip-icon"></i><div class="wire-piece"></div>
-                    </div>
+                    <div class="wire-container"><div class="wire-piece"></div><i class="fas fa-bolt chip-icon"></i><div class="wire-piece"></div></div>
                 </div>
             </section>
-
             <div class="calendar-box">
-                <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" 
-                style="border: 0" width="100%" height="450" frameborder="0" scrolling="no"></iframe>
+                <iframe src="https://calendar.google.com/calendar/embed?src=austeee53@gmail.com&ctz=Asia%2FDhaka" style="border: 0" width="100%" height="450" frameborder="0" scrolling="no"></iframe>
             </div>
         </div>
     </div>
@@ -850,16 +761,12 @@
                 <button class="switch-3d switch-prev" onclick="loadPreviousExams(this)">Previous Exams</button>
                 <button class="switch-3d switch-admin" onclick="triggerAdminLogin()">Admin Switch</button>
             </div>
-
             <div id="userTableContainer" class="table-container">
                 <table id="examTable">
-                    <thead>
-                        <tr><th>Date</th><th>Course Title</th><th>Section</th><th>Exam Type</th></tr>
-                    </thead>
+                    <thead><tr><th>Date</th><th>Course Title</th><th>Section</th><th>Exam Type</th></tr></thead>
                     <tbody id="examTableBody"></tbody>
                 </table>
             </div>
-
             <div id="adminDashboard" class="admin-dashboard" style="display: none;">
                 <div class="profile-banner">
                     <div>
@@ -869,12 +776,9 @@
                     <button class="btn-action btn-delete" onclick="logoutAdmin()">Logout</button>
                 </div>
                 <button class="btn-add" id="addNewBtn" onclick="showInputRow()">+ Add New Exam</button>
-
                 <div class="table-container" id="inputFormContainer" style="display: none; border-color: var(--neon-blue); margin-bottom: 30px;">
                     <table>
-                        <thead>
-                            <tr><th>Date</th><th>Course Title</th><th>Section sub-group</th><th>Exam Type</th><th>Action</th></tr>
-                        </thead>
+                        <thead><tr><th>Date</th><th>Course Title</th><th>Section sub-group</th><th>Exam Type</th><th>Action</th></tr></thead>
                         <tbody>
                             <tr>
                                 <td><input type="date" id="inputDate"></td>
@@ -904,13 +808,10 @@
                         </tbody>
                     </table>
                 </div>
-
                 <h3 style="color: var(--gold);">Manage Existing Inputs</h3>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr><th>Date</th><th>Course Title</th><th>Section</th><th>Exam Type</th><th>Actions</th></tr>
-                        </thead>
+                        <thead><tr><th>Date</th><th>Course Title</th><th>Section</th><th>Exam Type</th><th>Actions</th></tr></thead>
                         <tbody id="adminTableBody"></tbody>
                     </table>
                 </div>
@@ -942,11 +843,9 @@
     <div id="helpingSitesView" class="content-section">
         <div class="prev-year-wrapper">
             <div class="prev-headline-box"><h2>Helping Sites by <span>EEE-53</span></h2></div>
-            
             <div id="devHelpingSitesPanel" class="dev-management-panel" style="display: none;">
                 <h3><i class="fas fa-tools"></i> Developer Dashboard (Helping Sites)</h3>
                 <button class="btn-add" style="margin-bottom: 15px; padding: 8px 16px; font-size: 0.9rem;" onclick="showHelpingSitesForm()">+ Add New Site Button</button>
-                
                 <div class="table-container" id="helpingSitesFormBox" style="display: none; border-color: var(--gold); padding: 15px; background: #161616;">
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <div><label style="font-weight: bold; color: var(--gold);">Button Name:</label><input type="text" id="helpingSitesTitle"></div>
@@ -954,15 +853,8 @@
                         <button class="btn-action btn-submit" id="submitHelpingSitesBtn" onclick="submitHelpingSitesData()" style="max-width: 200px;">Save Site Blueprint</button>
                     </div>
                 </div>
-                
-                <div class="table-container">
-                    <table style="min-width: 500px;">
-                        <thead><tr><th>Button Display Name</th><th>Actions</th></tr></thead>
-                        <tbody id="helpingSitesTableBody"></tbody>
-                    </table>
-                </div>
+                <div class="table-container"><table style="min-width: 500px;"><thead><tr><th>Button Display Name</th><th>Actions</th></tr></thead><tbody id="helpingSitesTableBody"></tbody></table></div>
             </div>
-            
             <div class="glossy-btn-grid" id="userHelpingSitesGrid"></div>
         </div>
     </div>
@@ -970,106 +862,29 @@
     <!-- ======================== CR & GM ======================== -->
     <div id="crgmView" class="content-section">
         <div class="crgm-wrapper">
-            <div class="prev-headline-box">
-                <h2>CR & GM <span>Network Hub</span></h2>
-            </div>
-            
+            <div class="prev-headline-box"><h2>CR & GM <span>Network Hub</span></h2></div>
             <div class="crgm-btn-container">
                 <button class="crgm-toggle-btn active-tab" id="crTabBtn" onclick="toggleCrgmTab('cr')"><i class="fas fa-users"></i> CR Contacts</button>
                 <button class="crgm-toggle-btn" id="gmTabBtn" onclick="toggleCrgmTab('gm')"><i class="fas fa-user-shield"></i> GM Contacts</button>
             </div>
-
             <div id="crPane" class="crgm-display-box active-pane">
                 <div class="contact-grid">
-                    <div class="contact-card">
-                        <span class="card-tag">Section A</span>
-                        <div class="card-name">Nesar Ahmed</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01864856834', this)">
-                            <span class="phone-num">01864856834</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">Section A</span>
-                        <div class="card-name">Eshal Tabannum Eusha</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01717291596', this)">
-                            <span class="phone-num">01717291596</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">Section B</span>
-                        <div class="card-name">Opu Tarafder</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01722265753', this)">
-                            <span class="phone-num">01722265753</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">Section B</span>
-                        <div class="card-name">Sanjana Islam Dola</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01773010187', this)">
-                            <span class="phone-num">01773010187</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">Section C</span>
-                        <div class="card-name">Tasrif Sahil</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01898331054', this)">
-                            <span class="phone-num">01898331054</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">Section C</span>
-                        <div class="card-name">Sirajam Munira</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01814698480', this)">
-                            <span class="phone-num">01814698480</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">Section D</span>
-                        <div class="card-name">Rushil Datta</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01764053477', this)">
-                            <span class="phone-num">01764053477</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">Section D</span>
-                        <div class="card-name">Sruti Saha</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01924293777', this)">
-                            <span class="phone-num">01924293777</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
+                    <div class="contact-card"><span class="card-tag">Section A</span><div class="card-name">Nesar Ahmed</div><div class="card-phone-wrapper" onclick="copyContactNumber('01864856834', this)"><span class="phone-num">01864856834</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">Section A</span><div class="card-name">Eshal Tabannum Eusha</div><div class="card-phone-wrapper" onclick="copyContactNumber('01717291596', this)"><span class="phone-num">01717291596</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">Section B</span><div class="card-name">Opu Tarafder</div><div class="card-phone-wrapper" onclick="copyContactNumber('01722265753', this)"><span class="phone-num">01722265753</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">Section B</span><div class="card-name">Sanjana Islam Dola</div><div class="card-phone-wrapper" onclick="copyContactNumber('01773010187', this)"><span class="phone-num">01773010187</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">Section C</span><div class="card-name">Tasrif Sahil</div><div class="card-phone-wrapper" onclick="copyContactNumber('01898331054', this)"><span class="phone-num">01898331054</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">Section C</span><div class="card-name">Sirajam Munira</div><div class="card-phone-wrapper" onclick="copyContactNumber('01814698480', this)"><span class="phone-num">01814698480</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">Section D</span><div class="card-name">Rushil Datta</div><div class="card-phone-wrapper" onclick="copyContactNumber('01764053477', this)"><span class="phone-num">01764053477</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">Section D</span><div class="card-name">Sruti Saha</div><div class="card-phone-wrapper" onclick="copyContactNumber('01924293777', this)"><span class="phone-num">01924293777</span><i class="far fa-copy copy-icon"></i></div></div>
                 </div>
             </div>
-
             <div id="gmPane" class="crgm-display-box">
                 <div class="contact-grid">
-                    <div class="contact-card">
-                        <span class="card-tag">General Member-2.2</span>
-                        <div class="card-name">Loading</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('Number', this)">
-                            <span class="phone-num">Number</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">General Member</span>
-                        <div class="card-name">Quazi Alimuzzaman Aumi-2.1</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01676281095', this)">
-                            <span class="phone-num">01676281095</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">General Member</span>
-                        <div class="card-name">Rownok Hossain-1.2</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01732742201', this)">
-                            <span class="phone-num">01732742201</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <span class="card-tag">General Member</span>
-                        <div class="card-name">Ahmad Fahim Shahriar-1.1</div>
-                        <div class="card-phone-wrapper" onclick="copyContactNumber('01932234089', this)">
-                            <span class="phone-num">01932234089</span><i class="far fa-copy copy-icon"></i>
-                        </div>
-                    </div>
+                    <div class="contact-card"><span class="card-tag">General Member-2.2</span><div class="card-name">Loading</div><div class="card-phone-wrapper" onclick="copyContactNumber('Number', this)"><span class="phone-num">Number</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">General Member</span><div class="card-name">Quazi Alimuzzaman Aumi-2.1</div><div class="card-phone-wrapper" onclick="copyContactNumber('01676281095', this)"><span class="phone-num">01676281095</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">General Member</span><div class="card-name">Rownok Hossain-1.2</div><div class="card-phone-wrapper" onclick="copyContactNumber('01732742201', this)"><span class="phone-num">01732742201</span><i class="far fa-copy copy-icon"></i></div></div>
+                    <div class="contact-card"><span class="card-tag">General Member</span><div class="card-name">Ahmad Fahim Shahriar-1.1</div><div class="card-phone-wrapper" onclick="copyContactNumber('01932234089', this)"><span class="phone-num">01932234089</span><i class="far fa-copy copy-icon"></i></div></div>
                 </div>
             </div>
         </div>
@@ -1078,129 +893,169 @@
     <!-- ======================== OBE SYLLABUS ======================== -->
     <div id="obeView" class="content-section">
         <div class="pdf-view-wrapper">
-            <div class="pdf-header-box">
-                <h2>OBE Course Curriculum Outline</h2>
-                <p style="color: #bbb; margin: 0;">Department of Electrical and Electronic Engineering (EEE), AUST</p>
-            </div>
-            <div class="pdf-frame-container">
-                <iframe src="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" title="AUST EEE OBE Syllabus Blueprint"></iframe>
-            </div>
-            <div class="download-btn-area">
-                <a href="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Full Syllabus Blueprint PDF</a>
-            </div>
+            <div class="pdf-header-box"><h2>OBE Course Curriculum Outline</h2><p style="color: #bbb; margin: 0;">Department of Electrical and Electronic Engineering (EEE), AUST</p></div>
+            <div class="pdf-frame-container"><iframe src="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" title="AUST EEE OBE Syllabus Blueprint"></iframe></div>
+            <div class="download-btn-area"><a href="Detailed-outline-of-undergraduate-courses-for-EEE-program-2022.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Full Syllabus Blueprint PDF</a></div>
         </div>
     </div>
 
     <!-- ======================== BUS ROUTE ======================== -->
     <div id="busRouteView" class="content-section">
         <div class="pdf-view-wrapper">
-            <div class="pdf-header-box">
-                <h2>AUST Transport Network Panel</h2>
-                <p style="color: #bbb; margin: 0;">Official Bus and Shuttle Schedule Blueprint Frame</p>
-            </div>
-            <div class="pdf-frame-container">
-                <iframe src="Bus_and_Shuttle_Schedule.pdf" title="AUST Transport Schedule Network Blueprint"></iframe>
-            </div>
-            <div class="download-btn-area">
-                <a href="Bus_and_Shuttle_Schedule.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Bus & Shuttle Schedule PDF</a>
-            </div>
+            <div class="pdf-header-box"><h2>AUST Transport Network Panel</h2><p style="color: #bbb; margin: 0;">Official Bus and Shuttle Schedule Blueprint Frame</p></div>
+            <div class="pdf-frame-container"><iframe src="Bus_and_Shuttle_Schedule.pdf" title="AUST Transport Schedule Network Blueprint"></iframe></div>
+            <div class="download-btn-area"><a href="Bus_and_Shuttle_Schedule.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Bus & Shuttle Schedule PDF</a></div>
             <div class="pdf-subheading-box"><h3>Details Route</h3></div>
-            <div class="pdf-frame-container">
-                <iframe src="AUST_All_Bus_Schedule.pdf" title="AUST All Bus Detailed Route Blueprint"></iframe>
-            </div>
-            <div class="download-btn-area">
-                <a href="AUST_All_Bus_Schedule.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Detailed Route PDF</a>
-            </div>
+            <div class="pdf-frame-container"><iframe src="AUST_All_Bus_Schedule.pdf" title="AUST All Bus Detailed Route Blueprint"></iframe></div>
+            <div class="download-btn-area"><a href="AUST_All_Bus_Schedule.pdf" download class="btn-download-pdf"><i class="fas fa-file-download"></i> Download Detailed Route PDF</a></div>
         </div>
     </div>
 
-    <!-- ======================== ROUTINE (NEW) ======================== -->
+    <!-- ======================== ROUTINE ======================== -->
     <div id="routineView" class="content-section" data-active="">
         <div class="routine-wrapper">
-
-            <!-- Heading -->
             <div class="routine-heading-box">
                 <h1>Routine</h1>
                 <p>Select your section to view the class schedule</p>
             </div>
-
-            <!-- Section Switch Buttons -->
             <div class="routine-switch-bar">
-                <button class="routine-sec-btn" data-sec="A" onclick="loadRoutineSection('A', this)">
-                    <i class="fas fa-layer-group" style="margin-right:8px;"></i> Section A
-                </button>
-                <button class="routine-sec-btn" data-sec="B" onclick="loadRoutineSection('B', this)">
-                    <i class="fas fa-layer-group" style="margin-right:8px;"></i> Section B
-                </button>
-                <button class="routine-sec-btn" data-sec="C" onclick="loadRoutineSection('C', this)">
-                    <i class="fas fa-layer-group" style="margin-right:8px;"></i> Section C
-                </button>
-                <button class="routine-sec-btn" data-sec="D" onclick="loadRoutineSection('D', this)">
-                    <i class="fas fa-layer-group" style="margin-right:8px;"></i> Section D
-                </button>
+                <button class="routine-sec-btn" data-sec="A" onclick="loadRoutineSection('A', this)"><i class="fas fa-layer-group" style="margin-right:8px;"></i> Section A</button>
+                <button class="routine-sec-btn" data-sec="B" onclick="loadRoutineSection('B', this)"><i class="fas fa-layer-group" style="margin-right:8px;"></i> Section B</button>
+                <button class="routine-sec-btn" data-sec="C" onclick="loadRoutineSection('C', this)"><i class="fas fa-layer-group" style="margin-right:8px;"></i> Section C</button>
+                <button class="routine-sec-btn" data-sec="D" onclick="loadRoutineSection('D', this)"><i class="fas fa-layer-group" style="margin-right:8px;"></i> Section D</button>
             </div>
-
-            <!-- Image Frame -->
             <div class="routine-img-frame" id="routineImgFrame">
                 <span class="routine-section-badge" id="routineSectionBadge"></span>
-                <div class="routine-placeholder" id="routinePlaceholder">
-                    <i class="fas fa-calendar-week"></i>
-                    <p>Choose a section above to load the routine</p>
-                </div>
+                <div class="routine-placeholder" id="routinePlaceholder"><i class="fas fa-calendar-week"></i><p>Choose a section above to load the routine</p></div>
                 <img src="" alt="Section Routine" id="routineImg" style="display:none;">
             </div>
+        </div>
+    </div>
 
+    <!-- ======================== CG CALCULATOR ======================== -->
+    <div id="cgcalcView" class="content-section">
+        <div class="cgcalc-wrapper">
+            <div class="cgcalc-heading-box">
+                <h1>CG Calculator</h1>
+                <p>Calculate your grade point average instantly</p>
+            </div>
+            <div class="cgcalc-step1" id="cgStep1">
+                <label><i class="fas fa-book-open" style="color: var(--neon-green); margin-right: 8px;"></i>How many courses this semester?</label>
+                <div class="cgcalc-num-btns" id="cgNumBtns">
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(1)">1</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(2)">2</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(3)">3</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(4)">4</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(5)">5</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(6)">6</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(7)">7</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(8)">8</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(9)">9</button>
+                    <button class="cgcalc-num-btn" onclick="selectCourseCount(10)">10</button>
+                </div>
+            </div>
+            <div class="cgcalc-courses-container" id="cgCoursesContainer" style="display:none;"></div>
+            <div style="text-align: center;" id="cgCalcBtnArea" style="display:none;">
+                <button class="cgcalc-calc-btn" onclick="calculateCG()"><i class="fas fa-calculator"></i> Calculate CG</button>
+            </div>
+            <div class="cgcalc-result-box" id="cgResultBox">
+                <div class="cgcalc-result-label">Your CGPA</div>
+                <div class="cgcalc-result-num" id="cgResultNum">0.000</div>
+                <div class="cgcalc-result-grade" id="cgResultGrade"></div>
+                <button class="cgcalc-reset-btn" onclick="resetCGCalc()"><i class="fas fa-redo"></i> Calculate Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== NOTICE ======================== -->
+    <div id="noticeView" class="content-section">
+        <div class="notice-wrapper">
+            <div class="notice-heading-box">
+                <h1>Notice Board</h1>
+                <p>Official announcements and updates</p>
+            </div>
+            <div id="noticeDevPanel" class="notice-dev-panel" style="display:none;">
+                <h3><i class="fas fa-tools"></i> Developer — Notice Manager</h3>
+                <button class="btn-add" style="padding: 10px 20px; font-size: 0.95rem;" onclick="showNoticeForm()">+ Add New Notice</button>
+                <div id="noticeFormBox" class="notice-form-box" style="display:none;">
+                    <div class="notice-form-row">
+                        <div>
+                            <label>Date:</label>
+                            <input type="date" id="noticeInputDate" style="margin-top:6px; max-width: 220px;">
+                        </div>
+                        <div>
+                            <label>Topic / Title:</label>
+                            <input type="text" id="noticeInputTopic" placeholder="Enter notice topic..." style="margin-top:6px;">
+                        </div>
+                        <div>
+                            <label>View Type:</label>
+                            <div class="notice-type-toggle">
+                                <button class="notice-type-btn active-type" id="noticeTypeLinkBtn" onclick="setNoticeType('link')"><i class="fas fa-link"></i> Link</button>
+                                <button class="notice-type-btn" id="noticeTypeTextBtn" onclick="setNoticeType('text')"><i class="fas fa-file-alt"></i> Text</button>
+                            </div>
+                        </div>
+                        <div id="noticeLinkSection" class="notice-view-section active-type-view">
+                            <label>URL Link:</label>
+                            <input type="text" id="noticeInputLink" placeholder="https://..." style="margin-top:6px;">
+                        </div>
+                        <div id="noticeTextSection" class="notice-view-section">
+                            <label>Full Notice Text:</label>
+                            <textarea id="noticeInputText" rows="6" placeholder="Write the full notice here..." style="margin-top:6px; background:#222; color:#fff; border:1px solid #444; padding:10px; border-radius:8px; width:100%; box-sizing:border-box; font-size:0.95rem; resize:vertical;"></textarea>
+                        </div>
+                        <button class="btn-action btn-submit" id="noticeSubmitBtn" onclick="submitNoticeData()" style="max-width: 200px; margin-top: 8px;">Publish Notice</button>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <h3 style="color: var(--gold);">Manage Notices</h3>
+                    <div class="table-container" style="border-color: rgba(255,215,0,0.3);">
+                        <table><thead><tr><th>Date</th><th>Topic</th><th>Type</th><th>Actions</th></tr></thead><tbody id="noticeDevTableBody"></tbody></table>
+                    </div>
+                </div>
+            </div>
+            <div class="notice-table-container">
+                <table class="notice-table">
+                    <thead><tr><th style="width:130px;">Date</th><th>Topic</th><th style="width:120px;">View</th></tr></thead>
+                    <tbody id="noticeUserTableBody"></tbody>
+                </table>
+                <div class="notice-empty" id="noticeEmptyMsg" style="display:none;"><i class="fas fa-bell-slash" style="font-size:2.5rem; margin-bottom:12px; display:block; opacity:0.4;"></i>No notices posted yet.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notice Text Modal -->
+    <div class="notice-modal-overlay" id="noticeModalOverlay" onclick="closeNoticeModal(event)">
+        <div class="notice-modal-box">
+            <div class="notice-modal-header">
+                <div>
+                    <div class="notice-modal-title" id="noticeModalTitle">Notice</div>
+                    <div class="notice-modal-date" id="noticeModalDate"></div>
+                </div>
+                <button class="notice-modal-close" onclick="closeNoticeModalDirect()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="notice-modal-body" id="noticeModalBody"></div>
         </div>
     </div>
 
     <!-- ======================== CONTACT US ======================== -->
     <div id="contactUsView" class="content-section">
         <div class="contact-us-wrapper">
-
-            <!-- Heading -->
-            <div class="contact-us-heading-box">
-                <h1>Contacts</h1>
-                <p>Reach out to the right person instantly</p>
-            </div>
-
-            <!-- Cards -->
+            <div class="contact-us-heading-box"><h1>Contacts</h1><p>Reach out to the right person instantly</p></div>
             <div class="cu-card-grid">
-
-                <!-- Card 1: CR Contacts -->
                 <div class="cu-contact-card cu-card-cr">
-                    <div class="cu-card-tag">
-                        <i class="fas fa-users"></i> CR Contacts
-                    </div>
+                    <div class="cu-card-tag"><i class="fas fa-users"></i> CR Contacts</div>
                     <div class="cu-card-name">Class Representatives</div>
-                    <button class="cu-link-btn" onclick="switchView('crgm')">
-                        <i class="fas fa-arrow-right"></i> View CR & GM Section
-                    </button>
+                    <button class="cu-link-btn" onclick="switchView('crgm')"><i class="fas fa-arrow-right"></i> View CR & GM Section</button>
                 </div>
-
-                <!-- Card 2: Designer & Developer -->
                 <div class="cu-contact-card cu-card-dev">
-                    <div class="cu-card-tag">
-                        <i class="fas fa-code"></i> Designer &amp; Developer
-                    </div>
+                    <div class="cu-card-tag"><i class="fas fa-code"></i> Designer &amp; Developer</div>
                     <div class="cu-card-name">Ratul Krishna Mojumder</div>
-                    <div class="cu-phone-row" onclick="copyContactUs('+8801623519646', this)">
-                        <span class="cu-phone-num">+8801623519646</span>
-                        <i class="far fa-copy cu-copy-icon"></i>
-                    </div>
+                    <div class="cu-phone-row" onclick="copyContactUs('+8801623519646', this)"><span class="cu-phone-num">+8801623519646</span><i class="far fa-copy cu-copy-icon"></i></div>
                 </div>
-
-                <!-- Card 3: Material Management -->
                 <div class="cu-contact-card cu-card-mat">
-                    <div class="cu-card-tag">
-                        <i class="fas fa-layer-group"></i> Material Management
-                    </div>
+                    <div class="cu-card-tag"><i class="fas fa-layer-group"></i> Material Management</div>
                     <div class="cu-card-name">Ishtiaq Ahmed Emon</div>
-                    <div class="cu-phone-row" onclick="copyContactUs('+8801799371587', this)">
-                        <span class="cu-phone-num">+8801799371587</span>
-                        <i class="far fa-copy cu-copy-icon"></i>
-                    </div>
+                    <div class="cu-phone-row" onclick="copyContactUs('+8801799371587', this)"><span class="cu-phone-num">+8801799371587</span><i class="far fa-copy cu-copy-icon"></i></div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -1208,18 +1063,11 @@
     <!-- CREDITS VIEW -->
     <div id="creditsView" class="content-section" style="display: none;">
         <div class="pdf-view-wrapper" style="padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center;">
-            <div class="pdf-header-box" style="margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold);">
-                <h2 style="color: var(--gold); font-size: 2.2rem; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin: 0; text-transform: uppercase; letter-spacing: 2px;">Credits</h2>
-            </div>
-            <div class="credits-image-container" style="max-width: 90%; margin: 30px auto; border: 3px solid var(--maroon); border-radius: 15px; overflow: hidden; box-shadow: 0 0 35px rgba(128,0,0,0.6); background: #000; display: inline-block;">
-                <img src="Credits.png" alt="System Developer Credits" style="width: 100%; height: auto; display: block; object-fit: contain;">
-            </div>
+            <div class="pdf-header-box" style="margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold);"><h2 style="color: var(--gold); font-size: 2.2rem; text-shadow: 0 0 15px rgba(255,215,0,0.4); margin: 0; text-transform: uppercase; letter-spacing: 2px;">Credits</h2></div>
+            <div class="credits-image-container" style="max-width: 90%; margin: 30px auto; border: 3px solid var(--maroon); border-radius: 15px; overflow: hidden; box-shadow: 0 0 35px rgba(128,0,0,0.6); background: #000; display: inline-block;"><img src="Credits.png" alt="System Developer Credits" style="width: 100%; height: auto; display: block; object-fit: contain;"></div>
         </div>
         <footer style="background: #000; padding: 30px 20px; border-top: 1px solid #1a1a1a; text-align: center; position: relative; z-index: 20;">
-            <div class="footer-top-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <a href="#" class="footer-logo-link" style="color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none;">AUST EEE-53</a>
-                <a href="mailto:support@eee53.com" class="footer-mail-link" style="color: var(--gold); font-size: 1.6rem;"><i class="fas fa-envelope"></i></a>
-            </div>
+            <div class="footer-top-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;"><a href="#" class="footer-logo-link" style="color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none;">AUST EEE-53</a><a href="mailto:support@eee53.com" class="footer-mail-link" style="color: var(--gold); font-size: 1.6rem;"><i class="fas fa-envelope"></i></a></div>
             <div class="dev-credit" style="color: #fff; font-weight: bold; font-size: 0.9rem; border-top: 1px solid #222; padding-top: 10px;">Designed & Maintained by Ratul Krishna Mojumder</div>
         </footer>
     </div>
@@ -1237,586 +1085,900 @@
     </footer>
 
     <script>
-        // ============================================================
-        // NAVIGATION CONTROLLER
-        // ============================================================
-        function switchView(viewName) {
-            const allViews = ['homeView','examsView','prevYearView','obeView',
-                              'busRouteView','crgmView','helpingSitesView',
-                              'routineView','creditsView','contactUsView'];
-            allViews.forEach(id => {
+    // ============================================================
+    // NAVIGATION FIX — URL hash-based routing to prevent reload issues
+    // ============================================================
+    const ALL_VIEWS = ['homeView','examsView','prevYearView','obeView','busRouteView',
+                       'crgmView','helpingSitesView','routineView','creditsView',
+                       'contactUsView','cgcalcView','noticeView'];
+
+    const VIEW_MAP = {
+        'home': 'homeView', 'exams': 'examsView', 'prevYear': 'prevYearView',
+        'obe': 'obeView', 'busRoute': 'busRouteView', 'crgm': 'crgmView',
+        'helpingSites': 'helpingSitesView', 'routine': 'routineView',
+        'credits': 'creditsView', 'contactUs': 'contactUsView',
+        'cgcalc': 'cgcalcView', 'notice': 'noticeView'
+    };
+
+    function switchView(viewName) {
+        ALL_VIEWS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.classList.remove('active-view'); el.style.display = ''; }
+        });
+
+        const targetId = VIEW_MAP[viewName];
+        if (!targetId) return;
+
+        const el = document.getElementById(targetId);
+        if (!el) return;
+
+        if (viewName === 'credits') el.style.display = 'block';
+        el.classList.add('active-view');
+
+        // Side effects
+        if (viewName === 'exams') evalAdminSessionState();
+        if (viewName === 'prevYear') { evalDevSessionState(); listenPrevYearButtons(); }
+        if (viewName === 'helpingSites') { evalDevSessionState(); listenHelpingSitesButtons(); }
+        if (viewName === 'notice') { evalDevSessionState(); listenNoticeData(); }
+
+        toggleMenu(true);
+        window.scrollTo(0, 0);
+
+        // Update URL hash (no reload, but bookmarkable + share-able)
+        try { history.replaceState(null, '', '#' + viewName); } catch(e) {}
+    }
+
+    // On page load, read hash and navigate to correct view
+    function handleHashNavigation() {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && VIEW_MAP[hash]) {
+            switchView(hash);
+        } else {
+            switchView('home');
+        }
+    }
+
+    window.addEventListener('hashchange', function() {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && VIEW_MAP[hash]) {
+            // Show view without modifying history again
+            ALL_VIEWS.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) { el.classList.remove('active-view'); el.style.display = ''; }
             });
-
-            if (viewName === 'home') {
-                document.getElementById('homeView').classList.add('active-view');
-            } else if (viewName === 'exams') {
-                document.getElementById('examsView').classList.add('active-view');
-                evalAdminSessionState();
-            } else if (viewName === 'prevYear') {
-                document.getElementById('prevYearView').classList.add('active-view');
-                evalDevSessionState(); listenPrevYearButtons();
-            } else if (viewName === 'obe') {
-                document.getElementById('obeView').classList.add('active-view');
-            } else if (viewName === 'busRoute') {
-                document.getElementById('busRouteView').classList.add('active-view');
-            } else if (viewName === 'crgm') {
-                document.getElementById('crgmView').classList.add('active-view');
-            } else if (viewName === 'helpingSites') {
-                document.getElementById('helpingSitesView').classList.add('active-view');
-                evalDevSessionState(); listenHelpingSitesButtons();
-            } else if (viewName === 'routine') {
-                document.getElementById('routineView').classList.add('active-view');
-            } else if (viewName === 'contactUs') {
-                document.getElementById('contactUsView').classList.add('active-view');
-            } else if (viewName === 'credits') {
-                const creditsEl = document.getElementById('creditsView');
-                creditsEl.classList.add('active-view');
-                creditsEl.style.display = 'block';
-            }
-
-            toggleMenu(true);
-            window.scrollTo(0, 0);
-        }
-
-        function toggleMenu(forceClose) {
-            var menu = document.getElementById('navMenu');
-            if (forceClose) { menu.classList.remove('active'); } else { menu.classList.toggle('active'); }
-        }
-
-        // ============================================================
-        // ROUTINE SECTION ENGINE
-        // ============================================================
-        function loadRoutineSection(section, btn) {
-            // Update active button state
-            document.querySelectorAll('.routine-sec-btn').forEach(b => b.classList.remove('routine-active'));
-            btn.classList.add('routine-active');
-
-            // Update data-active on wrapper for CSS color theming
-            document.getElementById('routineView').setAttribute('data-active', section);
-
-            // Update badge text
-            const badge = document.getElementById('routineSectionBadge');
-            badge.textContent = 'Section ' + section;
-
-            const imgEl = document.getElementById('routineImg');
-            const placeholder = document.getElementById('routinePlaceholder');
-
-            // Fade out current image
-            imgEl.classList.add('fade-out');
-
-            setTimeout(function() {
-                // Hide placeholder, show image
-                placeholder.style.display = 'none';
-                imgEl.style.display = 'block';
-
-                // Set new source
-                imgEl.src = section + '.png';
-                imgEl.alt = 'Section ' + section + ' Routine';
-
-                // Fade in
-                imgEl.classList.remove('fade-out');
-            }, 300);
-        }
-
-        // ============================================================
-        // CR & GM TAB CONTROLLER & COPY
-        // ============================================================
-        function toggleCrgmTab(mode) {
-            document.getElementById('crPane').classList.remove('active-pane');
-            document.getElementById('gmPane').classList.remove('active-pane');
-            document.getElementById('crTabBtn').classList.remove('active-tab');
-            document.getElementById('gmTabBtn').classList.remove('active-tab');
-
-            if (mode === 'cr') {
-                document.getElementById('crPane').classList.add('active-pane');
-                document.getElementById('crTabBtn').classList.add('active-tab');
-            } else {
-                document.getElementById('gmPane').classList.add('active-pane');
-                document.getElementById('gmTabBtn').classList.add('active-tab');
+            const el = document.getElementById(VIEW_MAP[hash]);
+            if (el) {
+                if (hash === 'credits') el.style.display = 'block';
+                el.classList.add('active-view');
+                if (hash === 'exams') evalAdminSessionState();
+                if (hash === 'prevYear') { evalDevSessionState(); listenPrevYearButtons(); }
+                if (hash === 'helpingSites') { evalDevSessionState(); listenHelpingSitesButtons(); }
+                if (hash === 'notice') { evalDevSessionState(); listenNoticeData(); }
+                window.scrollTo(0, 0);
             }
         }
+    });
 
-        function copyContactNumber(text, element) {
-            navigator.clipboard.writeText(text).then(() => {
-                const toast = document.getElementById('copyToast');
-                toast.classList.add('show-toast');
-                setTimeout(() => { toast.classList.remove('show-toast'); }, 2000);
-            }).catch(err => { console.error('Error copying text: ', err); });
+    function toggleMenu(forceClose) {
+        var menu = document.getElementById('navMenu');
+        if (forceClose) { menu.classList.remove('active'); } else { menu.classList.toggle('active'); }
+    }
+
+    // ============================================================
+    // ROUTINE SECTION ENGINE
+    // ============================================================
+    function loadRoutineSection(section, btn) {
+        document.querySelectorAll('.routine-sec-btn').forEach(b => b.classList.remove('routine-active'));
+        btn.classList.add('routine-active');
+        document.getElementById('routineView').setAttribute('data-active', section);
+        document.getElementById('routineSectionBadge').textContent = 'Section ' + section;
+        const imgEl = document.getElementById('routineImg');
+        const placeholder = document.getElementById('routinePlaceholder');
+        imgEl.classList.add('fade-out');
+        setTimeout(function() {
+            placeholder.style.display = 'none';
+            imgEl.style.display = 'block';
+            imgEl.src = section + '.png';
+            imgEl.alt = 'Section ' + section + ' Routine';
+            imgEl.classList.remove('fade-out');
+        }, 300);
+    }
+
+    // ============================================================
+    // CG CALCULATOR ENGINE
+    // ============================================================
+    const GRADE_POINTS = {
+        'A+': 4.00, 'A': 3.75, 'A-': 3.50,
+        'B+': 3.25, 'B': 3.00, 'B-': 2.75,
+        'C+': 2.50, 'C': 2.25, 'D': 2.00, 'F': 0.00
+    };
+
+    function selectCourseCount(n) {
+        document.querySelectorAll('.cgcalc-num-btn').forEach(btn => btn.classList.remove('active-num'));
+        document.querySelectorAll('.cgcalc-num-btn')[n - 1].classList.add('active-num');
+
+        const container = document.getElementById('cgCoursesContainer');
+        const btnArea = document.getElementById('cgCalcBtnArea');
+        container.innerHTML = '';
+        document.getElementById('cgResultBox').classList.remove('show-result');
+
+        for (let i = 1; i <= n; i++) {
+            const row = document.createElement('div');
+            row.className = 'cgcalc-course-row';
+            row.innerHTML = `
+                <div class="cgcalc-course-num">${i}</div>
+                <div class="cgcalc-field-group">
+                    <span class="cgcalc-credit-label">Credit</span>
+                    <input type="number" class="cgcalc-credit-input" id="cgCredit${i}" min="0.5" max="5" step="0.5" value="3" placeholder="Credits">
+                </div>
+                <div class="cgcalc-field-group" style="flex:1;">
+                    <span class="cgcalc-grade-label">Grade</span>
+                    <select class="cgcalc-grade-select" id="cgGrade${i}">
+                        <option value="A+">A+ (4.00)</option>
+                        <option value="A">A (3.75)</option>
+                        <option value="A-">A- (3.50)</option>
+                        <option value="B+">B+ (3.25)</option>
+                        <option value="B" selected>B (3.00)</option>
+                        <option value="B-">B- (2.75)</option>
+                        <option value="C+">C+ (2.50)</option>
+                        <option value="C">C (2.25)</option>
+                        <option value="D">D (2.00)</option>
+                        <option value="F">F (0.00)</option>
+                    </select>
+                </div>
+            `;
+            container.appendChild(row);
+        }
+        container.style.display = 'block';
+        btnArea.style.display = 'block';
+    }
+
+    function calculateCG() {
+        const rows = document.querySelectorAll('.cgcalc-course-row');
+        let totalCredits = 0, totalPoints = 0, valid = true;
+        rows.forEach((row, i) => {
+            const n = i + 1;
+            const credit = parseFloat(document.getElementById('cgCredit' + n).value);
+            const grade = document.getElementById('cgGrade' + n).value;
+            if (isNaN(credit) || credit <= 0) { valid = false; return; }
+            totalCredits += credit;
+            totalPoints += credit * GRADE_POINTS[grade];
+        });
+        if (!valid || totalCredits === 0) { alert('Please enter valid credit hours for all courses.'); return; }
+        const cg = totalPoints / totalCredits;
+        document.getElementById('cgResultNum').textContent = cg.toFixed(3);
+
+        let letterGrade = '';
+        if (cg >= 4.00) letterGrade = 'Outstanding — A+';
+        else if (cg >= 3.75) letterGrade = 'Excellent — A';
+        else if (cg >= 3.50) letterGrade = 'Very Good — A-';
+        else if (cg >= 3.25) letterGrade = 'Good — B+';
+        else if (cg >= 3.00) letterGrade = 'Satisfactory — B';
+        else if (cg >= 2.75) letterGrade = 'Above Average — B-';
+        else if (cg >= 2.50) letterGrade = 'Average — C+';
+        else if (cg >= 2.25) letterGrade = 'Below Average — C';
+        else if (cg >= 2.00) letterGrade = 'Passing — D';
+        else letterGrade = 'Failing — F';
+
+        document.getElementById('cgResultGrade').textContent = letterGrade;
+        const box = document.getElementById('cgResultBox');
+        box.classList.add('show-result');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetCGCalc() {
+        document.querySelectorAll('.cgcalc-num-btn').forEach(btn => btn.classList.remove('active-num'));
+        document.getElementById('cgCoursesContainer').style.display = 'none';
+        document.getElementById('cgCoursesContainer').innerHTML = '';
+        document.getElementById('cgCalcBtnArea').style.display = 'none';
+        document.getElementById('cgResultBox').classList.remove('show-result');
+    }
+
+    // ============================================================
+    // NOTICE ENGINE
+    // ============================================================
+    let editingNoticeKey = null;
+    let currentNoticeType = 'link';
+
+    function setNoticeType(type) {
+        currentNoticeType = type;
+        document.getElementById('noticeTypeLinkBtn').classList.toggle('active-type', type === 'link');
+        document.getElementById('noticeTypeTextBtn').classList.toggle('active-type', type === 'text');
+        document.getElementById('noticeLinkSection').classList.toggle('active-type-view', type === 'link');
+        document.getElementById('noticeTextSection').classList.toggle('active-type-view', type === 'text');
+    }
+
+    function showNoticeForm() {
+        document.getElementById('noticeFormBox').style.display = 'block';
+        editingNoticeKey = null;
+        document.getElementById('noticeInputDate').value = '';
+        document.getElementById('noticeInputTopic').value = '';
+        document.getElementById('noticeInputLink').value = '';
+        document.getElementById('noticeInputText').value = '';
+        document.getElementById('noticeSubmitBtn').textContent = 'Publish Notice';
+        setNoticeType('link');
+    }
+
+    function submitNoticeData() {
+        const date = document.getElementById('noticeInputDate').value;
+        const topic = document.getElementById('noticeInputTopic').value.trim();
+        if (!date || !topic) { alert('Please fill in Date and Topic.'); return; }
+
+        let payload = { date, topic, type: currentNoticeType };
+        if (currentNoticeType === 'link') {
+            const link = document.getElementById('noticeInputLink').value.trim();
+            if (!link) { alert('Please enter a URL.'); return; }
+            payload.content = link;
+        } else {
+            const text = document.getElementById('noticeInputText').value.trim();
+            if (!text) { alert('Please write the notice text.'); return; }
+            payload.content = text;
         }
 
-        function copyContactUs(text, element) {
-            navigator.clipboard.writeText(text).then(() => {
-                const icon = element.querySelector('.cu-copy-icon');
-                if (icon) { icon.classList.remove('fa-copy'); icon.classList.add('fa-check'); }
-                const toast = document.getElementById('copyToast');
-                toast.classList.add('show-toast');
-                setTimeout(() => {
-                    toast.classList.remove('show-toast');
-                    if (icon) { icon.classList.remove('fa-check'); icon.classList.add('fa-copy'); }
-                }, 2000);
-            }).catch(err => { console.error('Error copying: ', err); });
+        if (editingNoticeKey) {
+            database.ref('notices/' + editingNoticeKey).update(payload).then(() => { alert('Notice Updated.'); resetNoticeForm(); });
+        } else {
+            database.ref('notices').push(payload).then(() => { alert('Notice Published.'); resetNoticeForm(); });
         }
+    }
 
-        // ============================================================
-        // FIREBASE
-        // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyA42cAhFc4ygHqmkZTIr2Rc87eEF_QA4R4",
-            authDomain: "spardho-53.firebaseapp.com",
-            databaseURL: "https://spardho-53-default-rtdb.firebaseio.com",
-            projectId: "spardho-53",
-            storageBucket: "spardho-53.firebasestorage.app",
-            messagingSenderId: "1042755226180",
-            appId: "1:1042755226180:web:76d4202bfc0352a240ca11"
-        };
-        
-        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-        const database = firebase.database();
+    function resetNoticeForm() {
+        document.getElementById('noticeFormBox').style.display = 'none';
+        editingNoticeKey = null;
+        renderNoticeDevTable();
+    }
 
-        const ADMIN_PROFILES = {
-            "092418": { name: "Ratul Krishna Mojumder", sectionText: "Developer (All Sections Access)", scope: "ALL" },
-            "407":    { name: "Ishtiaq Ahmed Emon",     sectionText: "Section A Tracker",              scope: "A"   },
-            "002":    { name: "Juhariya Raisa",          sectionText: "Section B Tracker",              scope: "B"   },
-            "passC":  { name: "Admin Section C",         sectionText: "Section C Tracker",              scope: "C"   },
-            "passD":  { name: "Admin Section D",         sectionText: "Section D Tracker",              scope: "D"   }
-        };
-
-        let currentAdminState = { isLogged: false, role: null, allowedSection: null };
-        let editingKey = null;
-        let editingDevBtnKey = null;
-        let editingHelpingSiteKey = null;
-
-        function getTodayDateString() {
-            let today = new Date();
-            let yyyy = today.getFullYear();
-            let mm = String(today.getMonth() + 1).padStart(2, '0');
-            let dd = String(today.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
-        }
-
-        function updateActiveButton(targetButton) {
-            if (!targetButton) return;
-            document.querySelectorAll('.exam-view-wrapper .switch-grid .switch-3d').forEach(btn => btn.classList.remove('active-btn'));
-            targetButton.classList.add('active-btn');
-        }
-
-        // ============================================================
-        // EXAMS ENGINE
-        // ============================================================
-        function evalAdminSessionState() {
-            if (sessionStorage.getItem('adminKey')) {
-                const savedKey = sessionStorage.getItem('adminKey');
-                const profile = ADMIN_PROFILES[savedKey];
-                currentAdminState = { isLogged: true, role: profile.scope === 'ALL' ? 'developer' : 'section', allowedSection: profile.scope };
-                setupDashboard(profile.name, profile.sectionText);
-                updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
-            } else {
-                loadSectionData('A', document.querySelector('.switch-grid .switch-3d'));
-            }
-        }
-
-        function loadSectionData(sectionLetter, element) {
-            if (!(element && element.classList.contains('switch-admin') && currentAdminState.isLogged)) {
-                document.getElementById('userTableContainer').style.display = 'block';
-                document.getElementById('adminDashboard').style.display = 'none';
-            }
-            updateActiveButton(element);
-
-            database.ref('exams').on('value', (snapshot) => {
-                const tbody = document.getElementById('examTableBody');
-                tbody.innerHTML = ''; const today = getTodayDateString();
-                snapshot.forEach((childSnapshot) => {
-                    const data = childSnapshot.val();
-                    if (data.section.startsWith(sectionLetter) && data.date >= today) {
-                        tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
-                    }
-                });
+    function renderNoticeDevTable() {
+        database.ref('notices').orderByChild('date').once('value', (snapshot) => {
+            const tbody = document.getElementById('noticeDevTableBody');
+            tbody.innerHTML = '';
+            const items = [];
+            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+            items.reverse().forEach(data => {
+                tbody.innerHTML += `<tr>
+                    <td style="font-family: monospace; color: #aaa;">${data.date}</td>
+                    <td style="color: #fff;">${data.topic}</td>
+                    <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${data.type.toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
+                    </td>
+                </tr>`;
             });
-        }
+        });
+    }
 
-        function loadPreviousExams(element) {
-            updateActiveButton(element);
+    function editNotice(key) {
+        database.ref('notices/' + key).once('value', snap => {
+            const data = snap.val();
+            document.getElementById('noticeFormBox').style.display = 'block';
+            document.getElementById('noticeInputDate').value = data.date;
+            document.getElementById('noticeInputTopic').value = data.topic;
+            setNoticeType(data.type);
+            if (data.type === 'link') document.getElementById('noticeInputLink').value = data.content;
+            else document.getElementById('noticeInputText').value = data.content;
+            editingNoticeKey = key;
+            document.getElementById('noticeSubmitBtn').textContent = 'Update Notice';
+            document.getElementById('noticeFormBox').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+
+    function deleteNotice(key) {
+        if (confirm('Are you sure you want to delete this notice?')) {
+            database.ref('notices/' + key).remove().then(() => { alert('Notice Deleted.'); renderNoticeDevTable(); listenNoticeData(); });
+        }
+    }
+
+    function listenNoticeData() {
+        database.ref('notices').orderByChild('date').on('value', snapshot => {
+            const tbody = document.getElementById('noticeUserTableBody');
+            const emptyMsg = document.getElementById('noticeEmptyMsg');
+            tbody.innerHTML = '';
+            const items = [];
+            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+            items.reverse();
+
+            if (items.length === 0) {
+                emptyMsg.style.display = 'block';
+            } else {
+                emptyMsg.style.display = 'none';
+                items.forEach(data => {
+                    const viewCell = data.type === 'link'
+                        ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
+                        : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
+                    tbody.innerHTML += `<tr>
+                        <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
+                        <td class="notice-topic-cell">${data.topic}</td>
+                        <td>${viewCell}</td>
+                    </tr>`;
+                });
+            }
+        });
+    }
+
+    function escapeForAttr(str) {
+        return (str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+    }
+
+    function formatNoticeDate(dateStr) {
+        try {
+            const d = new Date(dateStr + 'T00:00:00');
+            return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        } catch(e) { return dateStr; }
+    }
+
+    function openNoticeModal(key, topic, date, content) {
+        document.getElementById('noticeModalTitle').textContent = topic;
+        document.getElementById('noticeModalDate').textContent = formatNoticeDate(date);
+        document.getElementById('noticeModalBody').textContent = content.replace(/\\n/g, '\n');
+        document.getElementById('noticeModalOverlay').classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeNoticeModal(e) {
+        if (e.target === document.getElementById('noticeModalOverlay')) closeNoticeModalDirect();
+    }
+
+    function closeNoticeModalDirect() {
+        document.getElementById('noticeModalOverlay').classList.remove('modal-open');
+        document.body.style.overflow = '';
+    }
+
+    // ESC key closes modal
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNoticeModalDirect(); });
+
+    // ============================================================
+    // CR & GM TAB CONTROLLER & COPY
+    // ============================================================
+    function toggleCrgmTab(mode) {
+        document.getElementById('crPane').classList.remove('active-pane');
+        document.getElementById('gmPane').classList.remove('active-pane');
+        document.getElementById('crTabBtn').classList.remove('active-tab');
+        document.getElementById('gmTabBtn').classList.remove('active-tab');
+        if (mode === 'cr') { document.getElementById('crPane').classList.add('active-pane'); document.getElementById('crTabBtn').classList.add('active-tab'); }
+        else { document.getElementById('gmPane').classList.add('active-pane'); document.getElementById('gmTabBtn').classList.add('active-tab'); }
+    }
+
+    function copyContactNumber(text, element) {
+        navigator.clipboard.writeText(text).then(() => { showToast(); }).catch(err => console.error(err));
+    }
+
+    function copyContactUs(text, element) {
+        navigator.clipboard.writeText(text).then(() => {
+            const icon = element.querySelector('.cu-copy-icon');
+            if (icon) { icon.classList.remove('fa-copy'); icon.classList.add('fa-check'); }
+            showToast();
+            setTimeout(() => { if (icon) { icon.classList.remove('fa-check'); icon.classList.add('fa-copy'); } }, 2000);
+        }).catch(err => console.error(err));
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('copyToast');
+        toast.textContent = msg || 'Copied to Clipboard!';
+        toast.classList.add('show-toast');
+        setTimeout(() => toast.classList.remove('show-toast'), 2000);
+    }
+
+    // ============================================================
+    // FIREBASE
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyA42cAhFc4ygHqmkZTIr2Rc87eEF_QA4R4",
+        authDomain: "spardho-53.firebaseapp.com",
+        databaseURL: "https://spardho-53-default-rtdb.firebaseio.com",
+        projectId: "spardho-53",
+        storageBucket: "spardho-53.firebasestorage.app",
+        messagingSenderId: "1042755226180",
+        appId: "1:1042755226180:web:76d4202bfc0352a240ca11"
+    };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const database = firebase.database();
+
+    const ADMIN_PROFILES = {
+        "092418": { name: "Ratul Krishna Mojumder", sectionText: "Developer (All Sections Access)", scope: "ALL" },
+        "407":    { name: "Ishtiaq Ahmed Emon",     sectionText: "Section A Tracker",              scope: "A"   },
+        "002":    { name: "Juhariya Raisa",          sectionText: "Section B Tracker",              scope: "B"   },
+        "passC":  { name: "Admin Section C",         sectionText: "Section C Tracker",              scope: "C"   },
+        "passD":  { name: "Admin Section D",         sectionText: "Section D Tracker",              scope: "D"   }
+    };
+
+    let currentAdminState = { isLogged: false, role: null, allowedSection: null };
+    let editingKey = null, editingDevBtnKey = null, editingHelpingSiteKey = null;
+
+    function getTodayDateString() {
+        let today = new Date();
+        return `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    }
+
+    function updateActiveButton(targetButton) {
+        if (!targetButton) return;
+        document.querySelectorAll('.exam-view-wrapper .switch-grid .switch-3d').forEach(btn => btn.classList.remove('active-btn'));
+        targetButton.classList.add('active-btn');
+    }
+
+    // ============================================================
+    // EXAMS ENGINE
+    // ============================================================
+    function evalAdminSessionState() {
+        if (sessionStorage.getItem('adminKey')) {
+            const savedKey = sessionStorage.getItem('adminKey');
+            const profile = ADMIN_PROFILES[savedKey];
+            currentAdminState = { isLogged: true, role: profile.scope === 'ALL' ? 'developer' : 'section', allowedSection: profile.scope };
+            setupDashboard(profile.name, profile.sectionText);
+            updateActiveButton(document.querySelector('.switch-grid .switch-admin'));
+        } else {
+            loadSectionData('A', document.querySelector('.switch-grid .switch-3d'));
+        }
+    }
+
+    function loadSectionData(sectionLetter, element) {
+        if (!(element && element.classList.contains('switch-admin') && currentAdminState.isLogged)) {
             document.getElementById('userTableContainer').style.display = 'block';
             document.getElementById('adminDashboard').style.display = 'none';
-
-            database.ref('exams').on('value', (snapshot) => {
-                const tbody = document.getElementById('examTableBody');
-                tbody.innerHTML = ''; const today = getTodayDateString();
-                snapshot.forEach((childSnapshot) => {
-                    const data = childSnapshot.val();
-                    if (data.date < today) {
-                        tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
-                    }
-                });
-            });
         }
-
-        function triggerAdminLogin() {
-            if (sessionStorage.getItem('adminKey')) { evalAdminSessionState(); return; }
-            const passwordInput = prompt("Enter Administration Access Key:");
-            if (!passwordInput) return;
-            if (ADMIN_PROFILES[passwordInput]) {
-                sessionStorage.setItem('adminKey', passwordInput);
-                if (passwordInput === "092418") { updateDevMenuBtnText(true); }
-                evalAdminSessionState();
-            } else { alert("Invalid Admin Key. Process Aborted."); }
-        }
-
-        function setupDashboard(name, sectionText) {
-            document.getElementById('userTableContainer').style.display = 'none';
-            document.getElementById('adminDashboard').style.display = 'block';
-            document.getElementById('adminName').innerText = name;
-            document.getElementById('adminSectionDisplay').innerText = sectionText;
-            
-            const subSelect = document.getElementById('inputSubSection');
-            subSelect.innerHTML = '';
-            if (currentAdminState.allowedSection === 'ALL') {
-                ['A','A1','A2','B','B1','B2','C','C1','C2','D','D1','D2'].forEach(sec => {
-                    subSelect.innerHTML += `<option value="${sec}">${sec}</option>`;
-                });
-            } else {
-                const s = currentAdminState.allowedSection;
-                [`${s}`, `${s}1`, `${s}2`].forEach(sec => { subSelect.innerHTML += `<option value="${sec}">${sec}</option>`; });
-            }
-            renderAdminManagementTable();
-        }
-
-        function showInputRow() {
-            document.getElementById('inputFormContainer').style.display = 'block';
-            editingKey = null; document.getElementById('submitExamBtn').innerText = "Submit";
-        }
-
-        function submitExamData() {
-            const date = document.getElementById('inputDate').value;
-            const course = document.getElementById('inputCourse').value;
-            const section = document.getElementById('inputSubSection').value;
-            const examType = document.getElementById('inputExamType').value;
-            if (!date) { alert("Please select a valid target execution Date."); return; }
-            const payload = { date, course, section, examType };
-
-            if (editingKey) {
-                database.ref('exams/' + editingKey).update(payload).then(() => { alert("Entry Updated Successfully."); resetForm(); });
-            } else {
-                database.ref('exams').push(payload).then(() => { alert("New Entry Cataloged."); resetForm(); });
-            }
-        }
-
-        function resetForm() {
-            document.getElementById('inputDate').value = '';
-            document.getElementById('inputFormContainer').style.display = 'none';
-            editingKey = null; renderAdminManagementTable();
-        }
-
-        function renderAdminManagementTable() {
-            database.ref('exams').once('value', (snapshot) => {
-                const tbody = document.getElementById('adminTableBody'); tbody.innerHTML = '';
-                snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key; const data = childSnapshot.val();
-                    const isDev = currentAdminState.allowedSection === 'ALL';
-                    const isAssignedSection = data.section.startsWith(currentAdminState.allowedSection);
-                    if (isDev || isAssignedSection) {
-                        tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td>
-                            <td>
-                                <button class="btn-action btn-edit" onclick="editRow('${key}', '${data.date}', '${data.course}', '${data.section}', '${data.examType}')">Edit</button>
-                                <button class="btn-action btn-delete" onclick="deleteRow('${key}')">Delete</button>
-                            </td></tr>`;
-                    }
-                });
-            });
-        }
-
-        function editRow(key, date, course, section, examType) {
-            document.getElementById('inputFormContainer').style.display = 'block';
-            document.getElementById('inputDate').value = date;
-            document.getElementById('inputCourse').value = course;
-            document.getElementById('inputSubSection').value = section;
-            document.getElementById('inputExamType').value = examType;
-            editingKey = key; document.getElementById('submitExamBtn').innerText = "Update Entry";
-            window.scrollTo({ top: document.getElementById('inputFormContainer').offsetTop - 100, behavior: 'smooth' });
-        }
-
-        function deleteRow(key) {
-            if (confirm("Are you absolutely sure you want to scrub this entry?")) {
-                database.ref('exams/' + key).remove().then(() => { alert("Entry Purged."); renderAdminManagementTable(); });
-            }
-        }
-
-        function logoutAdmin() {
-            sessionStorage.removeItem('adminKey'); currentAdminState = { isLogged: false, role: null, allowedSection: null };
-            document.getElementById('adminDashboard').style.display = 'none'; updateDevMenuBtnText(false);
-            loadSectionData('A', document.querySelector('.exam-view-wrapper .switch-grid .switch-3d'));
-        }
-
-        // ============================================================
-        // DEVELOPER ENGINE
-        // ============================================================
-        function triggerDevLogin() {
-            if (sessionStorage.getItem('adminKey') === "092418") {
-                if (confirm("You are currently logged in as Developer. Do you want to Log Out?")) {
-                    sessionStorage.removeItem('adminKey'); updateDevMenuBtnText(false); evalDevSessionState();
-                    if (document.getElementById('examsView').classList.contains('active-view')) { logoutAdmin(); }
+        updateActiveButton(element);
+        database.ref('exams').on('value', (snapshot) => {
+            const tbody = document.getElementById('examTableBody');
+            tbody.innerHTML = '';
+            const today = getTodayDateString();
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                if (data.section.startsWith(sectionLetter) && data.date >= today) {
+                    tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
                 }
+            });
+        });
+    }
+
+    function loadPreviousExams(element) {
+        updateActiveButton(element);
+        document.getElementById('userTableContainer').style.display = 'block';
+        document.getElementById('adminDashboard').style.display = 'none';
+        database.ref('exams').on('value', (snapshot) => {
+            const tbody = document.getElementById('examTableBody');
+            tbody.innerHTML = '';
+            const today = getTodayDateString();
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                if (data.date < today) {
+                    tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
+                }
+            });
+        });
+    }
+
+    function triggerAdminLogin() {
+        if (sessionStorage.getItem('adminKey')) { evalAdminSessionState(); return; }
+        const passwordInput = prompt("Enter Administration Access Key:");
+        if (!passwordInput) return;
+        if (ADMIN_PROFILES[passwordInput]) {
+            sessionStorage.setItem('adminKey', passwordInput);
+            if (passwordInput === "092418") { updateDevMenuBtnText(true); }
+            evalAdminSessionState();
+        } else { alert("Invalid Admin Key. Process Aborted."); }
+    }
+
+    function setupDashboard(name, sectionText) {
+        document.getElementById('userTableContainer').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        document.getElementById('adminName').innerText = name;
+        document.getElementById('adminSectionDisplay').innerText = sectionText;
+        const subSelect = document.getElementById('inputSubSection');
+        subSelect.innerHTML = '';
+        if (currentAdminState.allowedSection === 'ALL') {
+            ['A','A1','A2','B','B1','B2','C','C1','C2','D','D1','D2'].forEach(sec => { subSelect.innerHTML += `<option value="${sec}">${sec}</option>`; });
+        } else {
+            const s = currentAdminState.allowedSection;
+            [`${s}`, `${s}1`, `${s}2`].forEach(sec => { subSelect.innerHTML += `<option value="${sec}">${sec}</option>`; });
+        }
+        renderAdminManagementTable();
+    }
+
+    function showInputRow() {
+        document.getElementById('inputFormContainer').style.display = 'block';
+        editingKey = null; document.getElementById('submitExamBtn').innerText = "Submit";
+    }
+
+    function submitExamData() {
+        const date = document.getElementById('inputDate').value;
+        const course = document.getElementById('inputCourse').value;
+        const section = document.getElementById('inputSubSection').value;
+        const examType = document.getElementById('inputExamType').value;
+        if (!date) { alert("Please select a valid target execution Date."); return; }
+        const payload = { date, course, section, examType };
+        if (editingKey) {
+            database.ref('exams/' + editingKey).update(payload).then(() => { alert("Entry Updated Successfully."); resetForm(); });
+        } else {
+            database.ref('exams').push(payload).then(() => { alert("New Entry Cataloged."); resetForm(); });
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('inputDate').value = '';
+        document.getElementById('inputFormContainer').style.display = 'none';
+        editingKey = null; renderAdminManagementTable();
+    }
+
+    function renderAdminManagementTable() {
+        database.ref('exams').once('value', (snapshot) => {
+            const tbody = document.getElementById('adminTableBody'); tbody.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const key = childSnapshot.key; const data = childSnapshot.val();
+                const isDev = currentAdminState.allowedSection === 'ALL';
+                const isAssignedSection = data.section.startsWith(currentAdminState.allowedSection);
+                if (isDev || isAssignedSection) {
+                    tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="editRow('${key}', '${data.date}', '${data.course}', '${data.section}', '${data.examType}')">Edit</button>
+                            <button class="btn-action btn-delete" onclick="deleteRow('${key}')">Delete</button>
+                        </td></tr>`;
+                }
+            });
+        });
+    }
+
+    function editRow(key, date, course, section, examType) {
+        document.getElementById('inputFormContainer').style.display = 'block';
+        document.getElementById('inputDate').value = date;
+        document.getElementById('inputCourse').value = course;
+        document.getElementById('inputSubSection').value = section;
+        document.getElementById('inputExamType').value = examType;
+        editingKey = key; document.getElementById('submitExamBtn').innerText = "Update Entry";
+        window.scrollTo({ top: document.getElementById('inputFormContainer').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function deleteRow(key) {
+        if (confirm("Are you absolutely sure you want to scrub this entry?")) {
+            database.ref('exams/' + key).remove().then(() => { alert("Entry Purged."); renderAdminManagementTable(); });
+        }
+    }
+
+    function logoutAdmin() {
+        sessionStorage.removeItem('adminKey'); currentAdminState = { isLogged: false, role: null, allowedSection: null };
+        document.getElementById('adminDashboard').style.display = 'none'; updateDevMenuBtnText(false);
+        loadSectionData('A', document.querySelector('.exam-view-wrapper .switch-grid .switch-3d'));
+    }
+
+    // ============================================================
+    // DEVELOPER ENGINE
+    // ============================================================
+    function triggerDevLogin() {
+        if (sessionStorage.getItem('adminKey') === "092418") {
+            if (confirm("You are currently logged in as Developer. Do you want to Log Out?")) {
+                sessionStorage.removeItem('adminKey'); updateDevMenuBtnText(false); evalDevSessionState();
+                if (document.getElementById('examsView').classList.contains('active-view')) { logoutAdmin(); }
+            }
+            return;
+        }
+        const input = prompt("Enter Developer Authentication Key:");
+        if (input === "092418") {
+            sessionStorage.setItem('adminKey', "092418"); updateDevMenuBtnText(true); alert("Developer Shell Initialized."); evalDevSessionState();
+        } else if (input) { alert("Access Denied."); }
+    }
+
+    function updateDevMenuBtnText(isLogged) {
+        const btn = document.getElementById('devLoginMenuBtn');
+        if (isLogged) { btn.innerHTML = `<a onclick="triggerDevLogin()" style="color: #ff3333; border-color: #ff3333;"><i class="fas fa-sign-out-alt"></i> Dev Log Out</a>`; }
+        else { btn.innerHTML = `<a onclick="triggerDevLogin()">Developer Log in</a>`; }
+    }
+
+    function evalDevSessionState() {
+        const isDev = sessionStorage.getItem('adminKey') === "092418";
+        const devPrevPanel = document.getElementById('devPrevYearPanel');
+        if (devPrevPanel) { if (isDev) { devPrevPanel.style.display = "block"; renderDevManagementGrid(); } else { devPrevPanel.style.display = "none"; } }
+        const devHelpingPanel = document.getElementById('devHelpingSitesPanel');
+        if (devHelpingPanel) { if (isDev) { devHelpingPanel.style.display = "block"; renderHelpingSitesGrid(); } else { devHelpingPanel.style.display = "none"; } }
+        const noticeDevPanel = document.getElementById('noticeDevPanel');
+        if (noticeDevPanel) { if (isDev) { noticeDevPanel.style.display = "block"; renderNoticeDevTable(); } else { noticeDevPanel.style.display = "none"; } }
+        if (isDev) { updateDevMenuBtnText(true); } else { updateDevMenuBtnText(false); }
+    }
+
+    // ============================================================
+    // PREVIOUS YEAR ENGINE
+    // ============================================================
+    function showDevBtnForm() {
+        document.getElementById('devBtnFormBox').style.display = "block";
+        editingDevBtnKey = null; document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
+        document.getElementById('submitDevBtn').innerText = "Save Button Blueprint";
+    }
+    function submitDevBtnData() {
+        const title = document.getElementById('devBtnTitle').value.trim();
+        const link = document.getElementById('devBtnLink').value.trim();
+        if (!title || !link) { alert("Please map both Title and URL."); return; }
+        const payload = { title, link };
+        if (editingDevBtnKey) {
+            database.ref('prev_years/' + editingDevBtnKey).update(payload).then(() => { alert("Component Restructured."); resetDevBtnForm(); });
+        } else {
+            database.ref('prev_years').push(payload).then(() => { alert("Cloud Button Integrated."); resetDevBtnForm(); });
+        }
+    }
+    function resetDevBtnForm() {
+        document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
+        document.getElementById('devBtnFormBox').style.display = "none"; editingDevBtnKey = null; renderDevManagementGrid();
+    }
+    function renderDevManagementGrid() {
+        database.ref('prev_years').once('value', (snapshot) => {
+            const tbody = document.getElementById('devBtnTableBody'); tbody.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const key = childSnapshot.key; const data = childSnapshot.val();
+                tbody.innerHTML += `<tr><td style="font-weight:bold; color:var(--gold);">${data.title}</td>
+                    <td><button class="btn-action btn-edit" onclick="editDevBtn('${key}', '${data.title}', '${data.link}')">Edit Blueprint</button>
+                    <button class="btn-action btn-delete" onclick="deleteDevBtn('${key}')">Purge</button></td></tr>`;
+            });
+        });
+    }
+    function editDevBtn(key, title, link) {
+        document.getElementById('devBtnFormBox').style.display = "block";
+        document.getElementById('devBtnTitle').value = title; document.getElementById('devBtnLink').value = link;
+        editingDevBtnKey = key; document.getElementById('submitDevBtn').innerText = "Update Component";
+    }
+    function deleteDevBtn(key) {
+        if (confirm("Are you sure you want to purge this button?")) { database.ref('prev_years/' + key).remove().then(() => { alert("Component Scrubbed."); renderDevManagementGrid(); }); }
+    }
+    function listenPrevYearButtons() {
+        database.ref('prev_years').on('value', (snapshot) => {
+            const grid = document.getElementById('userGlossyBtnGrid'); grid.innerHTML = ''; let counter = 0;
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val(); counter++;
+                grid.innerHTML += `<a href="${data.link}" target="_blank" class="glossy-resource-btn"><i class="fas fa-folder-open" style="color: var(--gold);"></i><span>${data.title}</span></a>`;
+            });
+            if (counter === 0) { grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No cloud elements synced.</p>`; }
+        });
+    }
+
+    // ============================================================
+    // HELPING SITES ENGINE
+    // ============================================================
+    function showHelpingSitesForm() {
+        document.getElementById('helpingSitesFormBox').style.display = "block";
+        editingHelpingSiteKey = null;
+        document.getElementById('helpingSitesTitle').value = ""; document.getElementById('helpingSitesLink').value = "";
+        document.getElementById('submitHelpingSitesBtn').innerText = "Save Site Blueprint";
+    }
+    function submitHelpingSitesData() {
+        const title = document.getElementById('helpingSitesTitle').value.trim();
+        const link = document.getElementById('helpingSitesLink').value.trim();
+        if (!title || !link) { alert("Please define both Button Name and URL."); return; }
+        const payload = { title, link };
+        if (editingHelpingSiteKey) {
+            database.ref('helping_sites/' + editingHelpingSiteKey).update(payload).then(() => { alert("Site Blueprint Restructured."); resetHelpingSitesForm(); });
+        } else {
+            database.ref('helping_sites').push(payload).then(() => { alert("Helping Site Cloud Element Integrated."); resetHelpingSitesForm(); });
+        }
+    }
+    function resetHelpingSitesForm() {
+        document.getElementById('helpingSitesTitle').value = ""; document.getElementById('helpingSitesLink').value = "";
+        document.getElementById('helpingSitesFormBox').style.display = "none"; editingHelpingSiteKey = null; renderHelpingSitesGrid();
+    }
+    function renderHelpingSitesGrid() {
+        database.ref('helping_sites').once('value', (snapshot) => {
+            const tbody = document.getElementById('helpingSitesTableBody'); tbody.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const key = childSnapshot.key; const data = childSnapshot.val();
+                tbody.innerHTML += `<tr><td style="font-weight:bold; color:var(--gold);">${data.title}</td>
+                    <td><button class="btn-action btn-edit" onclick="editHelpingSite('${key}', '${data.title}', '${data.link}')">Edit Blueprint</button>
+                    <button class="btn-action btn-delete" onclick="deleteHelpingSite('${key}')">Purge</button></td></tr>`;
+            });
+        });
+    }
+    function editHelpingSite(key, title, link) {
+        document.getElementById('helpingSitesFormBox').style.display = "block";
+        document.getElementById('helpingSitesTitle').value = title; document.getElementById('helpingSitesLink').value = link;
+        editingHelpingSiteKey = key; document.getElementById('submitHelpingSitesBtn').innerText = "Update Component";
+    }
+    function deleteHelpingSite(key) {
+        if (confirm("Are you sure you want to completely purge this site component?")) { database.ref('helping_sites/' + key).remove().then(() => { alert("Helping Site Data Purged."); renderHelpingSitesGrid(); }); }
+    }
+    function listenHelpingSitesButtons() {
+        database.ref('helping_sites').on('value', (snapshot) => {
+            const grid = document.getElementById('userHelpingSitesGrid'); grid.innerHTML = ''; let counter = 0;
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val(); counter++;
+                grid.innerHTML += `<a href="${data.link}" target="_blank" class="glossy-resource-btn"><i class="fas fa-globe" style="color: var(--neon-blue);"></i><span>${data.title}</span></a>`;
+            });
+            if (counter === 0) { grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No site paths linked yet.</p>`; }
+        });
+    }
+
+    // ============================================================
+    // IMPROVED SEARCH ENGINE — fuzzy + keyword + highlight
+    // ============================================================
+    const SEARCH_INDEX = [
+        { name: "Home", view: "home", icon: "fa-home", hint: "Main page", keywords: "main page welcome dashboard theme" },
+        { name: "Study Materials", view: "studyMaterials", icon: "fa-book", hint: "2.2 resources", keywords: "syllabus pdf 2.2 course notes study materials drive" },
+        { name: "Previous Year", view: "prevYear", icon: "fa-history", hint: "Past papers", keywords: "question paper past year exam previous" },
+        { name: "Routine", view: "routine", icon: "fa-calendar-week", hint: "Class schedule", keywords: "class schedule timetable section A B C D routine" },
+        { name: "Bus Route", view: "busRoute", icon: "fa-bus", hint: "Transport", keywords: "transport shuttle bus route schedule aust" },
+        { name: "Exams", view: "exams", icon: "fa-pen-nib", hint: "Exam dates", keywords: "test date assignment quiz exam q1 q2 q3 setup" },
+        { name: "Notice", view: "notice", icon: "fa-bell", hint: "Announcements", keywords: "notice official news update announcement" },
+        { name: "CG Calculator", view: "cgcalc", icon: "fa-calculator", hint: "GPA/CGPA", keywords: "cg cgpa gpa grade calculate credit point average calculator waiver" },
+        { name: "CR & GM Section", view: "crgm", icon: "fa-users", hint: "Contacts", keywords: "Nesar Eusha Dola Opu Sruti Sahil Rushil cr gm contact class rep general member" },
+        { name: "OBE Syllabus", view: "obe", icon: "fa-file-pdf", hint: "Curriculum", keywords: "obe curriculum outline eee detailed syllabus" },
+        { name: "Helping Sites", view: "helpingSites", icon: "fa-globe", hint: "Useful links", keywords: "resources links tools helping sites useful" },
+        { name: "Contact Us", view: "contactUs", icon: "fa-address-book", hint: "Phone / contact", keywords: "contact ratul emon phone number developer cr material management" },
+        { name: "Credits", view: "credits", icon: "fa-star", hint: "Team info", keywords: "developer info team ratul credits" },
+        { name: "Section A", view: "exams", icon: "fa-layer-group", hint: "Exams", keywords: "section a exams" },
+        { name: "Section B", view: "exams", icon: "fa-layer-group", hint: "Exams", keywords: "section b exams" },
+        { name: "Section C", view: "exams", icon: "fa-layer-group", hint: "Exams", keywords: "section c exams" },
+        { name: "Section D", view: "exams", icon: "fa-layer-group", hint: "Exams", keywords: "section d exams" },
+        { name: "EEE 2203 - Electronics II", view: "home", icon: "fa-microchip", hint: "Course", keywords: "eee2203 electronics ii circuit 2203" },
+        { name: "MATH 2203 - Mathematics V", view: "home", icon: "fa-square-root-alt", hint: "Course", keywords: "math2203 mathematics v calculus 2203" },
+        { name: "HUM 2201 - Bengali", view: "home", icon: "fa-language", hint: "Course", keywords: "hum2201 bengali language literature" },
+        { name: "Nesar Ahmed (CR-A)", view: "crgm", icon: "fa-user", hint: "Section A CR", keywords: "nesar ahmed cr section a contact phone 01864856834" },
+        { name: "Ratul Krishna (Developer)", view: "contactUs", icon: "fa-code", hint: "Developer", keywords: "ratul krishna mojumder developer designer 01623519646" },
+        { name: "Ishtiaq Ahmed Emon", view: "contactUs", icon: "fa-user", hint: "Materials", keywords: "ishtiaq ahmed emon material 01799371587" },
+    ];
+
+    function levenshtein(a, b) {
+        if (!a || !b) return Math.max((a||'').length, (b||'').length);
+        const m = a.length, n = b.length;
+        const dp = Array.from({length: m+1}, (_, i) => Array.from({length: n+1}, (_, j) => i === 0 ? j : j === 0 ? i : 0));
+        for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+            dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+        return dp[m][n];
+    }
+
+    function scoreMatch(item, query) {
+        if (!query) return 0;
+        const q = query.toLowerCase();
+        const name = item.name.toLowerCase();
+        const kw = item.keywords.toLowerCase();
+        const fullText = name + ' ' + kw;
+
+        // Exact match boosts
+        if (name === q) return 100;
+        if (name.startsWith(q)) return 90;
+        if (name.includes(q)) return 80;
+        if (kw.includes(q)) return 70;
+
+        // Word-level match
+        const qWords = q.split(/\s+/);
+        let wordScore = 0;
+        qWords.forEach(word => {
+            if (word.length < 2) return;
+            if (fullText.includes(word)) wordScore += 20;
+            else {
+                // Fuzzy: check all words in fullText
+                const textWords = fullText.split(/\s+/);
+                for (const tw of textWords) {
+                    if (tw.length >= 3 && word.length >= 3) {
+                        const dist = levenshtein(word, tw);
+                        const threshold = Math.floor(Math.max(word.length, tw.length) * 0.4);
+                        if (dist <= threshold) { wordScore += Math.max(5, 15 - dist * 3); break; }
+                    }
+                }
+            }
+        });
+        return wordScore;
+    }
+
+    function initSearchEngine() {
+        const input = document.getElementById('searchInput');
+        const btn = document.getElementById('searchBtn');
+        const sugBox = document.getElementById('search-suggestions');
+        let highlightIdx = -1;
+        let currentSuggestions = [];
+
+        function performSearch(query) {
+            if (!query.trim()) return;
+            const q = query.trim().toLowerCase();
+            const scored = SEARCH_INDEX.map(item => ({ item, score: scoreMatch(item, q) }))
+                .filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+            if (scored.length > 0) {
+                switchView(scored[0].item.view);
+                sugBox.classList.remove('visible');
+                input.value = '';
+            } else {
+                sugBox.innerHTML = `<div class="search-no-result"><i class="fas fa-search-minus"></i> No results for "<strong>${query}</strong>"</div>`;
+                sugBox.classList.add('visible');
+            }
+        }
+
+        function renderSuggestions(query) {
+            sugBox.innerHTML = '';
+            highlightIdx = -1;
+            if (!query.trim()) { sugBox.classList.remove('visible'); return; }
+            const q = query.trim().toLowerCase();
+            const scored = SEARCH_INDEX.map(item => ({ item, score: scoreMatch(item, q) }))
+                .filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, 7);
+            currentSuggestions = scored;
+
+            if (scored.length === 0) {
+                sugBox.innerHTML = `<div class="search-no-result">No results found</div>`;
+                sugBox.classList.add('visible');
                 return;
             }
-            const input = prompt("Enter Developer Authentication Key:");
-            if (input === "092418") {
-                sessionStorage.setItem('adminKey', "092418"); updateDevMenuBtnText(true); alert("Developer Shell Initialized."); evalDevSessionState();
-            } else if (input) { alert("Access Denied."); }
-        }
 
-        function updateDevMenuBtnText(isLogged) {
-            const btn = document.getElementById('devLoginMenuBtn');
-            if (isLogged) { btn.innerHTML = `<a onclick="triggerDevLogin()" style="color: #ff3333; border-color: #ff3333;"><i class="fas fa-sign-out-alt"></i> Dev Log Out</a>`; }
-            else { btn.innerHTML = `<a onclick="triggerDevLogin()">Developer Log in</a>`; }
-        }
+            scored.forEach((s, idx) => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.dataset.idx = idx;
 
-        function evalDevSessionState() {
-            const isDev = sessionStorage.getItem('adminKey') === "092418";
-            const devPrevPanel = document.getElementById('devPrevYearPanel');
-            if (devPrevPanel) {
-                if (isDev) { devPrevPanel.style.display = "block"; renderDevManagementGrid(); }
-                else { devPrevPanel.style.display = "none"; }
-            }
-            const devHelpingPanel = document.getElementById('devHelpingSitesPanel');
-            if (devHelpingPanel) {
-                if (isDev) { devHelpingPanel.style.display = "block"; renderHelpingSitesGrid(); }
-                else { devHelpingPanel.style.display = "none"; }
-            }
-            if (isDev) { updateDevMenuBtnText(true); } else { updateDevMenuBtnText(false); }
-        }
-
-        // ============================================================
-        // PREVIOUS YEAR ENGINE
-        // ============================================================
-        function showDevBtnForm() {
-            document.getElementById('devBtnFormBox').style.display = "block";
-            editingDevBtnKey = null; document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
-            document.getElementById('submitDevBtn').innerText = "Save Button Blueprint";
-        }
-
-        function submitDevBtnData() {
-            const title = document.getElementById('devBtnTitle').value.trim();
-            const link = document.getElementById('devBtnLink').value.trim();
-            if (!title || !link) { alert("Please map both Title and URL."); return; }
-            const payload = { title, link };
-
-            if (editingDevBtnKey) {
-                database.ref('prev_years/' + editingDevBtnKey).update(payload).then(() => { alert("Component Restructured."); resetDevBtnForm(); });
-            } else {
-                database.ref('prev_years').push(payload).then(() => { alert("Cloud Button Integrated."); resetDevBtnForm(); });
-            }
-        }
-
-        function resetDevBtnForm() {
-            document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
-            document.getElementById('devBtnFormBox').style.display = "none"; editingDevBtnKey = null; renderDevManagementGrid();
-        }
-
-        function renderDevManagementGrid() {
-            database.ref('prev_years').once('value', (snapshot) => {
-                const tbody = document.getElementById('devBtnTableBody'); tbody.innerHTML = '';
-                snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key; const data = childSnapshot.val();
-                    tbody.innerHTML += `<tr><td style="font-weight:bold; color:var(--gold);">${data.title}</td>
-                        <td>
-                            <button class="btn-action btn-edit" onclick="editDevBtn('${key}', '${data.title}', '${data.link}')">Edit Blueprint</button>
-                            <button class="btn-action btn-delete" onclick="deleteDevBtn('${key}')">Purge</button>
-                        </td></tr>`;
-                });
-            });
-        }
-
-        function editDevBtn(key, title, link) {
-            document.getElementById('devBtnFormBox').style.display = "block";
-            document.getElementById('devBtnTitle').value = title; document.getElementById('devBtnLink').value = link;
-            editingDevBtnKey = key; document.getElementById('submitDevBtn').innerText = "Update Component";
-        }
-
-        function deleteDevBtn(key) {
-            if (confirm("Are you sure you want to purge this button?")) {
-                database.ref('prev_years/' + key).remove().then(() => { alert("Component Scrubbed."); renderDevManagementGrid(); });
-            }
-        }
-
-        function listenPrevYearButtons() {
-            database.ref('prev_years').on('value', (snapshot) => {
-                const grid = document.getElementById('userGlossyBtnGrid'); grid.innerHTML = ''; let counter = 0;
-                snapshot.forEach((childSnapshot) => {
-                    const data = childSnapshot.val(); counter++;
-                    grid.innerHTML += `<a href="${data.link}" target="_blank" class="glossy-resource-btn"><i class="fas fa-folder-open" style="color: var(--gold);"></i><span>${data.title}</span></a>`;
-                });
-                if (counter === 0) { grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No cloud elements synced.</p>`; }
-            });
-        }
-
-        // ============================================================
-        // HELPING SITES ENGINE
-        // ============================================================
-        function showHelpingSitesForm() {
-            document.getElementById('helpingSitesFormBox').style.display = "block";
-            editingHelpingSiteKey = null;
-            document.getElementById('helpingSitesTitle').value = "";
-            document.getElementById('helpingSitesLink').value = "";
-            document.getElementById('submitHelpingSitesBtn').innerText = "Save Site Blueprint";
-        }
-
-        function submitHelpingSitesData() {
-            const title = document.getElementById('helpingSitesTitle').value.trim();
-            const link = document.getElementById('helpingSitesLink').value.trim();
-            if (!title || !link) { alert("Please define both Button Name and URL."); return; }
-            const payload = { title, link };
-
-            if (editingHelpingSiteKey) {
-                database.ref('helping_sites/' + editingHelpingSiteKey).update(payload).then(() => { alert("Site Blueprint Restructured."); resetHelpingSitesForm(); });
-            } else {
-                database.ref('helping_sites').push(payload).then(() => { alert("Helping Site Cloud Element Integrated."); resetHelpingSitesForm(); });
-            }
-        }
-
-        function resetHelpingSitesForm() {
-            document.getElementById('helpingSitesTitle').value = "";
-            document.getElementById('helpingSitesLink').value = "";
-            document.getElementById('helpingSitesFormBox').style.display = "none";
-            editingHelpingSiteKey = null;
-            renderHelpingSitesGrid();
-        }
-
-        function renderHelpingSitesGrid() {
-            database.ref('helping_sites').once('value', (snapshot) => {
-                const tbody = document.getElementById('helpingSitesTableBody'); tbody.innerHTML = '';
-                snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key; const data = childSnapshot.val();
-                    tbody.innerHTML += `<tr><td style="font-weight:bold; color:var(--gold);">${data.title}</td>
-                        <td>
-                            <button class="btn-action btn-edit" onclick="editHelpingSite('${key}', '${data.title}', '${data.link}')">Edit Blueprint</button>
-                            <button class="btn-action btn-delete" onclick="deleteHelpingSite('${key}')">Purge</button>
-                        </td></tr>`;
-                });
-            });
-        }
-
-        function editHelpingSite(key, title, link) {
-            document.getElementById('helpingSitesFormBox').style.display = "block";
-            document.getElementById('helpingSitesTitle').value = title;
-            document.getElementById('helpingSitesLink').value = link;
-            editingHelpingSiteKey = key;
-            document.getElementById('submitHelpingSitesBtn').innerText = "Update Component";
-        }
-
-        function deleteHelpingSite(key) {
-            if (confirm("Are you sure you want to completely purge this site component?")) {
-                database.ref('helping_sites/' + key).remove().then(() => { alert("Helping Site Data Purged."); renderHelpingSitesGrid(); });
-            }
-        }
-
-        function listenHelpingSitesButtons() {
-            database.ref('helping_sites').on('value', (snapshot) => {
-                const grid = document.getElementById('userHelpingSitesGrid'); grid.innerHTML = ''; let counter = 0;
-                snapshot.forEach((childSnapshot) => {
-                    const data = childSnapshot.val(); counter++;
-                    grid.innerHTML += `<a href="${data.link}" target="_blank" class="glossy-resource-btn"><i class="fas fa-globe" style="color: var(--neon-blue);"></i><span>${data.title}</span></a>`;
-                });
-                if (counter === 0) { grid.innerHTML = `<p style="color:#666; font-style:italic; grid-column: 1/-1;">No site paths linked yet.</p>`; }
-            });
-        }
-
-        // ============================================================
-        // SEARCH ENGINE
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            if (sessionStorage.getItem('adminKey') === "092418") { updateDevMenuBtnText(true); }
-
-            const searchInput = document.querySelector('.search-wrapper input');
-            const searchBtn = document.querySelector('.search-wrapper button');
-
-            const searchIndex = [
-                { name: "Home",             view: "home",         keywords: "main page welcome dashboard" },
-                { name: "Study Materials",  view: "studyMaterials", keywords: "syllabus pdf 2.2 course notes" },
-                { name: "Previous Year",    view: "prevYear",     keywords: "question paper past year exam" },
-                { name: "Routine",          view: "routine",      keywords: "class schedule timetable section" },
-                { name: "Bus Route",        view: "busRoute",     keywords: "transport shuttle bus" },
-                { name: "Exams",            view: "exams",        keywords: "test date assignment quiz" },
-                { name: "Notice",           view: "notice",       keywords: "official news update" },
-                { name: "Credits",          view: "credits",      keywords: "developer info team ratul" },
-                { name: "CR & GM Section",  view: "crgm",         keywords: "Nesar Eusha Dola Opu Sruti Sahil Rushil cr gm contact" },
-                { name: "OBE Syllabus",     view: "obe",          keywords: "obe curriculum outline eee" },
-                { name: "Helping Sites",    view: "helpingSites", keywords: "resources links tools" },
-                { name: "Contact Us",       view: "contactUs",    keywords: "contact ratul emon phone number developer cr" }
-            ];
-
-            const suggestionBox = document.createElement('div');
-            suggestionBox.id = 'search-suggestions';
-            Object.assign(suggestionBox.style, {
-                position: 'absolute', background: '#fff', color: '#000',
-                width: searchInput.offsetWidth + 'px', zIndex: '9999',
-                borderRadius: '0 0 10px 10px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.4)'
-            });
-            searchInput.parentNode.style.position = 'relative';
-            searchInput.parentNode.appendChild(suggestionBox);
-
-            function performSearch(query) {
-                const match = searchIndex.find(item =>
-                    item.name.toLowerCase().includes(query) ||
-                    item.keywords.toLowerCase().includes(query)
-                );
-                if (match) { window.switchView(match.view); suggestionBox.innerHTML = ""; searchInput.value = ""; }
-            }
-
-            searchInput.addEventListener('input', () => {
-                const query = searchInput.value.toLowerCase();
-                suggestionBox.innerHTML = "";
-                if (query.length > 0) {
-                    const matches = searchIndex.filter(item =>
-                        item.name.toLowerCase().includes(query) ||
-                        item.keywords.toLowerCase().includes(query)
-                    );
-                    matches.forEach(m => {
-                        const div = document.createElement('div');
-                        div.innerHTML = m.name;
-                        Object.assign(div.style, { padding: '10px 15px', cursor: 'pointer', borderBottom: '1px solid #eee', fontSize: '0.9rem' });
-                        div.onmouseover = () => { div.style.background = '#f0f0f0'; };
-                        div.onmouseout = () => { div.style.background = '#fff'; };
-                        div.onclick = () => { window.switchView(m.view); suggestionBox.innerHTML = ""; searchInput.value = ""; };
-                        suggestionBox.appendChild(div);
-                    });
+                // Highlight matching chars in name
+                let displayName = s.item.name;
+                const qLower = q.toLowerCase();
+                const nameLower = displayName.toLowerCase();
+                if (nameLower.includes(qLower)) {
+                    const start = nameLower.indexOf(qLower);
+                    displayName = displayName.slice(0, start) +
+                        `<strong style="color: var(--maroon);">${displayName.slice(start, start + q.length)}</strong>` +
+                        displayName.slice(start + q.length);
                 }
-            });
 
-            searchBtn.addEventListener('click', () => performSearch(searchInput.value.toLowerCase()));
-            searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(searchInput.value.toLowerCase()); });
+                div.innerHTML = `<i class="fas ${s.item.icon} sug-icon"></i><span class="sug-name">${displayName}</span><span class="sug-hint">${s.item.hint}</span>`;
+                div.onclick = () => { switchView(s.item.view); sugBox.classList.remove('visible'); input.value = ''; };
+                sugBox.appendChild(div);
+            });
+            sugBox.classList.add('visible');
+        }
+
+        input.addEventListener('input', () => renderSuggestions(input.value));
+
+        input.addEventListener('keydown', (e) => {
+            const items = sugBox.querySelectorAll('.suggestion-item');
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+                items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIdx));
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                highlightIdx = Math.max(highlightIdx - 1, -1);
+                items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIdx));
+            } else if (e.key === 'Enter') {
+                if (highlightIdx >= 0 && items[highlightIdx]) {
+                    items[highlightIdx].click();
+                } else {
+                    performSearch(input.value);
+                }
+            } else if (e.key === 'Escape') {
+                sugBox.classList.remove('visible');
+            }
         });
 
-        // ============================================================
-        // STUDY MATERIALS REDIRECT
-        // ============================================================
-        (function injectMaterialsRedirect() {
-            const myDriveLink = "https://drive.google.com/drive/folders/11IT7WRavcqKYkkKaiQX9yH3Ax9yX8hHT?usp=drive_link";
+        btn.addEventListener('click', () => performSearch(input.value));
 
-            function setupMaterialsClick() {
-                document.querySelectorAll("a, button, li").forEach(element => {
-                    const text = element.textContent ? element.textContent.trim().toLowerCase() : "";
-                    if (text.includes("2.2") && (text.includes("materials") || text.includes("study"))) {
-                        element.removeAttribute("onclick");
-                        element.addEventListener("click", (e) => {
-                            e.preventDefault(); e.stopPropagation();
-                            window.open(myDriveLink, '_blank');
-                            const navMenu = document.getElementById('navMenu');
-                            if (navMenu) navMenu.classList.remove('active');
-                        });
-                        element.style.cursor = "pointer";
-                    }
-                });
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('searchWrapper').contains(e.target)) {
+                sugBox.classList.remove('visible');
             }
+        });
+    }
 
-            if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", setupMaterialsClick);
-            } else { setupMaterialsClick(); }
-            setTimeout(setupMaterialsClick, 1500);
-            setTimeout(setupMaterialsClick, 3000);
-        })();
+    // ============================================================
+    // STUDY MATERIALS REDIRECT
+    // ============================================================
+    (function injectMaterialsRedirect() {
+        const myDriveLink = "https://drive.google.com/drive/folders/11IT7WRavcqKYkkKaiQX9yH3Ax9yX8hHT?usp=drive_link";
+        function setupMaterialsClick() {
+            document.querySelectorAll("a, button, li").forEach(element => {
+                const text = element.textContent ? element.textContent.trim().toLowerCase() : "";
+                if (text.includes("2.2") && (text.includes("materials") || text.includes("study"))) {
+                    element.removeAttribute("onclick");
+                    element.addEventListener("click", (e) => {
+                        e.preventDefault(); e.stopPropagation();
+                        window.open(myDriveLink, '_blank');
+                        const navMenu = document.getElementById('navMenu');
+                        if (navMenu) navMenu.classList.remove('active');
+                    });
+                    element.style.cursor = "pointer";
+                }
+            });
+        }
+        if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", setupMaterialsClick); }
+        else { setupMaterialsClick(); }
+        setTimeout(setupMaterialsClick, 1500);
+        setTimeout(setupMaterialsClick, 3000);
+    })();
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        if (sessionStorage.getItem('adminKey') === "092418") { updateDevMenuBtnText(true); }
+        initSearchEngine();
+        handleHashNavigation();
+    });
     </script>
-
 </body>
 </html>
