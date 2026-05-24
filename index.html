@@ -1060,17 +1060,251 @@
         </div>
     </div>
 
-    <!-- CREDITS VIEW -->
-    <div id="creditsView" class="content-section" style="display: none;">
-        <div class="pdf-view-wrapper" style="padding-top: 195px; padding-bottom: 60px; max-width: 1100px; margin: 0 auto; min-height: 85vh; text-align: center;">
-            <div class="pdf-header-box" style="margin: 20px; padding: 15px; border-bottom: 2px solid var(--gold);"><h2 style="color: var(--gold); font-size: 2.2rem; text-shadow: 0 0 15px rgba(255,215,0,0.4); margin: 0; text-transform: uppercase; letter-spacing: 2px;">Credits</h2></div>
-            <div class="credits-image-container" style="max-width: 90%; margin: 30px auto; border: 3px solid var(--maroon); border-radius: 15px; overflow: hidden; box-shadow: 0 0 35px rgba(128,0,0,0.6); background: #000; display: inline-block;"><img src="Credits.png" alt="System Developer Credits" style="width: 100%; height: auto; display: block; object-fit: contain;"></div>
+   <!-- CREDITS VIEW -->
+<div id="creditsView" class="content-section" style="display: none;">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+        .cred-root {
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 220px 20px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cred-bg-glow {
+            position: absolute;
+            width: 700px; height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(128,0,0,0.2) 0%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .cred-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff 0%, #FFD700 45%, #fff 80%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: cred-shine 3s linear infinite;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        @keyframes cred-shine { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+
+        .cred-subtitle-line {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.35em;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .cred-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 680px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cred-card {
+            position: relative;
+            border-radius: 16px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            background: linear-gradient(135deg, rgba(20,0,0,0.85), rgba(35,5,5,0.7));
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.07);
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .cred-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            border-radius: 16px 0 0 16px;
+        }
+
+        .cred-card:hover { transform: translateY(-4px) scale(1.01); }
+
+        .cred-card-red::before  { background: #ff3b30; box-shadow: 0 0 14px #ff3b30; }
+        .cred-card-red  { border-color: rgba(255,59,48,0.2); }
+        .cred-card-red:hover  { border-color: rgba(255,59,48,0.5); box-shadow: 0 18px 50px rgba(0,0,0,0.7), 0 0 35px rgba(255,59,48,0.12); }
+
+        .cred-card-cyan::before { background: #00F3FF; box-shadow: 0 0 14px #00F3FF; }
+        .cred-card-cyan { border-color: rgba(0,243,255,0.18); }
+        .cred-card-cyan:hover { border-color: rgba(0,243,255,0.45); box-shadow: 0 18px 50px rgba(0,0,0,0.7), 0 0 35px rgba(0,243,255,0.1); }
+
+        .cred-card-gold::before { background: #FFD700; box-shadow: 0 0 14px #FFD700; }
+        .cred-card-gold { border-color: rgba(255,215,0,0.18); }
+        .cred-card-gold:hover { border-color: rgba(255,215,0,0.5); box-shadow: 0 18px 50px rgba(0,0,0,0.7), 0 0 35px rgba(255,215,0,0.12); }
+
+        .cred-card-purple::before { background: #bf5fff; box-shadow: 0 0 14px #bf5fff; }
+        .cred-card-purple { border-color: rgba(191,95,255,0.18); }
+        .cred-card-purple:hover { border-color: rgba(191,95,255,0.45); box-shadow: 0 18px 50px rgba(0,0,0,0.7), 0 0 35px rgba(191,95,255,0.1); }
+
+        .cred-icon-wrap {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.5rem;
+        }
+
+        .cred-icon-red    { background: rgba(255,59,48,0.15);  border: 1px solid rgba(255,59,48,0.35);  color: #ff3b30; }
+        .cred-icon-cyan   { background: rgba(0,243,255,0.1);   border: 1px solid rgba(0,243,255,0.35);  color: #00F3FF; }
+        .cred-icon-gold   { background: rgba(255,215,0,0.1);   border: 1px solid rgba(255,215,0,0.35);  color: #FFD700; }
+        .cred-icon-purple { background: rgba(191,95,255,0.1);  border: 1px solid rgba(191,95,255,0.35); color: #bf5fff; }
+
+        .cred-info { flex: 1; min-width: 0; }
+
+        .cred-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
+            text-transform: uppercase; padding: 4px 12px;
+            border-radius: 30px; margin-bottom: 8px;
+            border: 1px solid currentColor;
+        }
+
+        .cbadge-red    { color: #ff3b30; background: rgba(255,59,48,0.1); }
+        .cbadge-cyan   { color: #00F3FF; background: rgba(0,243,255,0.08); }
+        .cbadge-gold   { color: #FFD700; background: rgba(255,215,0,0.1); }
+        .cbadge-purple { color: #bf5fff; background: rgba(191,95,255,0.08); }
+
+        .cred-role {
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em;
+            text-transform: uppercase; margin-bottom: 5px;
+            color: rgba(255,255,255,0.45);
+        }
+
+        .cred-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.04em;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cred-sec-dot {
+            width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.6rem; font-weight: 800; letter-spacing: 0.04em;
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.1; text-align: center;
+        }
+
+        .cdot-red    { background: rgba(255,59,48,0.18);  border: 1px solid rgba(255,59,48,0.5);  color: #ff3b30; }
+        .cdot-cyan   { background: rgba(0,243,255,0.12);  border: 1px solid rgba(0,243,255,0.45); color: #00F3FF; }
+        .cdot-gold   { background: rgba(255,215,0,0.12);  border: 1px solid rgba(255,215,0,0.45); color: #FFD700; }
+        .cdot-purple { background: rgba(191,95,255,0.12); border: 1px solid rgba(191,95,255,0.45); color: #bf5fff; }
+
+        @media (max-width: 480px) {
+            .cred-card { padding: 18px 16px; gap: 14px; }
+            .cred-icon-wrap { width: 46px; height: 46px; font-size: 1.2rem; }
+            .cred-sec-dot { width: 32px; height: 32px; font-size: 0.52rem; }
+        }
+    </style>
+
+    <div class="cred-root">
+        <div class="cred-bg-glow"></div>
+
+        <div class="cred-title">Credits</div>
+        <div class="cred-subtitle-line">AUST EEE-53 &nbsp;·&nbsp; System Architects</div>
+
+        <div class="cred-grid">
+
+            <!-- Card 1 — Developer -->
+            <div class="cred-card cred-card-red">
+                <div class="cred-icon-wrap cred-icon-red">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div class="cred-info">
+                    <div class="cred-badge cbadge-red">
+                        <i class="fas fa-bolt"></i> Designed &amp; Developed
+                    </div>
+                    <div class="cred-role">Lead Developer</div>
+                    <div class="cred-name">Ratul Krishna Mojumder</div>
+                </div>
+                <div class="cred-sec-dot cdot-red">SEC<br>A</div>
+            </div>
+
+            <!-- Card 2 — Note & Report -->
+            <div class="cred-card cred-card-cyan">
+                <div class="cred-icon-wrap cred-icon-cyan">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <div class="cred-info">
+                    <div class="cred-badge cbadge-cyan">
+                        <i class="fas fa-file-alt"></i> Note &amp; Report Management
+                    </div>
+                    <div class="cred-role">Material Manager</div>
+                    <div class="cred-name">Md Ishtiaq Ahmed Emon</div>
+                </div>
+                <div class="cred-sec-dot cdot-cyan">SEC<br>A</div>
+            </div>
+
+            <!-- Card 3 — Idea Sec A -->
+            <div class="cred-card cred-card-gold">
+                <div class="cred-icon-wrap cred-icon-gold">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="cred-info">
+                    <div class="cred-badge cbadge-gold">
+                        <i class="fas fa-drafting-compass"></i> Idea &amp; Planning
+                    </div>
+                    <div class="cred-role">Concept Architect</div>
+                    <div class="cred-name">Ahmad Fahim Shahriar</div>
+                </div>
+                <div class="cred-sec-dot cdot-gold">SEC<br>A</div>
+            </div>
+
+            <!-- Card 4 — Idea Sec D -->
+            <div class="cred-card cred-card-purple">
+                <div class="cred-icon-wrap cred-icon-purple">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="cred-info">
+                    <div class="cred-badge cbadge-purple">
+                        <i class="fas fa-drafting-compass"></i> Idea &amp; Planning
+                    </div>
+                    <div class="cred-role">Concept Architect</div>
+                    <div class="cred-name">Raiyan Barakat Taki</div>
+                </div>
+                <div class="cred-sec-dot cdot-purple">SEC<br>D</div>
+            </div>
+
         </div>
-        <footer style="background: #000; padding: 30px 20px; border-top: 1px solid #1a1a1a; text-align: center; position: relative; z-index: 20;">
-            <div class="footer-top-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;"><a href="#" class="footer-logo-link" style="color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none;">AUST EEE-53</a><a href="mailto:support@eee53.com" class="footer-mail-link" style="color: var(--gold); font-size: 1.6rem;"><i class="fas fa-envelope"></i></a></div>
-            <div class="dev-credit" style="color: #fff; font-weight: bold; font-size: 0.9rem; border-top: 1px solid #222; padding-top: 10px;">Designed & Maintained by Ratul Krishna Mojumder</div>
-        </footer>
     </div>
+
+  
 
     <!-- TOAST -->
     <div id="copyToast" class="toast-notification">Copied to Clipboard!</div>
