@@ -1427,13 +1427,14 @@
 
     // On page load, read hash and navigate to correct view
     function handleHashNavigation() {
-        const hash = window.location.hash.replace('#', '');
-        if (hash && VIEW_MAP[hash]) {
-            switchView(hash);
-        } else {
-            switchView('home');
-        }
+    const hash = window.location.hash.replace('#', '');
+    if (hash && VIEW_MAP[hash]) {
+        switchView(hash);
+    } else {
+        switchView('home');
     }
+    setTimeout(requestNotificationPermission, 3000);
+}
 
     window.addEventListener('hashchange', function() {
         const hash = window.location.hash.replace('#', '');
@@ -1615,7 +1616,11 @@
         if (editingNoticeKey) {
             database.ref('notices/' + editingNoticeKey).update(payload).then(() => { alert('Notice Updated.'); resetNoticeForm(); });
         } else {
-            database.ref('notices').push(payload).then(() => { alert('Notice Published.'); resetNoticeForm(); });
+            database.ref('notices').push(payload).then(() => {
+    alert('Notice Published.');
+    sendNoticeNotification(payload.topic, payload.date);
+    resetNoticeForm();
+});
         }
     }
 
@@ -1769,7 +1774,8 @@
         appId: "1:1042755226180:web:76d4202bfc0352a240ca11"
     };
     if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-    const database = firebase.database();
+const database = firebase.database();
+initFCM();
 
     const ADMIN_PROFILES = {
         "092418": { name: "Ratul Krishna Mojumder", sectionText: "Developer (All Sections Access)", scope: "ALL" },
@@ -2348,6 +2354,128 @@ async function verifyNoticeRoll() {
 function logoutNoticeAccess() {
     sessionStorage.removeItem('noticeRollVerified');
     switchView('home');
+}
+// ============================================================
+// FCM PUSH NOTIFICATION ENGINE
+// ============================================================
+// এই পুরো block টা   // INIT   section এর ঠিক আগে paste করো
+
+const VAPID_KEY = "BOnnuk9Ke7RdBHRH2hUyMjY4dMkSBO85iRCVBAw00Nxo49vNfljxPVeMWcxZTGZQlxYWN134AiGGgJk6MVNWjWk";
+
+let fcmMessaging = null;
+
+function initFCM() {
+    try {
+        fcmMessaging = firebase.messaging();
+
+        // Foreground notification handler
+        fcmMessaging.onMessage(function(payload) {
+            console.log('Foreground message:', payload);
+            const title = payload.notification.title || 'নতুন Notice!';
+            const body = payload.notification.body || 'নতুন notice এসেছে।';
+            showInAppNotification(title, body);
+        });
+    } catch(e) {
+        console.log('FCM init error:', e);
+    }
+}
+
+function showInAppNotification(title, body) {
+    // In-app toast notification যখন user site এ থাকবে
+    const existingBanner = document.getElementById('fcmInAppBanner');
+    if (existingBanner) existingBanner.remove();
+
+    const banner = document.createElement('div');
+    banner.id = 'fcmInAppBanner';
+    banner.style.cssText = `
+        position: fixed; top: 20px; right: 20px; z-index: 9999;
+        background: linear-gradient(135deg, #001a2e, #002a40);
+        border: 2px solid var(--neon-blue); border-radius: 16px;
+        padding: 16px 20px; max-width: 320px; width: 90%;
+        box-shadow: 0 0 30px rgba(0,243,255,0.3);
+        animation: slideInRight 0.4s ease;
+        cursor: pointer;
+    `;
+    banner.innerHTML = `
+        <style>
+            @keyframes slideInRight {
+                from { transform: translateX(120%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        </style>
+        <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="font-size:1.5rem;">🔔</div>
+            <div style="flex:1;">
+                <div style="color:var(--neon-blue); font-weight:800; font-size:0.95rem; margin-bottom:4px;">${title}</div>
+                <div style="color:rgba(255,255,255,0.7); font-size:0.82rem; line-height:1.4;">${body}</div>
+            </div>
+            <div id="fcmBannerClose" style="color:rgba(255,255,255,0.4); font-size:1.1rem; cursor:pointer; padding:0 4px;">✕</div>
+        </div>
+    `;
+    document.body.appendChild(banner);
+
+    banner.onclick = () => { switchView('notice'); banner.remove(); };
+    document.getElementById('fcmBannerClose').onclick = (e) => { e.stopPropagation(); banner.remove(); };
+    setTimeout(() => { if (banner.parentNode) banner.remove(); }, 6000);
+}
+
+async function requestNotificationPermission() {
+    if (!('Notification' in window)) return;
+    if (!fcmMessaging) return;
+
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            const token = await fcmMessaging.getToken({ vapidKey: VAPID_KEY });
+            if (token) {
+                // Token Firebase এ save করো
+                database.ref('fcm_tokens/' + token.substring(0, 20)).set({
+                    token: token,
+                    timestamp: Date.now()
+                });
+                console.log('FCM Token saved.');
+            }
+        }
+    } catch(e) {
+        console.log('Notification permission error:', e);
+    }
+}
+
+// Notice publish হলে সবাইকে notification পাঠাও
+async function sendNoticeNotification(topic, date) {
+    try {
+        // সব tokens পড়ো
+        const snapshot = await database.ref('fcm_tokens').once('value');
+        const tokens = [];
+        snapshot.forEach(child => {
+            const data = child.val();
+            if (data.token) tokens.push(data.token);
+        });
+
+        if (tokens.length === 0) return;
+
+        // Firebase Function না থাকলে এই approach:
+        // প্রতিটা token এ notification পাঠাও via FCM HTTP API
+        const payload = {
+            title: '📢 নতুন Notice — AUST EEE-53',
+            body: topic,
+            tokens: tokens
+        };
+
+        // FCM tokens Firebase DB তে save আছে
+        // Developer notice publish করলে এই function call হবে
+        await database.ref('pending_notifications').push({
+            title: '📢 নতুন Notice — AUST EEE-53',
+            body: topic,
+            date: date,
+            timestamp: Date.now(),
+            sent: false
+        });
+
+        console.log('Notification queued for', tokens.length, 'devices.');
+    } catch(e) {
+        console.log('Send notification error:', e);
+    }
 }
 
     // ============================================================
