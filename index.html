@@ -1343,7 +1343,7 @@
         <h2 style="color:var(--neon-blue); margin:0 0 6px; font-size:1.6rem; letter-spacing:0.1em;">Notice Board</h2>
         <p style="color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; margin:0 0 28px;">Student Access Required</p>
 
-        <input type="text" id="noticeRollInput" placeholder="Enter your Roll Number"
+        <input type="text" id="noticeRollInput" placeholder="Enter your Password"
             style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
             color:#fff; border:1px solid rgba(0,243,255,0.4); border-radius:12px;
             padding:14px 18px; font-size:1.1rem; outline:none; margin-bottom:12px;
@@ -2318,7 +2318,7 @@ async function verifyNoticeRoll() {
     const errorEl = document.getElementById('noticeLoginError');
 
     if (!rollInput) {
-        errorEl.textContent = 'Please enter your roll number.';
+        errorEl.textContent = 'Please enter your Password.';
         return;
     }
 
@@ -2339,7 +2339,7 @@ async function verifyNoticeRoll() {
         switchView('notice');
     } else {
         errorEl.style.color = '#ff4444';
-        errorEl.textContent = 'Roll number not found. Access denied.';
+        errorEl.textContent = 'Password not matched. Access denied.';
         document.getElementById('noticeRollInput').value = '';
         document.getElementById('noticeRollInput').focus();
     }
