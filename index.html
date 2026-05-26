@@ -2238,7 +2238,7 @@ if ('serviceWorker' in navigator) {
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
               // Optional: user-কে notify করো
-              if (confirm('নতুন আপডেট পাওয়া গেছে! Refresh করবেন?')) {
+              if (confirm('We got New UPDATE. UPDATE NOW!!')) {
                 window.location.reload();
               }
             }
