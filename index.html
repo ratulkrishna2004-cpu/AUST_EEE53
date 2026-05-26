@@ -712,7 +712,7 @@
                 <li><a onclick="switchView('routine')">Routine</a></li>
                 <li><a onclick="switchView('busRoute')">Bus Route</a></li>
                 <li><a onclick="switchView('exams')">Exams</a></li>
-                <li><a onclick="switchView('notice')">Notice</a></li>
+                <li><a onclick="handleNoticeAccess()">Notice</a></li>
                 <li><a onclick="switchView('crgm')">CR & GM Section</a></li>
                 <li><a onclick="switchView('credits')">Credits</a></li>
                 <li><a onclick="switchView('obe')">OBE Syllabus</a></li>
@@ -984,10 +984,18 @@
     <!-- ======================== NOTICE ======================== -->
     <div id="noticeView" class="content-section">
         <div class="notice-wrapper">
-            <div class="notice-heading-box">
-                <h1>Notice Board</h1>
-                <p>Official announcements and updates</p>
-            </div>
+          <div class="notice-heading-box">
+    <h1>Notice Board</h1>
+    <p>Official announcements and updates</p>
+</div>
+<div style="text-align:right; padding: 0 20px; margin-bottom: -20px;">
+    <button onclick="logoutNoticeAccess()" style="
+        background:transparent; border:1px dashed rgba(255,255,255,0.2);
+        color:rgba(255,255,255,0.4); border-radius:20px; padding:6px 16px;
+        cursor:pointer; font-size:0.78rem;">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+    </button>
+</div>
             <div id="noticeDevPanel" class="notice-dev-panel" style="display:none;">
                 <h3><i class="fas fa-tools"></i> Developer — Notice Manager</h3>
                 <button class="btn-add" style="padding: 10px 20px; font-size: 0.95rem;" onclick="showNoticeForm()">+ Add New Notice</button>
@@ -1318,6 +1326,49 @@
         </div>
     </div>
         </div>
+<!-- NOTICE LOGIN MODAL -->
+<div id="noticeLoginOverlay" style="
+    position:fixed; inset:0; background:rgba(0,0,0,0.92);
+    z-index:5000; display:none; align-items:center; justify-content:center; padding:20px;">
+    <div style="
+        background:linear-gradient(135deg,#050010,#001020);
+        border:2px solid var(--neon-blue); border-radius:20px;
+        max-width:420px; width:100%; padding:35px 30px;
+        box-shadow:0 0 60px rgba(0,243,255,0.2);
+        text-align:center; font-family:'Segoe UI',Arial,sans-serif;">
+
+        <div style="font-size:2.5rem; color:var(--neon-blue); margin-bottom:10px;">
+            <i class="fas fa-lock"></i>
+        </div>
+        <h2 style="color:var(--neon-blue); margin:0 0 6px; font-size:1.6rem; letter-spacing:0.1em;">Notice Board</h2>
+        <p style="color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; margin:0 0 28px;">Student Access Required</p>
+
+        <input type="text" id="noticeRollInput" placeholder="Enter your Roll Number"
+            style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+            color:#fff; border:1px solid rgba(0,243,255,0.4); border-radius:12px;
+            padding:14px 18px; font-size:1.1rem; outline:none; margin-bottom:12px;
+            text-align:center; letter-spacing:0.1em;"
+            onkeydown="if(event.key==='Enter') verifyNoticeRoll()">
+
+        <div id="noticeLoginError" style="color:#ff4444; font-size:0.88rem; min-height:20px; margin-bottom:12px;"></div>
+
+        <button onclick="verifyNoticeRoll()" style="
+            width:100%; padding:14px; border:none; border-radius:12px;
+            background:linear-gradient(135deg,#003344,#005566);
+            color:var(--neon-blue); font-size:1.1rem; font-weight:800;
+            border:2px solid var(--neon-blue); cursor:pointer;
+            box-shadow:0 0 20px rgba(0,243,255,0.2); letter-spacing:0.08em;">
+            <i class="fas fa-sign-in-alt"></i> &nbsp;Enter
+        </button>
+
+        <button onclick="closeNoticeLogin()" style="
+            margin-top:14px; background:transparent; border:1px dashed rgba(255,255,255,0.2);
+            color:rgba(255,255,255,0.4); border-radius:30px; padding:8px 22px;
+            cursor:pointer; font-size:0.88rem;">
+            Cancel
+        </button>
+    </div>
+</div>
     <!-- TOAST -->
     <div id="copyToast" class="toast-notification">Copied to Clipboard!</div>
 
@@ -2217,6 +2268,89 @@
         setTimeout(setupMaterialsClick, 1500);
         setTimeout(setupMaterialsClick, 3000);
     })();
+// ============================================================
+// NOTICE ACCESS CONTROL — CSV Roll Verification
+// ============================================================
+const PASS_CSV_URL = "const PASS_CSV_URL = "https://raw.githubusercontent.com/ratulkrishna2004-cpu/AUST_EEE53/refs/heads/main/Pass.csv";";
+
+let noticeAllowedRolls = [];
+
+async function loadNoticePassList() {
+    if (noticeAllowedRolls.length > 0) return;
+    try {
+        const res = await fetch(PASS_CSV_URL);
+        const text = await res.text();
+        const lines = text.trim().split('\n');
+        for (let i = 0; i < lines.length; i++) {
+            const roll = lines[i].trim().toLowerCase();
+            if (roll) noticeAllowedRolls.push(roll);
+        }
+    } catch(e) {
+        console.error('Could not load pass list:', e);
+    }
+}
+
+function handleNoticeAccess() {
+    if (sessionStorage.getItem('adminKey') === "092418") {
+        switchView('notice');
+        return;
+    }
+    if (sessionStorage.getItem('noticeRollVerified') === "true") {
+        switchView('notice');
+        return;
+    }
+    openNoticeLogin();
+}
+
+function openNoticeLogin() {
+    const overlay = document.getElementById('noticeLoginOverlay');
+    overlay.style.display = 'flex';
+    document.getElementById('noticeRollInput').value = '';
+    document.getElementById('noticeLoginError').textContent = '';
+    loadNoticePassList();
+    setTimeout(() => document.getElementById('noticeRollInput').focus(), 100);
+}
+
+function closeNoticeLogin() {
+    document.getElementById('noticeLoginOverlay').style.display = 'none';
+}
+
+async function verifyNoticeRoll() {
+    const rollInput = document.getElementById('noticeRollInput').value.trim().toLowerCase();
+    const errorEl = document.getElementById('noticeLoginError');
+
+    if (!rollInput) {
+        errorEl.textContent = 'Please enter your roll number.';
+        return;
+    }
+
+    errorEl.textContent = 'Verifying...';
+    errorEl.style.color = 'var(--neon-blue)';
+
+    await loadNoticePassList();
+
+    if (noticeAllowedRolls.length === 0) {
+        errorEl.style.color = '#ff4444';
+        errorEl.textContent = 'Could not load access list. Try again.';
+        return;
+    }
+
+    if (noticeAllowedRolls.includes(rollInput)) {
+        sessionStorage.setItem('noticeRollVerified', 'true');
+        closeNoticeLogin();
+        switchView('notice');
+    } else {
+        errorEl.style.color = '#ff4444';
+        errorEl.textContent = 'Roll number not found. Access denied.';
+        document.getElementById('noticeRollInput').value = '';
+        document.getElementById('noticeRollInput').focus();
+    }
+}
+
+function logoutNoticeAccess() {
+    sessionStorage.removeItem('noticeRollVerified');
+    switchView('home');
+}
 
     // ============================================================
     // INIT
