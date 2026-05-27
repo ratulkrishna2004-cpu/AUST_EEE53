@@ -1379,6 +1379,9 @@
             <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
         </div>
         <div class="dev-credit">Developed by: Ratul Krishna Mojumder</div>
+<div class="dev-credit" style="margin-top:6px; color: var(--gold); font-size: 0.85rem;">
+    👁️ Total Views: <span id="viewCountDisplay" style="font-weight:900; color:#fff;">...</span>
+</div>
     </footer>
 
     <script>
@@ -2477,15 +2480,34 @@ async function sendNoticeNotification(topic, date) {
         console.log('Send notification error:', e);
     }
 }
+// ============================================================
+// VIEW COUNTER ENGINE
+// ============================================================
+function initViewCounter() {
+    const counterRef = database.ref('site_views/total');
+
+    // প্রথমে current count দেখাও
+    counterRef.on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        const display = document.getElementById('viewCountDisplay');
+        if (display) display.textContent = count.toLocaleString();
+    });
+
+    // এই visit count করো
+    counterRef.transaction((current) => {
+        return (current || 0) + 1;
+    });
+}
 
     // ============================================================
     // INIT
     // ============================================================
     document.addEventListener('DOMContentLoaded', () => {
-        if (sessionStorage.getItem('adminKey') === "092418") { updateDevMenuBtnText(true); }
-        initSearchEngine();
-        handleHashNavigation();
-    });
+    if (sessionStorage.getItem('adminKey') === "092418") { updateDevMenuBtnText(true); }
+    initSearchEngine();
+    handleHashNavigation();
+    initViewCounter();
+});
     </script>
     <script>
 if ('serviceWorker' in navigator) {
