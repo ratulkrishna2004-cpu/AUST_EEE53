@@ -1329,7 +1329,7 @@
                 <div>
                     <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
                         letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Year</label>
-                    <input type="text" id="dash_year" placeholder="e.g. 2nd Year"
+                    <input type="text" id="dash_year" placeholder="e.g. 2nd "
                         style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
                         color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
                         padding:11px 14px; font-size:0.95rem; outline:none;">
@@ -1337,7 +1337,7 @@
                 <div>
                     <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
                         letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Semester</label>
-                    <input type="text" id="dash_semester" placeholder="e.g. 4th Semester"
+                    <input type="text" id="dash_semester" placeholder="e.g. 1st "
                         style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
                         color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
                         padding:11px 14px; font-size:0.95rem; outline:none;">
@@ -1361,11 +1361,19 @@
                 <div>
                     <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
                         letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Session</label>
-                    <input type="text" id="dash_session" placeholder="e.g. 2023-24"
+                    <input type="text" id="dash_session" placeholder="e.g. Spring-24"
                         style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
                         color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
                         padding:11px 14px; font-size:0.95rem; outline:none;">
                 </div>
+<div>
+    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Group</label>
+    <input type="text" id="dash_group" placeholder="e.g. 1"
+        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+        padding:11px 14px; font-size:0.95rem; outline:none;">
+</div>
             </div>
             <div style="display:flex; gap:12px; margin-top:22px;">
                 <button onclick="saveCoverProfile()" style="
@@ -1416,9 +1424,10 @@
                 <div class="cover-field"><label>Name</label><input type="text" id="lab_name" placeholder="Your Full Name"></div>
                 <div class="cover-field"><label>ID</label><input type="text" id="lab_id" placeholder="e.g. 00724105131001"></div>
                 <div class="cover-field"><label>Year</label><input type="text" id="lab_year" placeholder="e.g. 2nd Year"></div>
-                <div class="cover-field"><label>Section</label><input type="text" id="lab_section" placeholder="e.g. A"></div>
-                <div class="cover-field"><label>Group</label><input type="text" id="lab_group" placeholder="e.g. 1"></div>
                 <div class="cover-field"><label>Semester</label><input type="text" id="lab_semester" placeholder="e.g. 4th Semester"></div>
+<div class="cover-field"><label>Section</label><input type="text" id="lab_section" placeholder="e.g. A"></div>
+<div class="cover-field"><label>Group</label><input type="text" id="lab_group" placeholder="e.g. 1"></div></div>
+<div class="cover-field"><label>Session</label><input type="text" id="lab_session" placeholder="e.g. 2023-24"></div>
             </div>
 
             <!-- ASSIGNMENT SINGLE FIELDS -->
@@ -1431,8 +1440,10 @@
                 <div class="cover-field"><label>ID</label><input type="text" id="as_id" placeholder="e.g. 00724105131001"></div>
                 <div class="cover-field"><label>Year</label><input type="text" id="as_year" placeholder="e.g. 2nd Year"></div>
                 <div class="cover-field"><label>Semester</label><input type="text" id="as_semester" placeholder="e.g. 4th Semester"></div>
+<div class="cover-field"><label>Section</label><input type="text" id="as_section" placeholder="e.g. A"></div>
                 <div class="cover-field"><label>Program</label><input type="text" id="as_program" placeholder="e.g. B.Sc. in EEE"></div>
-                <div class="cover-field"><label>Section</label><input type="text" id="as_section" placeholder="e.g. A"></div>
+<div class="cover-field"><label>Session</label><input type="text" id="as_session" placeholder="e.g. 2023-24"></div>
+                
             </div>
 
             <!-- ASSIGNMENT GROUP FIELDS -->
@@ -3053,9 +3064,10 @@ function generateCoverPreview() {
                    ${cpRow('Name', name, '110px')}
 ${cpRow('ID', id, '110px')}
 ${cpRow('Year', year, '110px')}
+${cpRow('Semester', sem, '110px')}
 ${cpRow('Section', sec, '110px')}
 ${cpRow('Group', grp, '110px')}
-${cpRow('Semester', sem, '110px')}
+${cpRow('Session', document.getElementById('lab_session').value, '110px')}
                 </div>
             
         </div>`;
@@ -3100,6 +3112,7 @@ ${cpRow('Semester', sem, '110px')}
                     ${cpRow('Semester', sem, '110px')}
                     ${cpRow('Program', prog, '110px')}
                     ${cpRow('Section', sec, '110px')}
+${cpRow('Session', document.getElementById('as_session') ? document.getElementById('as_session').value : '', '110px')}
                 </div>
             </div>
         </div>`;
@@ -3315,6 +3328,7 @@ function showCoverDashboard() {
             { label: 'Section', val: d.section },
             { label: 'Program', val: d.program },
             { label: 'Session', val: d.session },
+{ label: 'Group', val: d.group }
         ];
         let html = '<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">';
         fields.forEach(f => {
@@ -3336,6 +3350,7 @@ function showCoverDashboard() {
         if (d.section)  document.getElementById('dash_section').value   = d.section;
         if (d.program)  document.getElementById('dash_program').value   = d.program;
         if (d.session)  document.getElementById('dash_session').value   = d.session;
+if (d.group)    document.getElementById('dash_group').value     = d.group;
     });
 }
 
@@ -3361,6 +3376,7 @@ function saveCoverProfile() {
         section:  document.getElementById('dash_section').value.trim(),
         program:  document.getElementById('dash_program').value.trim(),
         session:  document.getElementById('dash_session').value.trim(),
+group:    document.getElementById('dash_group').value.trim()
     };
     database.ref('cover_users/' + currentCoverRoll).update(payload).then(() => {
         showToast('Profile Saved!');
@@ -3382,6 +3398,8 @@ function autoFillCoverFields() {
         if (d.year)     document.getElementById('lab_year').value      = d.year;
         if (d.semester) document.getElementById('lab_semester').value  = d.semester;
         if (d.section)  document.getElementById('lab_section').value   = d.section;
+if (d.session)  document.getElementById('lab_session').value   = d.session;
+if (d.group)    document.getElementById('lab_group').value     = d.group;
 
         // Assignment Single
         if (d.name)     document.getElementById('as_name').value       = d.name;
@@ -3389,7 +3407,9 @@ function autoFillCoverFields() {
         if (d.year)     document.getElementById('as_year').value        = d.year;
         if (d.semester) document.getElementById('as_semester').value    = d.semester;
         if (d.section)  document.getElementById('as_section').value     = d.section;
+
         if (d.program)  document.getElementById('as_program').value     = d.program;
+if (d.session)  document.getElementById('as_session').value     = d.session;
 
         // Assignment Group
         if (d.roll)  { const el = document.getElementById('ag_id_1'); if(el) el.value = d.roll; }
@@ -3397,6 +3417,7 @@ function autoFillCoverFields() {
         if (d.semester) document.getElementById('ag_semester').value    = d.semester;
         if (d.section)  document.getElementById('ag_section').value     = d.section;
         if (d.session)  document.getElementById('ag_session').value     = d.session;
+if (d.group)    document.getElementById('ag_group').value       = d.group;
     });
 }
     // ============================================================
