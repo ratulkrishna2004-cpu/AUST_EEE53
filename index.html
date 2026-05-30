@@ -1262,6 +1262,128 @@
             <h1>Cover Page</h1>
             <p>Generate your Lab Report or Assignment Cover</p>
         </div>
+<!-- LOGIN / DASHBOARD BAR -->
+<div id="coverTopBar" style="display:flex; justify-content:flex-end; padding:0 10px 20px;">
+    <button id="coverLoginBtn" onclick="openCoverLogin()" style="
+        padding:9px 22px; border-radius:10px; font-size:0.9rem; font-weight:700;
+        border:1.5px solid var(--gold); background:rgba(255,215,0,0.08);
+        color:var(--gold); cursor:pointer; display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-sign-in-alt"></i> Login
+    </button>
+    <div id="coverLoggedBar" style="display:none; gap:10px;">
+        <button onclick="showCoverDashboard()" style="
+            padding:9px 22px; border-radius:10px; font-size:0.9rem; font-weight:700;
+            border:1.5px solid var(--gold); background:rgba(255,215,0,0.08);
+            color:var(--gold); cursor:pointer;">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </button>
+        <button onclick="logoutCoverAccess()" style="
+            padding:9px 22px; border-radius:10px; font-size:0.9rem; font-weight:700;
+            border:1.5px solid #ff4444; background:rgba(255,0,0,0.08);
+            color:#ff4444; cursor:pointer;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</div>
+
+<!-- DASHBOARD PANEL -->
+<div id="coverDashPanel" style="display:none; margin:0 10px 30px;">
+    <div style="background:rgba(12,12,12,0.9); border:2px solid rgba(255,215,0,0.3);
+        border-radius:18px; padding:30px; backdrop-filter:blur(10px);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+            <div style="color:var(--gold); font-size:1.2rem; font-weight:800; letter-spacing:0.1em;">
+                <i class="fas fa-user-circle"></i> My Profile
+            </div>
+            <div id="coverDashEditBtnArea">
+                <button onclick="enableCoverEdit()" id="coverEditBtn" style="
+                    padding:8px 20px; border-radius:8px; font-size:0.88rem; font-weight:700;
+                    border:1.5px solid var(--gold); background:rgba(255,215,0,0.1);
+                    color:var(--gold); cursor:pointer;">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+        </div>
+
+        <!-- INFO DISPLAY -->
+        <div id="coverInfoDisplay"></div>
+
+        <!-- EDIT FORM -->
+        <div id="coverEditForm" style="display:none;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div>
+                    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+                        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Name</label>
+                    <input type="text" id="dash_name" placeholder="Full Name"
+                        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+                        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+                        padding:11px 14px; font-size:0.95rem; outline:none;">
+                </div>
+                <div>
+                    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+                        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Roll / ID</label>
+                    <input type="text" id="dash_roll" placeholder="e.g. 00724105131001"
+                        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+                        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+                        padding:11px 14px; font-size:0.95rem; outline:none;">
+                </div>
+                <div>
+                    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+                        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Year</label>
+                    <input type="text" id="dash_year" placeholder="e.g. 2nd Year"
+                        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+                        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+                        padding:11px 14px; font-size:0.95rem; outline:none;">
+                </div>
+                <div>
+                    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+                        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Semester</label>
+                    <input type="text" id="dash_semester" placeholder="e.g. 4th Semester"
+                        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+                        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+                        padding:11px 14px; font-size:0.95rem; outline:none;">
+                </div>
+                <div>
+                    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+                        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Section</label>
+                    <input type="text" id="dash_section" placeholder="e.g. A"
+                        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+                        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+                        padding:11px 14px; font-size:0.95rem; outline:none;">
+                </div>
+                <div>
+                    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+                        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Program</label>
+                    <input type="text" id="dash_program" placeholder="e.g. B.Sc. in EEE"
+                        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+                        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+                        padding:11px 14px; font-size:0.95rem; outline:none;">
+                </div>
+                <div>
+                    <label style="color:var(--gold); font-size:0.78rem; font-weight:700;
+                        letter-spacing:0.15em; text-transform:uppercase; display:block; margin-bottom:6px;">Session</label>
+                    <input type="text" id="dash_session" placeholder="e.g. 2023-24"
+                        style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+                        color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+                        padding:11px 14px; font-size:0.95rem; outline:none;">
+                </div>
+            </div>
+            <div style="display:flex; gap:12px; margin-top:22px;">
+                <button onclick="saveCoverProfile()" style="
+                    padding:12px 35px; border-radius:12px; font-size:1rem; font-weight:800;
+                    border:2px solid var(--gold); background:rgba(255,215,0,0.12);
+                    color:var(--gold); cursor:pointer; letter-spacing:0.08em;">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button onclick="cancelCoverEdit()" style="
+                    padding:12px 25px; border-radius:12px; font-size:1rem; font-weight:700;
+                    border:1px dashed rgba(255,255,255,0.2); background:transparent;
+                    color:rgba(255,255,255,0.4); cursor:pointer;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
         <div class="cover-type-bar">
             <button class="cover-type-btn cover-active" id="coverLabBtn" onclick="setCoverType('lab')">
@@ -1643,6 +1765,45 @@
 </div>
     <!-- TOAST -->
     <div id="copyToast" class="toast-notification">Copied to Clipboard!</div>
+<div id="coverLoginOverlay" style="
+    position:fixed; inset:0; background:rgba(0,0,0,0.92);
+    z-index:5000; display:none; align-items:center; justify-content:center; padding:20px;">
+    <div style="
+        background:linear-gradient(135deg,#050010,#001020);
+        border:2px solid var(--gold); border-radius:20px;
+        max-width:420px; width:100%; padding:35px 30px;
+        box-shadow:0 0 60px rgba(255,215,0,0.2);
+        text-align:center;">
+        <div style="font-size:2.5rem; color:var(--gold); margin-bottom:10px;">
+            <i class="fas fa-id-card"></i>
+        </div>
+        <h2 style="color:var(--gold); margin:0 0 6px; font-size:1.6rem;">Cover Page Login</h2>
+        <p style="color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.2em;
+            text-transform:uppercase; margin:0 0 28px;">Enter your password</p>
+        <input type="text" id="coverRollInput" placeholder="Password"
+            style="width:100%; box-sizing:border-box; background:rgba(0,0,0,0.5);
+            color:#fff; border:1px solid rgba(255,215,0,0.4); border-radius:12px;
+            padding:14px 18px; font-size:1.1rem; outline:none; margin-bottom:12px;
+            text-align:center; letter-spacing:0.1em;"
+            onkeydown="if(event.key==='Enter') verifyCoverRoll()">
+        <div id="coverLoginError" style="color:#ff4444; font-size:0.88rem;
+            min-height:20px; margin-bottom:12px;"></div>
+        <button onclick="verifyCoverRoll()" style="
+            width:100%; padding:14px; border-radius:12px;
+            background:linear-gradient(135deg,#3a2000,#5a3500);
+            color:var(--gold); font-size:1.1rem; font-weight:800;
+            border:2px solid var(--gold); cursor:pointer; letter-spacing:0.08em;">
+            <i class="fas fa-sign-in-alt"></i> &nbsp;Login
+        </button>
+        <button onclick="closeCoverLogin()" style="
+            margin-top:14px; background:transparent;
+            border:1px dashed rgba(255,255,255,0.2);
+            color:rgba(255,255,255,0.4); border-radius:30px;
+            padding:8px 22px; cursor:pointer; font-size:0.88rem;">
+            Cancel
+        </button>
+    </div>
+</div>
 
     <!-- MAIN FOOTER -->
     <footer>
@@ -1692,6 +1853,11 @@
         if (viewName === 'prevYear') { evalDevSessionState(); listenPrevYearButtons(); }
         if (viewName === 'helpingSites') { evalDevSessionState(); listenHelpingSitesButtons(); }
         if (viewName === 'notice') { evalDevSessionState(); listenNoticeData(); }
+if (viewName === 'coverPage') {
+    currentCoverRoll = sessionStorage.getItem('coverRoll') || null;
+    updateCoverBarUI();
+    if (currentCoverRoll) autoFillCoverFields();
+}
 
         toggleMenu(true);
         window.scrollTo(0, 0);
@@ -3063,14 +3229,186 @@ function downloadCoverPDF() {
         });
     });
 }
+// ============================================================
+// COVER PAGE LOGIN + DASHBOARD ENGINE
+// ============================================================
+let coverAllowedRolls = [];
+let currentCoverRoll = null;
+
+async function loadCoverPassList() {
+    if (coverAllowedRolls.length > 0) return;
+    try {
+        const res = await fetch(PASS_CSV_URL);
+        const text = await res.text();
+        text.trim().split('\n').forEach(line => {
+            const r = line.trim().toLowerCase();
+            if (r) coverAllowedRolls.push(r);
+        });
+    } catch(e) { console.error('Cover pass list error:', e); }
+}
+
+function openCoverLogin() {
+    document.getElementById('coverLoginOverlay').style.display = 'flex';
+    document.getElementById('coverRollInput').value = '';
+    document.getElementById('coverLoginError').textContent = '';
+    loadCoverPassList();
+    setTimeout(() => document.getElementById('coverRollInput').focus(), 100);
+}
+
+function closeCoverLogin() {
+    document.getElementById('coverLoginOverlay').style.display = 'none';
+}
+
+async function verifyCoverRoll() {
+    const input = document.getElementById('coverRollInput').value.trim().toLowerCase();
+    const errorEl = document.getElementById('coverLoginError');
+    if (!input) { errorEl.textContent = 'Please enter your password.'; return; }
+    errorEl.style.color = 'var(--neon-blue)';
+    errorEl.textContent = 'Verifying...';
+    await loadCoverPassList();
+    if (coverAllowedRolls.length === 0) {
+        errorEl.style.color = '#ff4444';
+        errorEl.textContent = 'Could not load access list. Try again.';
+        return;
+    }
+    if (coverAllowedRolls.includes(input)) {
+        sessionStorage.setItem('coverRoll', input);
+        currentCoverRoll = input;
+        closeCoverLogin();
+        updateCoverBarUI();
+        autoFillCoverFields();
+    } else {
+        errorEl.style.color = '#ff4444';
+        errorEl.textContent = 'Password not matched. Access denied.';
+        document.getElementById('coverRollInput').value = '';
+        document.getElementById('coverRollInput').focus();
+    }
+}
+
+function logoutCoverAccess() {
+    sessionStorage.removeItem('coverRoll');
+    currentCoverRoll = null;
+    updateCoverBarUI();
+    document.getElementById('coverDashPanel').style.display = 'none';
+}
+
+function updateCoverBarUI() {
+    const isLogged = !!currentCoverRoll;
+    document.getElementById('coverLoginBtn').style.display = isLogged ? 'none' : 'flex';
+    document.getElementById('coverLoggedBar').style.display = isLogged ? 'flex' : 'none';
+}
+
+function showCoverDashboard() {
+    const panel = document.getElementById('coverDashPanel');
+    panel.style.display = 'block';
+    document.getElementById('coverEditForm').style.display = 'none';
+    document.getElementById('coverEditBtn').style.display = 'inline-block';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    database.ref('cover_users/' + currentCoverRoll).once('value', snap => {
+        const d = snap.val() || {};
+        const fields = [
+            { label: 'Name', val: d.name },
+            { label: 'Roll / ID', val: d.roll },
+            { label: 'Year', val: d.year },
+            { label: 'Semester', val: d.semester },
+            { label: 'Section', val: d.section },
+            { label: 'Program', val: d.program },
+            { label: 'Session', val: d.session },
+        ];
+        let html = '<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">';
+        fields.forEach(f => {
+            html += `<div style="background:rgba(0,0,0,0.3); border-radius:10px; padding:12px 16px;
+                border:1px solid rgba(255,255,255,0.07);">
+                <div style="color:rgba(255,255,255,0.4); font-size:0.72rem; text-transform:uppercase;
+                    letter-spacing:0.15em; margin-bottom:4px;">${f.label}</div>
+                <div style="color:#fff; font-weight:700; font-size:0.95rem;">${f.val || '<span style="color:#555;">—</span>'}</div>
+            </div>`;
+        });
+        html += '</div>';
+        document.getElementById('coverInfoDisplay').innerHTML = html;
+
+        // Edit form prefill
+        if (d.name)     document.getElementById('dash_name').value     = d.name;
+        if (d.roll)     document.getElementById('dash_roll').value      = d.roll;
+        if (d.year)     document.getElementById('dash_year').value      = d.year;
+        if (d.semester) document.getElementById('dash_semester').value  = d.semester;
+        if (d.section)  document.getElementById('dash_section').value   = d.section;
+        if (d.program)  document.getElementById('dash_program').value   = d.program;
+        if (d.session)  document.getElementById('dash_session').value   = d.session;
+    });
+}
+
+function enableCoverEdit() {
+    document.getElementById('coverEditForm').style.display = 'block';
+    document.getElementById('coverInfoDisplay').style.display = 'none';
+    document.getElementById('coverEditBtn').style.display = 'none';
+}
+
+function cancelCoverEdit() {
+    document.getElementById('coverEditForm').style.display = 'none';
+    document.getElementById('coverInfoDisplay').style.display = 'block';
+    document.getElementById('coverEditBtn').style.display = 'inline-block';
+}
+
+function saveCoverProfile() {
+    if (!currentCoverRoll) return;
+    const payload = {
+        name:     document.getElementById('dash_name').value.trim(),
+        roll:     document.getElementById('dash_roll').value.trim(),
+        year:     document.getElementById('dash_year').value.trim(),
+        semester: document.getElementById('dash_semester').value.trim(),
+        section:  document.getElementById('dash_section').value.trim(),
+        program:  document.getElementById('dash_program').value.trim(),
+        session:  document.getElementById('dash_session').value.trim(),
+    };
+    database.ref('cover_users/' + currentCoverRoll).update(payload).then(() => {
+        showToast('Profile Saved!');
+        cancelCoverEdit();
+        showCoverDashboard();
+        autoFillCoverFields();
+    });
+}
+
+function autoFillCoverFields() {
+    if (!currentCoverRoll) return;
+    database.ref('cover_users/' + currentCoverRoll).once('value', snap => {
+        const d = snap.val();
+        if (!d) return;
+
+        // Lab
+        if (d.name)     document.getElementById('lab_name').value     = d.name;
+        if (d.roll)     document.getElementById('lab_id').value        = d.roll;
+        if (d.year)     document.getElementById('lab_year').value      = d.year;
+        if (d.semester) document.getElementById('lab_semester').value  = d.semester;
+        if (d.section)  document.getElementById('lab_section').value   = d.section;
+
+        // Assignment Single
+        if (d.name)     document.getElementById('as_name').value       = d.name;
+        if (d.roll)     document.getElementById('as_id').value          = d.roll;
+        if (d.year)     document.getElementById('as_year').value        = d.year;
+        if (d.semester) document.getElementById('as_semester').value    = d.semester;
+        if (d.section)  document.getElementById('as_section').value     = d.section;
+        if (d.program)  document.getElementById('as_program').value     = d.program;
+
+        // Assignment Group
+        if (d.roll)  { const el = document.getElementById('ag_id_1'); if(el) el.value = d.roll; }
+        if (d.year)     document.getElementById('ag_year').value        = d.year;
+        if (d.semester) document.getElementById('ag_semester').value    = d.semester;
+        if (d.section)  document.getElementById('ag_section').value     = d.section;
+        if (d.session)  document.getElementById('ag_session').value     = d.session;
+    });
+}
     // ============================================================
     // INIT
     // ============================================================
-    document.addEventListener('DOMContentLoaded', () => {
+   document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.getItem('adminKey') === "092418") { updateDevMenuBtnText(true); }
     initSearchEngine();
     handleHashNavigation();
     initViewCounter();
+    // এই line add করো:
+    currentCoverRoll = sessionStorage.getItem('coverRoll') || null;
 });
     </script>
     <script>
