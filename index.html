@@ -720,6 +720,7 @@
                 <li><a onclick="switchView('helpingSites')">Helping Sites</a></li>
                 <li><a onclick="switchView('cgcalc')">CG Calculator</a></li>
                 <li><a onclick="switchView('contactUs')">Contact Us</a></li>
+<li id="devDashboardMenuItem" style="display:none;"><a onclick="switchView('devDashboard')" style="color:#ff9500;">Dev Dashboard</a></li>
                 <li class="dev-login-item" id="devLoginMenuBtn"><a onclick="triggerDevLogin()">Developer Log in</a></li>
             </ul>
         </nav>
@@ -1488,6 +1489,112 @@
         </div>
     </div>
 </div>
+<!-- DEV DASHBOARD VIEW -->
+<div id="devDashboardView" class="content-section">
+<style>
+.devdash-wrapper {
+    padding-top: 195px; padding-bottom: 80px;
+    max-width: 900px; margin: 0 auto; min-height: 85vh;
+}
+.devdash-heading {
+    text-align: center; padding: 20px 10px 35px; position: relative;
+}
+.devdash-heading::after {
+    content: ''; display: block; width: 130px; height: 3px;
+    background: linear-gradient(90deg, transparent, #ff9500, transparent);
+    margin: 15px auto 0; border-radius: 2px;
+}
+.devdash-heading h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900;
+    letter-spacing: 0.15em; text-transform: uppercase; margin: 0;
+    background: linear-gradient(135deg, #fff 20%, #ff9500 50%, #fff 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; animation: shine-text 3s linear infinite;
+}
+.devdash-heading p { color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; margin: 10px 0 0; }
+.devdash-grid {
+    display: flex; flex-direction: column; gap: 12px; padding: 0 20px;
+}
+.devdash-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(15,15,15,0.8); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 16px 22px;
+    transition: border-color 0.3s;
+}
+.devdash-row:hover { border-color: rgba(255,149,0,0.3); }
+.devdash-row-name {
+    font-size: 1rem; font-weight: 700; color: #fff; letter-spacing: 0.04em;
+}
+.devdash-row-sub {
+    font-size: 0.78rem; color: rgba(255,255,255,0.35);
+    margin-top: 3px; letter-spacing: 0.08em;
+}
+.devdash-toggle-btn {
+    position: relative; width: 56px; height: 28px;
+    border-radius: 14px; border: none; cursor: pointer;
+    background: #333; transition: background 0.3s;
+    flex-shrink: 0;
+}
+.devdash-toggle-btn::after {
+    content: ''; position: absolute;
+    top: 4px; left: 4px;
+    width: 20px; height: 20px;
+    border-radius: 50%; background: #fff;
+    transition: transform 0.3s;
+}
+.devdash-toggle-btn.maint-on { background: #ff3333; }
+.devdash-toggle-btn.maint-on::after { transform: translateX(28px); }
+.devdash-maint-label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-right: 12px;
+    color: rgba(255,255,255,0.3);
+}
+.devdash-maint-label.label-on { color: #ff3333; }
+.devdash-right { display: flex; align-items: center; }
+@media (max-width: 768px) {
+    .devdash-wrapper { padding-top: 240px; }
+    .devdash-row-name { font-size: 0.9rem; }
+}
+</style>
+    <div class="devdash-wrapper">
+        <div class="devdash-heading">
+            <h1>Dev Dashboard</h1>
+            <p>Maintenance control panel</p>
+        </div>
+        <div class="devdash-grid" id="devDashGrid"></div>
+    </div>
+</div>
+<!-- UNDER MAINTENANCE VIEW -->
+<div id="underMaintenanceView" style="
+    display:none; position:fixed; inset:0; z-index:4000;
+    background:#000; align-items:center; justify-content:center;
+    flex-direction:column; text-align:center; padding:20px;">
+    <div style="font-size:4rem; margin-bottom:20px;">🔧</div>
+    <div style="font-size:clamp(1.8rem,6vw,3rem); font-weight:900;
+        color:#fff; letter-spacing:0.1em; margin-bottom:12px;">
+        Under Maintenance
+    </div>
+    <div style="font-size:1.1rem; color:rgba(255,255,255,0.5);
+        margin-bottom:8px; letter-spacing:0.05em;">
+        We'll be back soon!
+    </div>
+    <div style="width:60px; height:3px; margin:20px auto;
+        background:linear-gradient(90deg,transparent,var(--gold),transparent);
+        border-radius:2px;"></div>
+    <div style="color:rgba(255,255,255,0.25); font-size:0.8rem;
+        letter-spacing:0.2em; text-transform:uppercase;">
+        AUST EEE-53
+    </div>
+    <div style="margin-top:30px;">
+        <button onclick="triggerDevLogin()" style="
+            background:transparent; border:1px dashed rgba(255,255,255,0.15);
+            color:rgba(255,255,255,0.2); border-radius:20px; padding:8px 20px;
+            cursor:pointer; font-size:0.75rem; letter-spacing:0.1em;">
+            <i class="fas fa-code"></i> Developer
+        </button>
+    </div>
+</div>
    <!-- CREDITS VIEW -->
 <div id="creditsView" class="content-section" style="display: none;">
     <style>
@@ -1835,18 +1942,36 @@
     // ============================================================
     const ALL_VIEWS = ['homeView','examsView','prevYearView','obeView','busRouteView',
                    'crgmView','helpingSitesView','routineView','creditsView',
-                   'contactUsView','cgcalcView','noticeView','coverPageView'];
+                   'contactUsView','cgcalcView','noticeView','coverPageView','devDashboardView'];
 
     const VIEW_MAP = {
         'home': 'homeView', 'exams': 'examsView', 'prevYear': 'prevYearView',
         'obe': 'obeView', 'busRoute': 'busRouteView', 'crgm': 'crgmView',
         'helpingSites': 'helpingSitesView', 'routine': 'routineView',
         'credits': 'creditsView', 'contactUs': 'contactUsView',
-        'cgcalc': 'cgcalcView', 'coverPage': 'coverPageView', 'notice': 'noticeView'
+        'cgcalc': 'cgcalcView', 'coverPage': 'coverPageView', 'notice': 'noticeView', 'devDashboard': 'devDashboardView'
+
     };
 
     function switchView(viewName) {
-        ALL_VIEWS.forEach(id => {
+    // Dev এর জন্য maintenance check bypass
+    const isDev = sessionStorage.getItem('adminKey') === "092418";
+
+    if (!isDev && viewName !== 'devDashboard') {
+        checkMaintenance(viewName).then(ok => {
+            if (ok) {
+                hideMaintenancePage();
+                _doSwitchView(viewName);
+            }
+        });
+        return;
+    }
+    hideMaintenancePage();
+    _doSwitchView(viewName);
+}
+
+function _doSwitchView(viewName) {
+    ALL_VIEWS.forEach(id => {
             const el = document.getElementById(id);
             if (el) { el.classList.remove('active-view'); el.style.display = ''; }
         });
@@ -1865,6 +1990,7 @@
         if (viewName === 'prevYear') { evalDevSessionState(); listenPrevYearButtons(); }
         if (viewName === 'helpingSites') { evalDevSessionState(); listenHelpingSitesButtons(); }
         if (viewName === 'notice') { evalDevSessionState(); listenNoticeData(); }
+if (viewName === 'devDashboard') renderDevDashGrid();
 if (viewName === 'coverPage') {
     currentCoverRoll = sessionStorage.getItem('coverRoll') || null;
     updateCoverBarUI();
@@ -2409,15 +2535,21 @@ initFCM();
         }
         const input = prompt("Enter Developer Authentication Key:");
         if (input === "092418") {
-            sessionStorage.setItem('adminKey', "092418"); updateDevMenuBtnText(true); alert("Developer Shell Initialized."); evalDevSessionState();
+            sessionStorage.setItem('adminKey', "092418"); updateDevMenuBtnText(true); hideMaintenancePage(); alert("Developer Shell Initialized."); evalDevSessionState();
         } else if (input) { alert("Access Denied."); }
     }
 
     function updateDevMenuBtnText(isLogged) {
-        const btn = document.getElementById('devLoginMenuBtn');
-        if (isLogged) { btn.innerHTML = `<a onclick="triggerDevLogin()" style="color: #ff3333; border-color: #ff3333;"><i class="fas fa-sign-out-alt"></i> Dev Log Out</a>`; }
-        else { btn.innerHTML = `<a onclick="triggerDevLogin()">Developer Log in</a>`; }
+    const btn = document.getElementById('devLoginMenuBtn');
+    const dashItem = document.getElementById('devDashboardMenuItem');
+    if (isLogged) {
+        btn.innerHTML = `<a onclick="triggerDevLogin()" style="color: #ff3333; border-color: #ff3333;"><i class="fas fa-sign-out-alt"></i> Dev Log Out</a>`;
+        if (dashItem) dashItem.style.display = 'block';
+    } else {
+        btn.innerHTML = `<a onclick="triggerDevLogin()">Developer Log in</a>`;
+        if (dashItem) dashItem.style.display = 'none';
     }
+}
 
     function evalDevSessionState() {
         const isDev = sessionStorage.getItem('adminKey') === "092418";
@@ -3421,6 +3553,103 @@ if (d.session)  document.getElementById('as_session').value     = d.session;
         if (d.session)  document.getElementById('ag_session').value     = d.session;
 if (d.group)    document.getElementById('ag_group').value       = d.group;
     });
+}
+// ============================================================
+// DEV DASHBOARD — MAINTENANCE ENGINE
+// ============================================================
+const MAINT_PAGES = [
+    { key: 'all',          name: 'All Pages',         sub: 'Home page এ show করবে' },
+    { key: 'home',         name: 'Home',               sub: 'Main page' },
+    { key: 'exams',        name: 'Exams',              sub: 'Exam schedule' },
+    { key: 'prevYear',     name: 'Previous Year',      sub: 'Past papers' },
+    { key: 'routine',      name: 'Routine',            sub: 'Class schedule' },
+    { key: 'busRoute',     name: 'Bus Route',          sub: 'Transport' },
+    { key: 'notice',       name: 'Notice',             sub: 'Announcements' },
+    { key: 'crgm',         name: 'CR & GM',            sub: 'Contacts' },
+    { key: 'obe',          name: 'OBE Syllabus',       sub: 'Curriculum' },
+    { key: 'helpingSites', name: 'Helping Sites',      sub: 'Useful links' },
+    { key: 'cgcalc',       name: 'CG Calculator',      sub: 'GPA/CGPA' },
+    { key: 'coverPage',    name: 'Cover Page',         sub: 'Lab/Assignment cover' },
+    { key: 'credits',      name: 'Credits',            sub: 'Team info' },
+    { key: 'contactUs',    name: 'Contact Us',         sub: 'Phone/contact' },
+];
+
+function renderDevDashGrid() {
+    database.ref('maintenance').once('value', snap => {
+        const data = snap.val() || {};
+        const grid = document.getElementById('devDashGrid');
+        grid.innerHTML = '';
+        MAINT_PAGES.forEach(page => {
+            const isOn = data[page.key] === true;
+            const row = document.createElement('div');
+            row.className = 'devdash-row';
+            row.innerHTML = `
+                <div>
+                    <div class="devdash-row-name">${page.name}</div>
+                    <div class="devdash-row-sub">${page.sub}</div>
+                </div>
+                <div class="devdash-right">
+                    <span class="devdash-maint-label ${isOn ? 'label-on' : ''}" id="maintLabel_${page.key}">
+                        ${isOn ? 'ON' : 'OFF'}
+                    </span>
+                    <button class="devdash-toggle-btn ${isOn ? 'maint-on' : ''}"
+                        id="maintBtn_${page.key}"
+                        onclick="toggleMaintenance('${page.key}')">
+                    </button>
+                </div>
+            `;
+            grid.appendChild(row);
+        });
+    });
+}
+
+function toggleMaintenance(key) {
+    database.ref('maintenance/' + key).once('value', snap => {
+        const current = snap.val() === true;
+        database.ref('maintenance/' + key).set(!current).then(() => {
+            const btn = document.getElementById('maintBtn_' + key);
+            const label = document.getElementById('maintLabel_' + key);
+            if (!current) {
+                btn.classList.add('maint-on');
+                label.classList.add('label-on');
+                label.textContent = 'ON';
+            } else {
+                btn.classList.remove('maint-on');
+                label.classList.remove('label-on');
+                label.textContent = 'OFF';
+            }
+        });
+    });
+}
+
+async function checkMaintenance(viewName) {
+    return new Promise(resolve => {
+        database.ref('maintenance').once('value', snap => {
+            const data = snap.val() || {};
+            // all on হলে home page এ show করবে
+            if (data['all'] === true) {
+                showMaintenancePage();
+                resolve(false);
+                return;
+            }
+            if (data[viewName] === true) {
+                showMaintenancePage();
+                resolve(false);
+                return;
+            }
+            resolve(true);
+        });
+    });
+}
+
+function showMaintenancePage() {
+    const el = document.getElementById('underMaintenanceView');
+    el.style.display = 'flex';
+}
+
+function hideMaintenancePage() {
+    const el = document.getElementById('underMaintenanceView');
+    el.style.display = 'none';
 }
     // ============================================================
     // INIT
