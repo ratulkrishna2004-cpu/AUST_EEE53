@@ -1190,7 +1190,8 @@
 .cp-sheet {
     background: #fff; color: #000;
     font-family: 'Times New Roman', Times, serif;
-    width: 210mm;
+    width: 794px;
+    min-width: 794px;
     min-height: 297mm;
     margin: 0 auto;
     padding: 45px 65px 50px 65px;
@@ -3221,13 +3222,14 @@ function downloadCoverPDF() {
 
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', function() {
         loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', function() {
-            html2canvas(sheet, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: '#ffffff',
-                logging: false,
-                width: sheet.scrollWidth,
-                height: sheet.scrollHeight
+           html2canvas(sheet, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    logging: false,
+    width: 794,
+    height: sheet.scrollHeight,
+    windowWidth: 794
             }).then(canvas => {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
