@@ -1203,7 +1203,7 @@
 .cp-header { text-align: center; margin-bottom: 35px; }
 .cp-univ { font-size: 1.6rem; font-weight: 800; margin-bottom: 20px; letter-spacing: 0.01em; word-spacing: 0.05em; margin-top: 5px; margin-bottom: 15px; width: 100%; white-space: nowrap; }
 .cp-logo { width: 155px; display: block; margin: 0 auto 18px; }
-.cp-dept { font-size: 1.25rem; font-weight: 700; margin-bottom: 5px; letter-spacing: 0.01em; word-spacing: 0.05em; }
+.cp-dept { font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; letter-spacing: 0.04em; word-spacing: 0.15em; }
 .cp-title {
     font-size: 2rem; font-weight: 800; text-decoration: underline;
     margin: 4px 0 0; letter-spacing: 0.03em;
@@ -1939,6 +1939,34 @@
     </footer>
 
     <script>
+// ============================================================
+// CACHE ENGINE
+// ============================================================
+const CACHE = { prev_years: null, helping_sites: null, notices: null, lastFetch: {} };
+const CACHE_TTL = 5 * 60 * 1000;
+
+async function getCached(refPath, key) {
+    const now = Date.now();
+    if (CACHE[key] && CACHE.lastFetch[key] && (now - CACHE.lastFetch[key]) < CACHE_TTL) {
+        return CACHE[key];
+    }
+    return new Promise(resolve => {
+        database.ref(refPath).once('value', snap => {
+            CACHE[key] = snap;
+            CACHE.lastFetch[key] = now;
+            resolve(snap);
+        });
+    });
+}
+
+function invalidateCache(key) {
+    CACHE[key] = null;
+    CACHE.lastFetch[key] = 0;
+}
+
+let maintenanceCache = null;
+let maintCacheTime = 0;
+let examListener = null;
     // ============================================================
     // NAVIGATION FIX — URL hash-based routing to prevent reload issues
     // ============================================================
@@ -2199,8 +2227,9 @@ if (viewName === 'coverPage') {
         } else {
             database.ref('notices').push(payload).then(() => {
     alert('Notice Published.');
-    sendNoticeNotification(payload.topic, payload.date);
-    resetNoticeForm();
+sendNoticeNotification(payload.topic, payload.date);
+invalidateCache('notices');
+resetNoticeForm();
 });
         }
     }
@@ -2248,36 +2277,36 @@ if (viewName === 'coverPage') {
 
     function deleteNotice(key) {
         if (confirm('Are you sure you want to delete this notice?')) {
-            database.ref('notices/' + key).remove().then(() => { alert('Notice Deleted.'); renderNoticeDevTable(); listenNoticeData(); });
+            database.ref('notices/' + key).remove().then(() => { alert('Notice Deleted.'); invalidateCache('notices'); renderNoticeDevTable(); listenNoticeData(); });
         }
     }
 
     function listenNoticeData() {
-        database.ref('notices').orderByChild('date').on('value', snapshot => {
-            const tbody = document.getElementById('noticeUserTableBody');
-            const emptyMsg = document.getElementById('noticeEmptyMsg');
-            tbody.innerHTML = '';
-            const items = [];
-            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
-            items.reverse();
+    getCached('notices', 'notices').then(snapshot => {
+        const tbody = document.getElementById('noticeUserTableBody');
+        const emptyMsg = document.getElementById('noticeEmptyMsg');
+        tbody.innerHTML = '';
+        const items = [];
+        snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+        items.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-            if (items.length === 0) {
-                emptyMsg.style.display = 'block';
-            } else {
-                emptyMsg.style.display = 'none';
-                items.forEach(data => {
-                    const viewCell = data.type === 'link'
-                        ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
-                        : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
-                    tbody.innerHTML += `<tr>
-                        <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
-                        <td class="notice-topic-cell">${data.topic}</td>
-                        <td>${viewCell}</td>
-                    </tr>`;
-                });
-            }
-        });
-    }
+        if (items.length === 0) {
+            emptyMsg.style.display = 'block';
+        } else {
+            emptyMsg.style.display = 'none';
+            items.forEach(data => {
+                const viewCell = data.type === 'link'
+                    ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
+                    : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
+                tbody.innerHTML += `<tr>
+                    <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
+                    <td class="notice-topic-cell">${data.topic}</td>
+                    <td>${viewCell}</td>
+                </tr>`;
+            });
+        }
+    });
+}
 
     function escapeForAttr(str) {
         return (str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
@@ -2397,23 +2426,26 @@ initFCM();
     }
 
     function loadSectionData(sectionLetter, element) {
-        if (!(element && element.classList.contains('switch-admin') && currentAdminState.isLogged)) {
-            document.getElementById('userTableContainer').style.display = 'block';
-            document.getElementById('adminDashboard').style.display = 'none';
-        }
-        updateActiveButton(element);
-        database.ref('exams').on('value', (snapshot) => {
-            const tbody = document.getElementById('examTableBody');
-            tbody.innerHTML = '';
-            const today = getTodayDateString();
-            snapshot.forEach((childSnapshot) => {
-                const data = childSnapshot.val();
-                if (data.section.startsWith(sectionLetter) && data.date >= today) {
-                    tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
-                }
-            });
-        });
+    if (!(element && element.classList.contains('switch-admin') && currentAdminState.isLogged)) {
+        document.getElementById('userTableContainer').style.display = 'block';
+        document.getElementById('adminDashboard').style.display = 'none';
     }
+    updateActiveButton(element);
+
+    if (examListener) { database.ref('exams').off('value', examListener); examListener = null; }
+
+    examListener = database.ref('exams').on('value', (snapshot) => {
+        const tbody = document.getElementById('examTableBody');
+        tbody.innerHTML = '';
+        const today = getTodayDateString();
+        snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+            if (data.section.startsWith(sectionLetter) && data.date >= today) {
+                tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
+            }
+        });
+    });
+}
 
     function loadPreviousExams(element) {
         updateActiveButton(element);
@@ -2585,7 +2617,7 @@ initFCM();
     }
     function resetDevBtnForm() {
         document.getElementById('devBtnTitle').value = ""; document.getElementById('devBtnLink').value = "";
-        document.getElementById('devBtnFormBox').style.display = "none"; editingDevBtnKey = null; renderDevManagementGrid();
+        document.getElementById('devBtnFormBox').style.display = "none"; editingDevBtnKey = null; invalidateCache('prev_years'); renderDevManagementGrid();
     }
     function renderDevManagementGrid() {
         database.ref('prev_years').once('value', (snapshot) => {
@@ -2604,7 +2636,7 @@ initFCM();
         editingDevBtnKey = key; document.getElementById('submitDevBtn').innerText = "Update Component";
     }
     function deleteDevBtn(key) {
-        if (confirm("Are you sure you want to purge this button?")) { database.ref('prev_years/' + key).remove().then(() => { alert("Component Scrubbed."); renderDevManagementGrid(); }); }
+        if (confirm("Are you sure you want to purge this button?")) { database.ref('prev_years/' + key).remove().then(() => { alert("Component Scrubbed."); invalidateCache('prev_years'); renderDevManagementGrid(); }); }
     }
     function listenPrevYearButtons() {
         database.ref('prev_years').on('value', (snapshot) => {
@@ -2639,7 +2671,7 @@ initFCM();
     }
     function resetHelpingSitesForm() {
         document.getElementById('helpingSitesTitle').value = ""; document.getElementById('helpingSitesLink').value = "";
-        document.getElementById('helpingSitesFormBox').style.display = "none"; editingHelpingSiteKey = null; renderHelpingSitesGrid();
+        document.getElementById('helpingSitesFormBox').style.display = "none"; editingHelpingSiteKey = null; invalidateCache('helping_sites'); renderHelpingSitesGrid();
     }
     function renderHelpingSitesGrid() {
         database.ref('helping_sites').once('value', (snapshot) => {
@@ -2658,7 +2690,7 @@ initFCM();
         editingHelpingSiteKey = key; document.getElementById('submitHelpingSitesBtn').innerText = "Update Component";
     }
     function deleteHelpingSite(key) {
-        if (confirm("Are you sure you want to completely purge this site component?")) { database.ref('helping_sites/' + key).remove().then(() => { alert("Helping Site Data Purged."); renderHelpingSitesGrid(); }); }
+        if (confirm("Are you sure you want to completely purge this site component?")) { database.ref('helping_sites/' + key).remove().then(() => { alert("Helping Site Data Purged."); invalidateCache('helping_sites'); renderHelpingSitesGrid(); }); }
     }
     function listenHelpingSitesButtons() {
         database.ref('helping_sites').on('value', (snapshot) => {
@@ -2866,19 +2898,16 @@ initFCM();
 // ============================================================
 const PASS_CSV_URL = "https://raw.githubusercontent.com/ratulkrishna2004-cpu/AUST_EEE53/refs/heads/main/Pass.csv";let noticeAllowedRolls = [];
 
-async function loadNoticePassList() {
-    if (noticeAllowedRolls.length > 0) return;
+async function loadCoverPassList() {
+    if (coverAllowedRolls.length > 0) return;
+    const cached = sessionStorage.getItem('coverPassList');
+    if (cached) { coverAllowedRolls = JSON.parse(cached); return; }
     try {
         const res = await fetch(PASS_CSV_URL);
         const text = await res.text();
-        const lines = text.trim().split('\n');
-        for (let i = 0; i < lines.length; i++) {
-            const roll = lines[i].trim().toLowerCase();
-            if (roll) noticeAllowedRolls.push(roll);
-        }
-    } catch(e) {
-        console.error('Could not load pass list:', e);
-    }
+        coverAllowedRolls = text.trim().split('\n').map(l => l.trim().toLowerCase()).filter(Boolean);
+        sessionStorage.setItem('coverPassList', JSON.stringify(coverAllowedRolls));
+    } catch(e) { console.error('Cover pass list error:', e); }
 }
 
 function handleNoticeAccess() {
@@ -3069,18 +3098,15 @@ async function sendNoticeNotification(topic, date) {
 // ============================================================
 function initViewCounter() {
     const counterRef = database.ref('site_views/total');
-
-    // প্রথমে current count দেখাও
     counterRef.on('value', (snapshot) => {
         const count = snapshot.val() || 0;
         const display = document.getElementById('viewCountDisplay');
         if (display) display.textContent = count.toLocaleString();
     });
-
-    // এই visit count করো
-    counterRef.transaction((current) => {
-        return (current || 0) + 1;
-    });
+    if (!sessionStorage.getItem('viewCounted')) {
+        counterRef.transaction((current) => (current || 0) + 1);
+        sessionStorage.setItem('viewCounted', 'true');
+    }
 }
 // ============================================================
 // COVER PAGE ENGINE
@@ -3626,20 +3652,21 @@ function toggleMaintenance(key) {
 
 async function checkMaintenance(viewName) {
     return new Promise(resolve => {
+        const now = Date.now();
+        if (maintenanceCache && (now - maintCacheTime) < 120000) {
+            const data = maintenanceCache;
+            if (data['all'] === true || data[viewName] === true) {
+                showMaintenancePage(); resolve(false);
+            } else { resolve(true); }
+            return;
+        }
         database.ref('maintenance').once('value', snap => {
-            const data = snap.val() || {};
-            // all on হলে home page এ show করবে
-            if (data['all'] === true) {
-                showMaintenancePage();
-                resolve(false);
-                return;
-            }
-            if (data[viewName] === true) {
-                showMaintenancePage();
-                resolve(false);
-                return;
-            }
-            resolve(true);
+            maintenanceCache = snap.val() || {};
+            maintCacheTime = Date.now();
+            const data = maintenanceCache;
+            if (data['all'] === true || data[viewName] === true) {
+                showMaintenancePage(); resolve(false);
+            } else { resolve(true); }
         });
     });
 }
