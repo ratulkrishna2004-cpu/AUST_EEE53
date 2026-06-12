@@ -2213,7 +2213,7 @@ if (viewName === 'coverPage') {
 
     if (editingNoticeKey) {
         database.ref('notices/' + editingNoticeKey).update(payload)
-            .then(() => { alert('Notice Updated.'); resetNoticeForm(); })
+            .then(() => { alert('Notice Updated.'); resetNoticeForm(); refreshAllNoticeTables(); })
             .catch(err => { alert('Update failed: ' + err.message); console.error(err); });
     } else {
         database.ref('notices').push(payload)
@@ -2221,6 +2221,7 @@ if (viewName === 'coverPage') {
                 alert('Notice Published.');
                 sendNoticeNotification(payload.topic, payload.date);
                 resetNoticeForm();
+                refreshAllNoticeTables();
             })
             .catch(err => { alert('Publish failed: ' + err.message); console.error(err); });
     }
@@ -2232,35 +2233,65 @@ if (viewName === 'coverPage') {
         renderNoticeDevTable();
     }
 
-    function renderNoticeDevTable() {
-    const tbody = document.getElementById('noticeDevTableBody');
-    if (!tbody) return;
+    
+function refreshAllNoticeTables() {
+    database.ref('notices').once('value', (snapshot) => {
+        const items = [];
+        snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        items.reverse();
 
-    database.ref('.info/connected').once('value', () => {
-        database.ref('notices').once('value', (snapshot) => {
+        // ---- USER TABLE ----
+        const tbody = document.getElementById('noticeUserTableBody');
+        const emptyMsg = document.getElementById('noticeEmptyMsg');
+        if (tbody && emptyMsg) {
             tbody.innerHTML = '';
-            const items = [];
-            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
-
             if (items.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="color:#666; font-style:italic; text-align:center;">No notices found.</td></tr>';
-                return;
+                emptyMsg.style.display = 'block';
+            } else {
+                emptyMsg.style.display = 'none';
+                items.forEach(data => {
+                    const viewCell = data.type === 'link'
+                        ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
+                        : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
+                    tbody.innerHTML += `<tr>
+                        <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
+                        <td class="notice-topic-cell">${data.topic}</td>
+                        <td>${viewCell}</td>
+                    </tr>`;
+                });
             }
+        }
 
-            items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-            items.reverse().forEach(data => {
-                tbody.innerHTML += `<tr>
-                    <td style="font-family: monospace; color: #aaa;">${data.date || '—'}</td>
-                    <td style="color: #fff;">${data.topic || '(no topic)'}</td>
-                    <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${(data.type || 'unknown').toUpperCase()}</span></td>
-                    <td>
-                        <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
-                        <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
-                    </td>
-                </tr>`;
-            });
-        });
+        // ---- DEV MANAGE TABLE ----
+        const devTbody = document.getElementById('noticeDevTableBody');
+        if (devTbody) {
+            devTbody.innerHTML = '';
+            if (items.length === 0) {
+                devTbody.innerHTML = '<tr><td colspan="4" style="color:#666; font-style:italic; text-align:center;">No notices found.</td></tr>';
+            } else {
+                items.forEach(data => {
+                    devTbody.innerHTML += `<tr>
+                        <td style="font-family: monospace; color: #aaa;">${data.date}</td>
+                        <td style="color: #fff;">${data.topic}</td>
+                        <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${(data.type || '').toUpperCase()}</span></td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
+                            <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
+                        </td>
+                    </tr>`;
+                });
+            }
+        }
     });
+}
+
+function listenNoticeData() {
+    refreshAllNoticeTables();
+}
+
+function renderNoticeDevTable() {
+    refreshAllNoticeTables();
 }
 
     function editNotice(key) {
@@ -2279,49 +2310,17 @@ if (viewName === 'coverPage') {
     }
 
     function deleteNotice(key) {
-        if (confirm('Are you sure you want to delete this notice?')) {
-            database.ref('notices/' + key).remove().then(() => { alert('Notice Deleted.'); renderNoticeDevTable(); listenNoticeData(); });
-        }
+    if (confirm('Are you sure you want to delete this notice?')) {
+        database.ref('notices/' + key).remove().then(() => {
+            alert('Notice Deleted.');
+            refreshAllNoticeTables();
+        });
     }
+}
 
     let noticeListenerAttached = false;
 
-function listenNoticeData() {
-    const tbody = document.getElementById('noticeUserTableBody');
-    const emptyMsg = document.getElementById('noticeEmptyMsg');
-    if (!tbody || !emptyMsg) return;
 
-    if (noticeListenerAttached) return; // already listening
-
-    noticeListenerAttached = true;
-    database.ref('notices').on('value', snapshot => {
-        const tb = document.getElementById('noticeUserTableBody');
-        const em = document.getElementById('noticeEmptyMsg');
-        if (!tb || !em) return;
-
-        tb.innerHTML = '';
-        const items = [];
-        snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
-        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-        items.reverse();
-
-        if (items.length === 0) {
-            em.style.display = 'block';
-        } else {
-            em.style.display = 'none';
-            items.forEach(data => {
-                const viewCell = data.type === 'link'
-                    ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
-                    : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
-                tb.innerHTML += `<tr>
-                    <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
-                    <td class="notice-topic-cell">${data.topic}</td>
-                    <td>${viewCell}</td>
-                </tr>`;
-            });
-        }
-    });
-}
 
     function escapeForAttr(str) {
         return (str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
