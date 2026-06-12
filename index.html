@@ -769,11 +769,11 @@
                 </table>
             </div>
             <section class="circuit-container">
-                <div class="circuit-switch mid-switch" onclick="window.open(//'https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
+                <div class="circuit-switch mid-switch" onclick="window.open('https://drive.google.com/drive/folders/1pkQrFPMUpagvHlvT8JCxGXLZuhA7yLv6', '_blank')">
                     <span class="switch-label">MID</span>
                     <div class="wire-container"><div class="wire-piece"></div><i class="fas fa-microchip chip-icon"></i><div class="wire-piece"></div></div>
                 </div>
-                <div class="circuit-switch final-switch" onclick="window.open(//'https://final-exam-psi-neon.vercel.app/', '_blank'//)">
+                <div class="circuit-switch final-switch" onclick="window.open('https://final-exam-psi-neon.vercel.app/', '_blank')">
                     <span class="switch-label">FINAL</span>
                     <div class="wire-container"><div class="wire-piece"></div><i class="fas fa-bolt chip-icon"></i><div class="wire-piece"></div></div>
                 </div>
@@ -2196,31 +2196,35 @@ if (viewName === 'coverPage') {
     }
 
     function submitNoticeData() {
-        const date = document.getElementById('noticeInputDate').value;
-        const topic = document.getElementById('noticeInputTopic').value.trim();
-        if (!date || !topic) { alert('Please fill in Date and Topic.'); return; }
+    const date = document.getElementById('noticeInputDate').value;
+    const topic = document.getElementById('noticeInputTopic').value.trim();
+    if (!date || !topic) { alert('Please fill in Date and Topic.'); return; }
 
-        let payload = { date, topic, type: currentNoticeType };
-        if (currentNoticeType === 'link') {
-            const link = document.getElementById('noticeInputLink').value.trim();
-            if (!link) { alert('Please enter a URL.'); return; }
-            payload.content = link;
-        } else {
-            const text = document.getElementById('noticeInputText').value.trim();
-            if (!text) { alert('Please write the notice text.'); return; }
-            payload.content = text;
-        }
-
-        if (editingNoticeKey) {
-            database.ref('notices/' + editingNoticeKey).update(payload).then(() => { alert('Notice Updated.'); resetNoticeForm(); });
-        } else {
-            database.ref('notices').push(payload).then(() => {
-    alert('Notice Published.');
-    sendNoticeNotification(payload.topic, payload.date);
-    resetNoticeForm();
-});
-        }
+    let payload = { date, topic, type: currentNoticeType };
+    if (currentNoticeType === 'link') {
+        const link = document.getElementById('noticeInputLink').value.trim();
+        if (!link) { alert('Please enter a URL.'); return; }
+        payload.content = link;
+    } else {
+        const text = document.getElementById('noticeInputText').value.trim();
+        if (!text) { alert('Please write the notice text.'); return; }
+        payload.content = text;
     }
+
+    if (editingNoticeKey) {
+        database.ref('notices/' + editingNoticeKey).update(payload)
+            .then(() => { alert('Notice Updated.'); resetNoticeForm(); })
+            .catch(err => { alert('Update failed: ' + err.message); console.error(err); });
+    } else {
+        database.ref('notices').push(payload)
+            .then(() => {
+                alert('Notice Published.');
+                sendNoticeNotification(payload.topic, payload.date);
+                resetNoticeForm();
+            })
+            .catch(err => { alert('Publish failed: ' + err.message); console.error(err); });
+    }
+}
 
     function resetNoticeForm() {
         document.getElementById('noticeFormBox').style.display = 'none';
