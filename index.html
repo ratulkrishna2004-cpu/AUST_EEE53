@@ -2233,22 +2233,32 @@ if (viewName === 'coverPage') {
     }
 
     function renderNoticeDevTable() {
-    database.ref('notices').once('value', (snapshot) => {
-        const tbody = document.getElementById('noticeDevTableBody');
-        tbody.innerHTML = '';
-        const items = [];
-        snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
-        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-        items.reverse().forEach(data => {
-            tbody.innerHTML += `<tr>
-                <td style="font-family: monospace; color: #aaa;">${data.date}</td>
-                <td style="color: #fff;">${data.topic}</td>
-                <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${data.type.toUpperCase()}</span></td>
-                <td>
-                    <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
-                    <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
-                </td>
-            </tr>`;
+    const tbody = document.getElementById('noticeDevTableBody');
+    if (!tbody) return;
+
+    database.ref('.info/connected').once('value', () => {
+        database.ref('notices').once('value', (snapshot) => {
+            tbody.innerHTML = '';
+            const items = [];
+            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:#666; font-style:italic; text-align:center;">No notices found.</td></tr>';
+                return;
+            }
+
+            items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+            items.reverse().forEach(data => {
+                tbody.innerHTML += `<tr>
+                    <td style="font-family: monospace; color: #aaa;">${data.date || '—'}</td>
+                    <td style="color: #fff;">${data.topic || '(no topic)'}</td>
+                    <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${(data.type || 'unknown').toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
+                    </td>
+                </tr>`;
+            });
         });
     });
 }
@@ -2274,26 +2284,36 @@ if (viewName === 'coverPage') {
         }
     }
 
-    function listenNoticeData() {
-    database.ref('notices').off('value');
+    let noticeListenerAttached = false;
+
+function listenNoticeData() {
+    const tbody = document.getElementById('noticeUserTableBody');
+    const emptyMsg = document.getElementById('noticeEmptyMsg');
+    if (!tbody || !emptyMsg) return;
+
+    if (noticeListenerAttached) return; // already listening
+
+    noticeListenerAttached = true;
     database.ref('notices').on('value', snapshot => {
-        const tbody = document.getElementById('noticeUserTableBody');
-        const emptyMsg = document.getElementById('noticeEmptyMsg');
-        tbody.innerHTML = '';
+        const tb = document.getElementById('noticeUserTableBody');
+        const em = document.getElementById('noticeEmptyMsg');
+        if (!tb || !em) return;
+
+        tb.innerHTML = '';
         const items = [];
         snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
         items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
         items.reverse();
 
         if (items.length === 0) {
-            emptyMsg.style.display = 'block';
+            em.style.display = 'block';
         } else {
-            emptyMsg.style.display = 'none';
+            em.style.display = 'none';
             items.forEach(data => {
                 const viewCell = data.type === 'link'
                     ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
                     : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
-                tbody.innerHTML += `<tr>
+                tb.innerHTML += `<tr>
                     <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
                     <td class="notice-topic-cell">${data.topic}</td>
                     <td>${viewCell}</td>
