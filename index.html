@@ -2233,24 +2233,25 @@ if (viewName === 'coverPage') {
     }
 
     function renderNoticeDevTable() {
-        database.ref('notices').orderByChild('date').once('value', (snapshot) => {
-            const tbody = document.getElementById('noticeDevTableBody');
-            tbody.innerHTML = '';
-            const items = [];
-            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
-            items.reverse().forEach(data => {
-                tbody.innerHTML += `<tr>
-                    <td style="font-family: monospace; color: #aaa;">${data.date}</td>
-                    <td style="color: #fff;">${data.topic}</td>
-                    <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${data.type.toUpperCase()}</span></td>
-                    <td>
-                        <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
-                        <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
-                    </td>
-                </tr>`;
-            });
+    database.ref('notices').once('value', (snapshot) => {
+        const tbody = document.getElementById('noticeDevTableBody');
+        tbody.innerHTML = '';
+        const items = [];
+        snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        items.reverse().forEach(data => {
+            tbody.innerHTML += `<tr>
+                <td style="font-family: monospace; color: #aaa;">${data.date}</td>
+                <td style="color: #fff;">${data.topic}</td>
+                <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${data.type.toUpperCase()}</span></td>
+                <td>
+                    <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
+                    <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
+                </td>
+            </tr>`;
         });
-    }
+    });
+}
 
     function editNotice(key) {
         database.ref('notices/' + key).once('value', snap => {
@@ -2274,31 +2275,33 @@ if (viewName === 'coverPage') {
     }
 
     function listenNoticeData() {
-        database.ref('notices').orderByChild('date').on('value', snapshot => {
-            const tbody = document.getElementById('noticeUserTableBody');
-            const emptyMsg = document.getElementById('noticeEmptyMsg');
-            tbody.innerHTML = '';
-            const items = [];
-            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
-            items.reverse();
+    database.ref('notices').off('value');
+    database.ref('notices').on('value', snapshot => {
+        const tbody = document.getElementById('noticeUserTableBody');
+        const emptyMsg = document.getElementById('noticeEmptyMsg');
+        tbody.innerHTML = '';
+        const items = [];
+        snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        items.reverse();
 
-            if (items.length === 0) {
-                emptyMsg.style.display = 'block';
-            } else {
-                emptyMsg.style.display = 'none';
-                items.forEach(data => {
-                    const viewCell = data.type === 'link'
-                        ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
-                        : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
-                    tbody.innerHTML += `<tr>
-                        <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
-                        <td class="notice-topic-cell">${data.topic}</td>
-                        <td>${viewCell}</td>
-                    </tr>`;
-                });
-            }
-        });
-    }
+        if (items.length === 0) {
+            emptyMsg.style.display = 'block';
+        } else {
+            emptyMsg.style.display = 'none';
+            items.forEach(data => {
+                const viewCell = data.type === 'link'
+                    ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
+                    : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
+                tbody.innerHTML += `<tr>
+                    <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
+                    <td class="notice-topic-cell">${data.topic}</td>
+                    <td>${viewCell}</td>
+                </tr>`;
+            });
+        }
+    });
+}
 
     function escapeForAttr(str) {
         return (str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
