@@ -2247,7 +2247,7 @@ if (viewName === 'coverPage') {
 }
 
     function loadAndRenderNotices() {
-    database.ref('notices').orderByChild('date').once('value', (snapshot) => {
+    database.ref('notices').once('value', (snapshot) => {
         const items = [];
         snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
         items.reverse();
