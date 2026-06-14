@@ -2248,53 +2248,44 @@ console.log('Trying to save:', payload);
 
     function loadAndRenderNotices() {
     database.ref('notices').once('value', (snapshot) => {
-    console.log('Total notices found:', snapshot.numChildren());
         const items = [];
-        snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+        snapshot.forEach(child => {
+            items.push({ key: child.key, ...child.val() });
+        });
         items.reverse();
 
-       const tbody = document.getElementById('noticeUserTableBody');
-const emptyMsg = document.getElementById('noticeEmptyMsg');
-if (tbody) {
-    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
-    if (items.length === 0) {
-        if (emptyMsg) emptyMsg.style.display = 'block';
-    } else {
+        const tbody = document.getElementById('noticeUserTableBody');
+        const emptyMsg = document.getElementById('noticeEmptyMsg');
+
+        tbody.innerHTML = '';
+
+        if (items.length === 0) {
+            if (emptyMsg) emptyMsg.style.display = 'block';
+            return;
+        }
+
         if (emptyMsg) emptyMsg.style.display = 'none';
+
         items.forEach(data => {
-            const viewCell = data.type === 'link'
-                ? `<a href="${data.content}" target="_blank" class="notice-view-btn"><i class="fas fa-external-link-alt"></i> Click here</a>`
-                : `<button class="notice-view-btn" onclick="openNoticeModal('${data.key}', '${escapeForAttr(data.topic)}', '${data.date}', '${escapeForAttr(data.content)}')"><i class="fas fa-eye"></i> Click here</button>`;
-            const row = document.createElement('tr');
-            row.innerHTML = `
+            const tr = document.createElement('tr');
+            let viewCell = '';
+
+            if (data.type === 'link') {
+                viewCell = `<a href="${data.content}" target="_blank" class="notice-view-btn">
+                    <i class="fas fa-external-link-alt"></i> Open</a>`;
+            } else {
+                viewCell = `<button class="notice-view-btn" 
+                    onclick="openNoticeModal('${data.key}', \`${data.topic}\`, '${data.date}', \`${data.content}\`)">
+                    <i class="fas fa-eye"></i> Read</button>`;
+            }
+
+            tr.innerHTML = `
                 <td class="notice-date-cell">${formatNoticeDate(data.date)}</td>
                 <td class="notice-topic-cell">${data.topic}</td>
-                <td>${viewCell}</td>`;
-            tbody.appendChild(row);
+                <td>${viewCell}</td>
+            `;
+            tbody.appendChild(tr);
         });
-    }
-}
-
-        const devTbody = document.getElementById('noticeDevTableBody');
-        if (devTbody) {
-            devTbody.innerHTML = '';
-            if (items.length === 0) {
-                devTbody.innerHTML = '<tr><td colspan="4" style="color:#666; font-style:italic; text-align:center;">No notices found.</td></tr>';
-            } else {
-                items.forEach(data => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td style="font-family: monospace; color: #aaa;">${data.date}</td>
-                        <td style="color: #fff;">${data.topic}</td>
-                        <td><span style="color: ${data.type === 'link' ? 'var(--neon-blue)' : 'var(--neon-green)'}; font-size: 0.85rem;">${(data.type || '').toUpperCase()}</span></td>
-                        <td>
-                            <button class="btn-action btn-edit" onclick="editNotice('${data.key}')">Edit</button>
-                            <button class="btn-action btn-delete" onclick="deleteNotice('${data.key}')">Delete</button>
-                        </td>`;
-                    devTbody.appendChild(row);
-                });
-            }
-        }
     });
 }
 
