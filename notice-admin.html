@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Admin</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #fff;
+            padding: 30px 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 {
+            color: #00F3FF;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 2px solid #00F3FF;
+            padding-bottom: 15px;
+        }
+        .form-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 35px;
+        }
+        .form-box h2 { color: #FFD700; margin-bottom: 20px; font-size: 1.1rem; }
+        .field { margin-bottom: 16px; }
+        .field label {
+            display: block;
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .field input, .field textarea, .field select {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .field input:focus, .field textarea:focus { border-color: #00F3FF; }
+        .field textarea { resize: vertical; min-height: 120px; }
+        .type-row { display: flex; gap: 10px; margin-bottom: 16px; }
+        .type-btn {
+            padding: 8px 24px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #1a1a1a;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .type-btn.active {
+            border-color: #00F3FF;
+            color: #00F3FF;
+            background: rgba(0,243,255,0.1);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #003344, #005566);
+            border: 2px solid #00F3FF;
+            border-radius: 10px;
+            color: #00F3FF;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 5px;
+        }
+        .submit-btn:hover { box-shadow: 0 0 20px rgba(0,243,255,0.3); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .notice-list h2 { color: #FFD700; margin-bottom: 15px; font-size: 1.1rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background: #1a1a1a;
+            color: #00F3FF;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #333;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #1a1a1a;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        tr:hover td { background: #111; }
+        .del-btn {
+            padding: 6px 14px;
+            background: rgba(255,0,0,0.15);
+            border: 1px solid #ff3333;
+            border-radius: 6px;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .del-btn:hover { background: rgba(255,0,0,0.3); }
+        .edit-btn {
+            padding: 6px 14px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid #FFD700;
+            border-radius: 6px;
+            color: #FFD700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 6px;
+            transition: all 0.2s;
+        }
+        .edit-btn:hover { background: rgba(255,215,0,0.2); }
+        .toast {
+            position: fixed; bottom: 25px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #39FF14; color: #000;
+            padding: 12px 28px; border-radius: 30px;
+            font-weight: bold; z-index: 999;
+            transition: transform 0.4s ease; opacity: 0;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .empty-msg { color: #555; font-style: italic; padding: 20px; text-align: center; }
+        .status-bar {
+            text-align: center; margin-bottom: 20px;
+            font-size: 0.85rem; color: #555;
+        }
+        .status-bar span { color: #39FF14; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🔧 Notice Admin Panel</h1>
+    <div class="status-bar">Firebase: <span id="fbStatus">Connecting...</span></div>
+
+    <div class="form-box">
+        <h2 id="formTitle">➕ Add New Notice</h2>
+
+        <div class="field">
+            <label>Date</label>
+            <input type="date" id="n_date">
+        </div>
+
+        <div class="field">
+            <label>Topic / Title</label>
+            <input type="text" id="n_topic" placeholder="Notice topic লেখো...">
+        </div>
+
+        <div class="field">
+            <label>Type</label>
+            <div class="type-row">
+                <button class="type-btn active" id="btnLink" onclick="setType('link')">🔗 Link</button>
+                <button class="type-btn" id="btnText" onclick="setType('text')">📄 Text</button>
+            </div>
+        </div>
+
+        <div class="field" id="linkField">
+            <label>URL</label>
+            <input type="text" id="n_link" placeholder="https://...">
+        </div>
+
+        <div class="field" id="textField" style="display:none;">
+            <label>Notice Text</label>
+            <textarea id="n_text" placeholder="পুরো notice লেখো..."></textarea>
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitNotice()">
+            📤 Publish Notice
+        </button>
+        <button id="cancelEditBtn" onclick="cancelEdit()" style="
+            display:none; width:100%; margin-top:10px; padding:10px;
+            background:transparent; border:1px dashed #555; border-radius:10px;
+            color:#888; cursor:pointer; font-size:0.95rem;">
+            ✕ Cancel Edit
+        </button>
+    </div>
+
+    <div class="notice-list">
+        <h2>📋 All Notices</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:110px;">Date</th>
+                    <th>Topic</th>
+                    <th style="width:70px;">Type</th>
+                    <th style="width:150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="noticeTable"></tbody>
+        </table>
+        <div id="emptyMsg" class="empty-msg" style="display:none;">
+            No notices yet.
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    // ── Firebase Config (same as main site) ──
+    const firebaseConfig = {
+        apiKey: "AIzaSyA42cAhFc4ygHqmkZTIr2Rc87eEF_QA4R4",
+        authDomain: "spardho-53.firebaseapp.com",
+        databaseURL: "https://spardho-53-default-rtdb.firebaseio.com",
+        projectId: "spardho-53",
+        storageBucket: "spardho-53.firebasestorage.app",
+        messagingSenderId: "1042755226180",
+        appId: "1:1042755226180:web:76d4202bfc0352a240ca11"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    db.ref('.info/connected').on('value', snap => {
+        document.getElementById('fbStatus').textContent = snap.val() ? 'Connected ✓' : 'Disconnected';
+    });
+
+    let currentType = 'link';
+    let editingKey = null;
+
+    function setType(type) {
+        currentType = type;
+        document.getElementById('btnLink').classList.toggle('active', type === 'link');
+        document.getElementById('btnText').classList.toggle('active', type === 'text');
+        document.getElementById('linkField').style.display = type === 'link' ? 'block' : 'none';
+        document.getElementById('textField').style.display = type === 'text' ? 'block' : 'none';
+    }
+
+    function submitNotice() {
+        const date = document.getElementById('n_date').value;
+        const topic = document.getElementById('n_topic').value.trim();
+        const content = currentType === 'link'
+            ? document.getElementById('n_link').value.trim()
+            : document.getElementById('n_text').value.trim();
+
+        if (!date) { alert('Date দাও।'); return; }
+        if (!topic) { alert('Topic লেখো।'); return; }
+        if (!content) { alert('Content দাও।'); return; }
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Publishing...';
+
+        const payload = { date, topic, type: currentType, content };
+
+        const op = editingKey
+            ? db.ref('notices/' + editingKey).update(payload)
+            : db.ref('notices').push(payload);
+
+        op.then(() => {
+            showToast(editingKey ? 'Updated!' : 'Published!');
+            resetForm();
+            loadNotices();
+        }).catch(err => {
+            alert('Error: ' + err.message);
+            btn.disabled = false;
+            btn.textContent = editingKey ? 'Update Notice' : 'Publish Notice';
+        });
+    }
+
+    function resetForm() {
+        document.getElementById('n_date').value = '';
+        document.getElementById('n_topic').value = '';
+        document.getElementById('n_link').value = '';
+        document.getElementById('n_text').value = '';
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitBtn').textContent = '📤 Publish Notice';
+        document.getElementById('formTitle').textContent = '➕ Add New Notice';
+        document.getElementById('cancelEditBtn').style.display = 'none';
+        editingKey = null;
+        setType('link');
+    }
+
+    function cancelEdit() { resetForm(); }
+
+    function loadNotices() {
+        db.ref('notices').once('value', snapshot => {
+            const items = [];
+            snapshot.forEach(child => items.push({ key: child.key, ...child.val() }));
+            items.reverse();
+
+            const tbody = document.getElementById('noticeTable');
+            const emptyMsg = document.getElementById('emptyMsg');
+            tbody.innerHTML = '';
+
+            if (items.length === 0) {
+                emptyMsg.style.display = 'block';
+                return;
+            }
+            emptyMsg.style.display = 'none';
+
+            items.forEach(data => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-family:monospace; font-size:0.82rem; color:#aaa;">${data.date}</td>
+                    <td style="color:#fff; font-weight:600;">${data.topic}</td>
+                    <td><span style="color:${data.type === 'link' ? '#00F3FF' : '#39FF14'}; font-size:0.8rem; font-weight:700;">
+                        ${(data.type || '').toUpperCase()}</span></td>
+                    <td>
+                        <button class="edit-btn" onclick="editNotice('${data.key}')">Edit</button>
+                        <button class="del-btn" onclick="deleteNotice('${data.key}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        });
+    }
+
+    function editNotice(key) {
+        db.ref('notices/' + key).once('value', snap => {
+            const d = snap.val();
+            document.getElementById('n_date').value = d.date;
+            document.getElementById('n_topic').value = d.topic;
+            setType(d.type);
+            if (d.type === 'link') document.getElementById('n_link').value = d.content;
+            else document.getElementById('n_text').value = d.content;
+            editingKey = key;
+            document.getElementById('submitBtn').textContent = '✏️ Update Notice';
+            document.getElementById('formTitle').textContent = '✏️ Edit Notice';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    function deleteNotice(key) {
+        if (!confirm('Delete করবে?')) return;
+        db.ref('notices/' + key).remove().then(() => {
+            showToast('Deleted!');
+            loadNotices();
+        });
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // Load on start
+    loadNotices();
+</script>
+</body>
+</html>
