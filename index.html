@@ -922,7 +922,7 @@
                 <button class="btn-add" id="addNewBtn" onclick="showInputRow()">+ Add New Exam</button>
                 <div class="table-container" id="inputFormContainer" style="display: none; border-color: var(--neon-blue); margin-bottom: 30px;">
                     <table>
-                        <thead><tr><th>Date</th><th>Course Title</th><th>Section sub-group</th><th>Exam Type</th><th>Action</th></tr></thead>
+                        <thead><tr><th>Date</th><th>Course Title</th><th>Section sub-group</th><th>Exam Type</th><th>Note</th><th>Action</th></tr></thead>
                         <tbody>
                             <tr>
                                 <td><input type="date" id="inputDate"></td>
@@ -947,6 +947,7 @@
                                         <option value="Setup-1">Setup-1</option><option value="Setup-2">Setup-2</option>
                                     </select>
                                 </td>
+                                <td><input type="text" id="inputNote" placeholder="Optional note"></td>
                                 <td><button class="btn-action btn-submit" id="submitExamBtn" onclick="submitExamData()">Submit</button></td>
                             </tr>
                         </tbody>
@@ -2628,6 +2629,11 @@ initFCM();
         }
     }
 
+    function renderExamRow(data) {
+        const courseDisplay = data.note ? `${data.course} (${data.note})` : data.course;
+        return `<tr><td>${data.date}</td><td>${courseDisplay}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
+    }
+
     function loadSectionData(sectionLetter, element) {
         if (!(element && element.classList.contains('switch-admin') && currentAdminState.isLogged)) {
             document.getElementById('userTableContainer').style.display = 'block';
@@ -2638,12 +2644,15 @@ initFCM();
             const tbody = document.getElementById('examTableBody');
             tbody.innerHTML = '';
             const today = getTodayDateString();
+            const rows = [];
             snapshot.forEach((childSnapshot) => {
                 const data = childSnapshot.val();
                 if (data.section.startsWith(sectionLetter) && data.date >= today) {
-                    tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
+                    rows.push(data);
                 }
             });
+            rows.sort((a, b) => a.date.localeCompare(b.date));
+            rows.forEach(data => { tbody.innerHTML += renderExamRow(data); });
         });
     }
 
@@ -2655,12 +2664,15 @@ initFCM();
             const tbody = document.getElementById('examTableBody');
             tbody.innerHTML = '';
             const today = getTodayDateString();
+            const rows = [];
             snapshot.forEach((childSnapshot) => {
                 const data = childSnapshot.val();
                 if (data.date < today) {
-                    tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td></tr>`;
+                    rows.push(data);
                 }
             });
+            rows.sort((a, b) => a.date.localeCompare(b.date));
+            rows.forEach(data => { tbody.innerHTML += renderExamRow(data); });
         });
     }
 
@@ -2701,8 +2713,9 @@ initFCM();
         const course = document.getElementById('inputCourse').value;
         const section = document.getElementById('inputSubSection').value;
         const examType = document.getElementById('inputExamType').value;
+        const note = document.getElementById('inputNote').value.trim();
         if (!date) { alert("Please select a valid target execution Date."); return; }
-        const payload = { date, course, section, examType };
+        const payload = { date, course, section, examType, note };
         if (editingKey) {
             database.ref('exams/' + editingKey).update(payload).then(() => { alert("Entry Updated Successfully."); resetForm(); });
         } else {
@@ -2712,6 +2725,7 @@ initFCM();
 
     function resetForm() {
         document.getElementById('inputDate').value = '';
+        document.getElementById('inputNote').value = '';
         document.getElementById('inputFormContainer').style.display = 'none';
         editingKey = null; renderAdminManagementTable();
     }
@@ -2719,27 +2733,34 @@ initFCM();
     function renderAdminManagementTable() {
         database.ref('exams').once('value', (snapshot) => {
             const tbody = document.getElementById('adminTableBody'); tbody.innerHTML = '';
+            const rows = [];
             snapshot.forEach((childSnapshot) => {
                 const key = childSnapshot.key; const data = childSnapshot.val();
                 const isDev = currentAdminState.allowedSection === 'ALL';
                 const isAssignedSection = data.section.startsWith(currentAdminState.allowedSection);
                 if (isDev || isAssignedSection) {
-                    tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td>
-                        <td>
-                            <button class="btn-action btn-edit" onclick="editRow('${key}', '${data.date}', '${data.course}', '${data.section}', '${data.examType}')">Edit</button>
-                            <button class="btn-action btn-delete" onclick="deleteRow('${key}')">Delete</button>
-                        </td></tr>`;
+                    rows.push({ key, data });
                 }
+            });
+            rows.sort((a, b) => a.data.date.localeCompare(b.data.date));
+            rows.forEach(({ key, data }) => {
+                const note = data.note || '';
+                tbody.innerHTML += `<tr><td>${data.date}</td><td>${data.course}</td><td>${data.section}</td><td>${data.examType}</td><td>${note}</td>
+                    <td>
+                        <button class="btn-action btn-edit" onclick="editRow('${key}', '${data.date}', '${data.course}', '${data.section}', '${data.examType}', '${escapeForAttr(note)}')">Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteRow('${key}')">Delete</button>
+                    </td></tr>`;
             });
         });
     }
 
-    function editRow(key, date, course, section, examType) {
+    function editRow(key, date, course, section, examType, note) {
         document.getElementById('inputFormContainer').style.display = 'block';
         document.getElementById('inputDate').value = date;
         document.getElementById('inputCourse').value = course;
         document.getElementById('inputSubSection').value = section;
         document.getElementById('inputExamType').value = examType;
+        document.getElementById('inputNote').value = note || '';
         editingKey = key; document.getElementById('submitExamBtn').innerText = "Update Entry";
         window.scrollTo({ top: document.getElementById('inputFormContainer').offsetTop - 100, behavior: 'smooth' });
     }
