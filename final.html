@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EEE 2.2 Exam Dashboard</title>
+    <style>
+        :root {
+            --lightning: #2ecc71;
+            --thor-green: #00ff00;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
+                        url('./varsity-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        .header h1 { 
+            margin-top: 40px; 
+            margin-bottom: 0; 
+            font-size: 2.2rem; 
+            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px var(--lightning);
+            font-weight: 800;
+        }
+        
+        .wheel-container {
+            position: relative;
+            width: 360px; height: 360px;
+            margin-top: 350px; 
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .wheel-container { width: 480px; height: 480px; margin-top: 400px; }
+        }
+
+        .hammer-box {
+            position: absolute;
+            top: -420px; 
+            left: 50%; 
+            transform: translateX(-60%); 
+            width: 390px; 
+            height: 390px;
+            z-index: 50; 
+            pointer-events: auto; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            .hammer-box { width: 430px; height: 430px; top: -520px; transform: translateX(-60%); }
+        }
+
+        .hammer-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            animation: thor-shock 0.4s infinite alternate, floating 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px var(--lightning));
+        }
+
+        @keyframes thor-shock {
+            0% { filter: drop-shadow(0 0 5px var(--lightning)) brightness(1); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 25px #fff) drop-shadow(0 0 45px var(--thor-green)) brightness(1.5); transform: scale(1.02); }
+            100% { filter: drop-shadow(0 0 12px var(--lightning)) brightness(1.1); transform: scale(1); }
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .wheel {
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 8px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+
+        .segment {
+            position: absolute;
+            width: 50%; height: 50%;
+            transform-origin: 100% 100%;
+            cursor: pointer;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+
+        .s1 { background: linear-gradient(45deg, #ff5f6d, #ffc371); transform: rotate(0deg) skewY(-18deg); }
+        .s2 { background: linear-gradient(45deg, #f1c40f, #f39c12); transform: rotate(72deg) skewY(-18deg); }
+        .s3 { background: linear-gradient(45deg, #11998e, #38ef7d); transform: rotate(144deg) skewY(-18deg); }
+        .s4 { background: linear-gradient(45deg, #00c6ff, #0072ff); transform: rotate(216deg) skewY(-18deg); }
+        .s5 { background: linear-gradient(45deg, #8e44ad, #c39bd3); transform: rotate(288deg) skewY(-18deg); }
+
+        .segment span {
+            transform: skewY(18deg) rotate(-45deg);
+            position: absolute;
+            font-weight: 900;
+            width: 90px;
+            right: 20px; top: 45px;
+            font-size: 0.9rem;
+        }
+
+        .routine-btn {
+            position: absolute;
+            width: 85px; height: 85px;
+            background: #fff; color: #000;
+            border-radius: 50%; border: 4px solid #000;
+            cursor: pointer; font-weight: 900;
+            z-index: 30;
+            font-size: 0.7rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* --- Updated Modal & Routine UI --- */
+        .modal {
+            display: none; position: fixed; z-index: 100;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); backdrop-filter: blur(10px);
+            justify-content: center; align-items: center; padding: 20px 0;
+        }
+        .modal-content { width: 90%; max-width: 500px; text-align: center; }
+        .modal-title { color: #ffca3a; font-size: 1.8rem; margin-bottom: 25px; font-weight: 800; }
+        
+        .routine-card {
+            background: #1a1a1a; margin-bottom: 15px;
+            padding: 15px 20px; border-radius: 20px; display: flex;
+            justify-content: space-between; align-items: center; text-align: left;
+            border-left: 6px solid; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .card-left h3 { margin: 0; font-size: 1.1rem; color: #fff; }
+        .card-left p { margin: 5px 0 0; font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+        .card-right { text-align: right; }
+        .card-right .date { font-weight: bold; font-size: 0.9rem; color: #fff; }
+        .card-right .day { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+
+        .close-btn {
+            margin-top: 20px; padding: 12px 60px; background: #ff4757; color: #fff;
+            border: none; border-radius: 30px; font-weight: 900; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* --- Updated Subject Info Card --- */
+        .info-card {
+            width: 85%; max-width: 500px; padding: 25px; border-radius: 25px;
+            backdrop-filter: blur(20px); text-align: center; display: none;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); margin-bottom: 60px;
+            background: rgba(60, 40, 40, 0.8); border: 2px solid;
+        }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+        .box { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .box small { color: #aaa; display: block; margin-bottom: 5px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; }
+        .box span { font-weight: 700; font-size: 0.95rem; }
+        
+        .drive-btn { 
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            padding: 16px; background: #fff; color: #000; text-decoration: none; 
+            border-radius: 40px; font-weight: 800; font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+        .drive-btn:active { transform: scale(0.95); }
+
+        .footer { margin-top: auto; padding: 20px; text-align: center; background: rgba(0,0,0,0.8); width: 100%; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>AUST EEE 2.2 EXAM PORTAL</h1>
+    </div>
+
+    <div class="wheel-container">
+        <div class="hammer-box" onclick="window.open('https://drive.google.com/drive/u/2/folders/110y2WwKe_Zdp8sRxmPiG3PFrEQMRPYx0', '_blank')">
+            <img src="thor-hammer.png" alt="Mjolnir" class="hammer-img">
+        </div>
+
+        <div class="wheel" id="wheelFrame">
+            <div class="segment s1" onclick="loadCourse(0)"><span>EEE-2203</span></div>
+            <div class="segment s2" onclick="loadCourse(1)"><span>EEE-2213</span></div>
+            <div class="segment s3" onclick="loadCourse(2)"><span>MATH-2203</span></div>
+            <div class="segment s4" onclick="loadCourse(3)"><span>HUM-2201</span></div>
+            <div class="segment s5" onclick="loadCourse(4)"><span>HUM-2209</span></div>
+        </div>
+
+        <button class="routine-btn" onclick="openRoutine()">VIEW<br>ROUTINE</button>
+    </div>
+
+    <div id="infoCard" class="info-card">
+        <h2 id="title" style="margin:0; color: #fff; font-size: 1.6rem; font-weight: 800;">Subject Title</h2>
+        <div class="details-grid">
+            <div class="box"><small>📅 DATE</small><span id="dateText">-</span></div>
+            <div class="box"><small>🕒 TIME</small><span id="timeText">-</span></div>
+            <div class="box"><small>🗓 DAY</small><span id="dayText">-</span></div>
+            <div class="box"><small>📍 VENUE</small><span>AUST Campus</span></div>
+        </div>
+        <a id="driveBtn" href="#" target="_blank" class="drive-btn">📂 OPEN MATERIALS DRIVE</a>
+    </div>
+
+    <div id="routineModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">MID-Term Exam Routine</div>
+            <div id="cardList"></div>
+            <button class="close-btn" onclick="closeRoutine()">CLOSE</button>
+        </div>
+    </div>
+
+    <div class="footer">Developed by: <b>Ratul Krishna Mojumder</b></div>
+
+    <script>
+        const courseData = [
+            { name: "Electrical Properties of Materials", code: "EEE-2213", date: "August 09, 2026", time: "09:30 AM-12:00 PM", day: "Sunday", link: "jdguhttps://drive.google.com/drive/folders/1VpU2gqtwiapRvBhHxeXenZraFj9seVK1//", color: "#ff5f6d" },
+            { name: "Accountings & Economics", code: "HUM-2209", date: "August 10, 2026", time: "09:30 AM-12:00 PM", day: "Wednesday", link: "https://drive.gooihhghuiegle.com/drive/folders/1rQV9WMWOJKGwlUjHBhig3fMik9SNFbIB///", color: "#f1c40f" },
+            { name: "Electronics II", code: "EEE-2203", date: "August 11, 2026", time: "09:30 AM-12:00 PM", day: "Monday", link: "https://drive.google.com/drivdihue/folders/1QpfegRbmSES0cPU5A2u8ThztCIDnbQhV///", color: "#2ecc71" },
+            { name: "Mathematics-V", code: "MATH-2203", date: "August 12, 2026", time: "09:30 AM-12:00 PM", day: "Sunday", link: "https://drive.google.com/driuhiive/folders/1lpebIYMXh4wugawWNpYKtkOnF-eMYO-0//", color: "#00c6ff" },
+            { name: "Bengali Language & Literature", code: "HUM-2201", date: "August 13, 2026", time: "09:30 AM-12:00 PM", day: "Wednesday", link: "https://dryuguyive.google.com/drive/folders/1pikfV-sZeGvZBv_RTFtm-aUmRC9VgvR7//", color: "#8e44ad" }
+        ];
+
+        function loadCourse(id) {
+            const course = courseData[id];
+            document.getElementById('wheelFrame').style.transform = `rotate(${-id * 72}deg)`;
+            const card = document.getElementById('infoCard');
+            card.style.display = 'block';
+            card.style.borderColor = course.color;
+            // Background shade based on color
+            card.style.background = `linear-gradient(rgba(30, 20, 20, 0.9), rgba(10, 10, 10, 0.95))`;
+            
+            document.getElementById('title').innerText = course.name;
+            document.getElementById('dateText').innerText = course.date;
+            document.getElementById('timeText').innerText = course.time;
+            document.getElementById('dayText').innerText = course.day;
+            document.getElementById('driveBtn').href = course.link;
+            
+            // Scroll to card
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function openRoutine() {
+            const modal = document.getElementById('routineModal');
+            const cardList = document.getElementById('cardList');
+            cardList.innerHTML = ''; 
+            courseData.forEach(c => {
+                cardList.innerHTML += `
+                    <div class="routine-card" style="border-color: ${c.color}">
+                        <div class="card-left">
+                            <h3>${c.name}</h3>
+                            <p>${c.code} | ${c.time}</p>
+                        </div>
+                        <div class="card-right">
+                            <div class="date">${c.date}</div>
+                            <div class="day">${c.day}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            modal.style.display = 'flex';
+        }
+
+        function closeRoutine() {
+            document.getElementById('routineModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
