@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EEE 2.2 Exam Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root {
             --lightning: #2ecc71;
@@ -30,11 +33,36 @@
             text-shadow: 0 0 20px var(--lightning);
             font-weight: 800;
         }
+
+        /* --- ADMIN BUTTON --- */
+        .top-admin-bar {
+            position: fixed; top: 15px; right: 15px; z-index: 200;
+        }
+        .admin-btn {
+            padding: 8px 20px; border-radius: 20px; font-weight: 800; font-size: 0.78rem;
+            background: rgba(0,0,0,0.6); color: #fff; border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer; letter-spacing: 1px; backdrop-filter: blur(6px);
+            transition: all 0.25s;
+        }
+        .admin-btn.logged-in {
+            border-color: var(--lightning); color: var(--lightning);
+            box-shadow: 0 0 15px rgba(46,204,113,0.35);
+        }
+
+        /* --- SYLLABUS BUTTON --- */
+        .syllabus-btn-wrap { margin-top: 22px; text-align: center; }
+        .syllabus-btn {
+            padding: 13px 40px; border-radius: 30px; font-weight: 800; font-size: 0.95rem;
+            background: linear-gradient(135deg,#11998e,#38ef7d); color: #000; border: none;
+            cursor: pointer; letter-spacing: 1px; box-shadow: 0 8px 22px rgba(17,153,142,0.4);
+            transition: transform 0.2s;
+        }
+        .syllabus-btn:active { transform: scale(0.96); }
         
         .wheel-container {
             position: relative;
             width: 360px; height: 360px;
-            margin-top: 100px; 
+            margin-top: 60px; 
             margin-bottom: 60px;
             display: flex;
             justify-content: center;
@@ -42,7 +70,7 @@
         }
 
         @media (min-width: 768px) {
-            .wheel-container { width: 480px; height: 480px; margin-top: 120px; }
+            .wheel-container { width: 480px; height: 480px; margin-top: 80px; }
         }
 
         .wheel {
@@ -98,8 +126,9 @@
             left: 0; top: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.92); backdrop-filter: blur(10px);
             justify-content: center; align-items: center; padding: 20px 0;
+            overflow-y: auto;
         }
-        .modal-content { width: 90%; max-width: 500px; text-align: center; }
+        .modal-content { width: 90%; max-width: 500px; text-align: center; margin: auto; }
         .modal-title { color: #ffca3a; font-size: 1.8rem; margin-bottom: 25px; font-weight: 800; }
         
         .routine-card {
@@ -141,13 +170,68 @@
         }
         .drive-btn:active { transform: scale(0.95); }
 
-        .footer { margin-top: auto; padding: 20px; text-align: center; background: rgba(0,0,0,0.8); width: 100%; font-size: 0.9rem; }
+        /* --- SYLLABUS MODAL --- */
+        .syllabus-modal-content { width: 92%; max-width: 680px; text-align: center; margin: auto; }
+        .syl-input {
+            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.5); color:#fff;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 11px 14px;
+            font-size: 0.95rem; margin-bottom: 10px; outline: none; font-family: inherit; resize: vertical;
+        }
+        .syl-form-box {
+            background: rgba(20,20,20,0.7); border: 1px solid rgba(46,204,113,0.3);
+            border-radius: 14px; padding: 18px; margin-bottom: 20px; text-align: left;
+        }
+        .syl-save-btn {
+            padding: 10px 28px; border-radius: 20px; border: none; background: var(--lightning);
+            color: #000; font-weight: 800; cursor: pointer; margin-right: 8px;
+        }
+        .syl-cancel-btn {
+            padding: 10px 22px; border-radius: 20px; border: 1px dashed rgba(255,255,255,0.3);
+            background: transparent; color: rgba(255,255,255,0.6); cursor: pointer;
+        }
+        .add-course-btn {
+            padding: 11px 26px; border-radius: 20px; border: 2px dashed var(--lightning);
+            background: rgba(46,204,113,0.08); color: var(--lightning); font-weight: 800;
+            cursor: pointer; margin-bottom: 18px; letter-spacing: 0.5px;
+        }
+        .syllabus-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .syllabus-table { width: 100%; border-collapse: collapse; }
+        .syllabus-table th {
+            background: rgba(46,204,113,0.15); color: var(--lightning); padding: 12px 10px;
+            text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .syllabus-table td {
+            padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.88rem; text-align: left; vertical-align: top; white-space: pre-wrap;
+        }
+        .syllabus-table tr:last-child td { border-bottom: none; }
+        .action-btn { padding: 5px 12px; margin-right: 5px; border: none; border-radius: 6px; font-weight: 700; font-size: 0.72rem; cursor: pointer; }
+        .action-edit { background: #ffca3a; color: #000; }
+        .action-delete { background: #ff4757; color: #fff; }
+
+        /* --- FOOTER (matches main site) --- */
+        .footer {
+            margin-top: auto; padding: 25px 20px 20px; text-align: center;
+            background: rgba(0,0,0,0.85); width: 100%; box-sizing: border-box;
+            border-top: 1px solid #1a1a1a;
+        }
+        .footer-top-row { display: flex; justify-content: center; align-items: center; gap: 18px; margin-bottom: 12px; }
+        .footer-logo-link { color: var(--lightning); font-weight: bold; font-size: 1.2rem; text-decoration: none; cursor: pointer; }
+        .footer-mail-link { color: var(--lightning); font-size: 1.4rem; text-decoration: none; }
+        .footer-dev-credit { color: #fff; font-weight: bold; font-size: 0.88rem; border-top: 1px solid #222; padding-top: 10px; }
     </style>
 </head>
 <body>
 
+    <div class="top-admin-bar">
+        <button id="adminBtn" class="admin-btn" onclick="toggleAdminLogin()"><i class="fas fa-user-shield"></i> Admin</button>
+    </div>
+
     <div class="header">
         <h1>AUST EEE 2.2 EXAM PORTAL</h1>
+        <div class="syllabus-btn-wrap">
+            <button class="syllabus-btn" onclick="openSyllabus()"><i class="fas fa-book"></i> Syllabus</button>
+        </div>
     </div>
 
     <div class="wheel-container">
@@ -181,9 +265,58 @@
         </div>
     </div>
 
-    <div class="footer">Developed by: <b>Ratul Krishna Mojumder</b></div>
+    <!-- ======================== SYLLABUS MODAL ======================== -->
+    <div id="syllabusModal" class="modal">
+        <div class="modal-content syllabus-modal-content">
+            <div class="modal-title"><i class="fas fa-book-open"></i> Course Syllabus</div>
+
+            <button id="addCourseBtn" class="add-course-btn" style="display:none;" onclick="showSylForm()">
+                <i class="fas fa-plus"></i> Add Course
+            </button>
+
+            <div id="sylFormBox" class="syl-form-box" style="display:none;">
+                <label style="color:var(--lightning); font-size:0.78rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; display:block; margin-bottom:6px;">Course Name</label>
+                <input type="text" id="sylCourseInput" class="syl-input" placeholder="e.g. EEE 2203: Electronics II">
+                <label style="color:var(--lightning); font-size:0.78rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; display:block; margin-bottom:6px;">Syllabus</label>
+                <textarea id="sylTextInput" class="syl-input" rows="4" placeholder="Write the syllabus / topics here..."></textarea>
+                <div>
+                    <button class="syl-save-btn" onclick="submitSyllabus()">Save</button>
+                    <button class="syl-cancel-btn" onclick="cancelSylForm()">Cancel</button>
+                </div>
+            </div>
+
+            <div class="syllabus-table-wrap">
+                <table class="syllabus-table">
+                    <thead>
+                        <tr>
+                            <th style="width:35%;">Course Name</th>
+                            <th>Syllabus</th>
+                            <th id="sylActionsHeader" style="display:none; width:110px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="syllabusTableBody">
+                        <tr><td colspan="3" style="text-align:center; color:#888;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="close-btn" onclick="closeSyllabus()">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- ======================== FOOTER (matches main site) ======================== -->
+    <footer class="footer">
+        <div class="footer-top-row">
+            <a onclick="window.location.href='https://spardho53.xyz/#home'" class="footer-logo-link" style="cursor:pointer;">AUST EEE-53</a>
+            <a href="mailto:austeee53@gmail.com" class="footer-mail-link"><i class="fas fa-envelope-open-text"></i></a>
+        </div>
+        <div class="footer-dev-credit">Designed &amp; Developed by: Ratul Krishna Mojumder</div>
+    </footer>
 
     <script>
+        // ============================================================
+        // WHEEL / ROUTINE (existing functionality)
+        // ============================================================
         const courseData = [
             { name: "Electrical Properties of Materials", code: "EEE-2213", date: "August 09, 2026", time: "09:30 AM-12:00 PM", day: "Sunday", link: "jdguhttps://drive.google.com/drive/folders/1VpU2gqtwiapRvBhHxeXenZraFj9seVK1//", color: "#ff5f6d" },
             { name: "Accountings & Economics", code: "HUM-2209", date: "August 10, 2026", time: "09:30 AM-12:00 PM", day: "Wednesday", link: "https://drive.gooihhghuiegle.com/drive/folders/1rQV9WMWOJKGwlUjHBhig3fMik9SNFbIB///", color: "#f1c40f" },
@@ -198,7 +331,6 @@
             const card = document.getElementById('infoCard');
             card.style.display = 'block';
             card.style.borderColor = course.color;
-            // Background shade based on color
             card.style.background = `linear-gradient(rgba(30, 20, 20, 0.9), rgba(10, 10, 10, 0.95))`;
             
             document.getElementById('title').innerText = course.name;
@@ -207,7 +339,6 @@
             document.getElementById('dayText').innerText = course.day;
             document.getElementById('driveBtn').href = course.link;
             
-            // Scroll to card
             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
@@ -235,6 +366,155 @@
         function closeRoutine() {
             document.getElementById('routineModal').style.display = 'none';
         }
+
+        // ============================================================
+        // FIREBASE (same project/database as main site)
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyA42cAhFc4ygHqmkZTIr2Rc87eEF_QA4R4",
+            authDomain: "spardho-53.firebaseapp.com",
+            databaseURL: "https://spardho-53-default-rtdb.firebaseio.com",
+            projectId: "spardho-53",
+            storageBucket: "spardho-53.firebasestorage.app",
+            messagingSenderId: "1042755226180",
+            appId: "1:1042755226180:web:76d4202bfc0352a240ca11"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const database = firebase.database();
+
+        // ============================================================
+        // ADMIN LOGIN
+        // ============================================================
+        const MID_ADMIN_PASS = "092418";
+
+        function toggleAdminLogin() {
+            const isAdmin = sessionStorage.getItem('midAdmin') === 'true';
+            if (isAdmin) {
+                if (confirm("Log out from Admin?")) {
+                    sessionStorage.removeItem('midAdmin');
+                    updateAdminBtnUI();
+                }
+                return;
+            }
+            const pass = prompt("Enter Admin Password:");
+            if (pass === null) return;
+            if (pass === MID_ADMIN_PASS) {
+                sessionStorage.setItem('midAdmin', 'true');
+                updateAdminBtnUI();
+                alert("Admin Login Successful.");
+            } else {
+                alert("Wrong Password. Access Denied.");
+            }
+        }
+
+        function updateAdminBtnUI() {
+            const isAdmin = sessionStorage.getItem('midAdmin') === 'true';
+            const btn = document.getElementById('adminBtn');
+            btn.innerHTML = isAdmin
+                ? '<i class="fas fa-user-shield"></i> Admin ✓'
+                : '<i class="fas fa-user-shield"></i> Admin';
+            btn.classList.toggle('logged-in', isAdmin);
+
+            document.getElementById('addCourseBtn').style.display = isAdmin ? 'inline-flex' : 'none';
+            document.getElementById('sylActionsHeader').style.display = isAdmin ? 'table-cell' : 'none';
+            renderSyllabusTable();
+        }
+
+        // ============================================================
+        // SYLLABUS ENGINE
+        // ============================================================
+        let editingSylKey = null;
+        let syllabusListenerAttached = false;
+
+        function openSyllabus() {
+            document.getElementById('syllabusModal').style.display = 'flex';
+            updateAdminBtnUI();
+            if (!syllabusListenerAttached) {
+                renderSyllabusTable();
+                syllabusListenerAttached = true;
+            }
+        }
+
+        function closeSyllabus() {
+            document.getElementById('syllabusModal').style.display = 'none';
+            cancelSylForm();
+        }
+
+        function showSylForm() {
+            editingSylKey = null;
+            document.getElementById('sylCourseInput').value = '';
+            document.getElementById('sylTextInput').value = '';
+            document.getElementById('sylFormBox').style.display = 'block';
+        }
+
+        function cancelSylForm() {
+            editingSylKey = null;
+            document.getElementById('sylFormBox').style.display = 'none';
+            document.getElementById('sylCourseInput').value = '';
+            document.getElementById('sylTextInput').value = '';
+        }
+
+        function submitSyllabus() {
+            const course = document.getElementById('sylCourseInput').value.trim();
+            const syllabus = document.getElementById('sylTextInput').value.trim();
+            if (!course || !syllabus) { alert("Please fill in both Course Name and Syllabus."); return; }
+            const payload = { course, syllabus };
+
+            const saveRef = editingSylKey
+                ? database.ref('syllabus/' + editingSylKey).update(payload)
+                : database.ref('syllabus').push(payload);
+
+            saveRef.then(() => {
+                cancelSylForm();
+                renderSyllabusTable();
+            }).catch(err => alert("Failed: " + err.message));
+        }
+
+        function editSyllabusRow(key, course, syllabus) {
+            editingSylKey = key;
+            document.getElementById('sylCourseInput').value = course;
+            document.getElementById('sylTextInput').value = syllabus;
+            document.getElementById('sylFormBox').style.display = 'block';
+            document.getElementById('sylFormBox').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteSyllabusRow(key) {
+            if (confirm("Are you sure you want to delete this course syllabus?")) {
+                database.ref('syllabus/' + key).remove().then(renderSyllabusTable);
+            }
+        }
+
+        function renderSyllabusTable() {
+            const isAdmin = sessionStorage.getItem('midAdmin') === 'true';
+            database.ref('syllabus').on('value', (snapshot) => {
+                const tbody = document.getElementById('syllabusTableBody');
+                tbody.innerHTML = '';
+                if (!snapshot.exists()) {
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#888;">No syllabus added yet.</td></tr>`;
+                    return;
+                }
+                snapshot.forEach(child => {
+                    const key = child.key;
+                    const d = child.val();
+                    const actionsCell = isAdmin
+                        ? `<td>
+                             <button class="action-btn action-edit" onclick="editSyllabusRow('${key}', \`${(d.course||'').replace(/`/g,'')}\`, \`${(d.syllabus||'').replace(/`/g,'')}\`)">Edit</button>
+                             <button class="action-btn action-delete" onclick="deleteSyllabusRow('${key}')">Delete</button>
+                           </td>`
+                        : '';
+                    tbody.innerHTML += `<tr>
+                        <td>${d.course}</td>
+                        <td>${d.syllabus}</td>
+                        ${actionsCell}
+                    </tr>`;
+                });
+            });
+        }
+
+        // Init admin button state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAdminBtnUI();
+        });
     </script>
 </body>
 </html>
