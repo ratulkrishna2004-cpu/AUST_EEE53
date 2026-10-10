@@ -97,12 +97,7 @@
             border-radius: 50%;
             background: repeating-conic-gradient(#3a414b 0deg 3deg, #14171b 3deg 6deg);
             z-index: 5;
-            animation: rim-spin 40s linear infinite, rim-glow 2.5s ease-in-out infinite;
-        }
-        @keyframes rim-spin { to { transform: rotate(360deg); } }
-        @keyframes rim-glow {
-            0%, 100% { box-shadow: 0 0 0 2px #50575f, 0 0 18px rgba(46,204,113,0.35); }
-            50%      { box-shadow: 0 0 0 2px #6b737c, 0 0 38px rgba(46,204,113,0.75); }
+            box-shadow: 0 0 0 2px #5a626b, 0 0 26px rgba(46,204,113,0.55);
         }
 
         .wheel {
@@ -217,7 +212,6 @@
         }
         .shuriken {
             width: 100%; height: 100%;
-            animation: rim-spin 8s linear infinite;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
         }
 
@@ -312,36 +306,21 @@
             font-size: 0.95rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            animation: share-glow 1.8s ease-in-out infinite;
-            transition: transform 0.2s;
+            /* steady glow, no pulsing */
+            box-shadow: 0 0 14px rgba(46,204,113,0.7), 0 0 32px rgba(46,204,113,0.4);
+            text-shadow: 0 0 8px var(--lightning);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .share-btn:hover { transform: scale(1.06); }
+        .share-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--thor-green), 0 0 44px rgba(46,204,113,0.7);
+        }
         .share-btn:active { transform: scale(0.95); }
 
-        /* light sweep across the button */
-        .share-btn::before {
-            content: "";
-            position: absolute;
-            top: 0; left: -75%;
-            width: 50%; height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
-            transform: skewX(-20deg);
-            animation: share-shine 3s ease-in-out infinite;
-        }
-
-        @keyframes share-glow {
-            0%, 100% {
-                box-shadow: 0 0 8px rgba(46,204,113,0.5), 0 0 18px rgba(46,204,113,0.3);
-                text-shadow: 0 0 6px var(--lightning);
-            }
-            50% {
-                box-shadow: 0 0 18px var(--thor-green), 0 0 42px rgba(46,204,113,0.75);
-                text-shadow: 0 0 12px var(--thor-green);
-            }
-        }
-        @keyframes share-shine {
-            0%   { left: -75%; }
-            60%, 100% { left: 130%; }
+        /* Phone/OS "reduce motion" setting on: no spinning at all */
+        @media (prefers-reduced-motion: reduce) {
+            .wheel, .shuriken-wrap { transition: none; }
+            .slash.go { animation: none; }
         }
     </style>
 </head>
@@ -502,11 +481,11 @@
             document.getElementById('dayText').innerText = course.day;
             document.getElementById('driveBtn').href = course.link;
             
-            // Let the spin finish before scrolling down to the card
-            clearTimeout(loadCourse.scrollTimer);
-            loadCourse.scrollTimer = setTimeout(() => {
-                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 900);
+            // Only nudge the page if the card is actually off-screen (no forced jump to center)
+            const r = card.getBoundingClientRect();
+            if (r.top > window.innerHeight - 80 || r.bottom < 0) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
 
         function openRoutine() {
