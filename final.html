@@ -292,7 +292,57 @@
         }
         .drive-btn:active { transform: scale(0.95); }
 
-        .footer { margin-top: auto; padding: 20px; text-align: center; background: rgba(0,0,0,0.8); width: 100%; font-size: 0.9rem; }
+        .footer { margin-top: auto; padding: 28px 20px 20px; text-align: center; background: rgba(0,0,0,0.8); width: 100%; font-size: 0.9rem; box-sizing: border-box; }
+
+        /* --- Glowing "Share Your Note" button --- */
+        .share-btn {
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            padding: 14px 36px;
+            border-radius: 40px;
+            border: 2px solid var(--lightning);
+            background: linear-gradient(135deg, #0b0d10, #1c2128);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Russo One', 'Segoe UI', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            animation: share-glow 1.8s ease-in-out infinite;
+            transition: transform 0.2s;
+        }
+        .share-btn:hover { transform: scale(1.06); }
+        .share-btn:active { transform: scale(0.95); }
+
+        /* light sweep across the button */
+        .share-btn::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -75%;
+            width: 50%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+            transform: skewX(-20deg);
+            animation: share-shine 3s ease-in-out infinite;
+        }
+
+        @keyframes share-glow {
+            0%, 100% {
+                box-shadow: 0 0 8px rgba(46,204,113,0.5), 0 0 18px rgba(46,204,113,0.3);
+                text-shadow: 0 0 6px var(--lightning);
+            }
+            50% {
+                box-shadow: 0 0 18px var(--thor-green), 0 0 42px rgba(46,204,113,0.75);
+                text-shadow: 0 0 12px var(--thor-green);
+            }
+        }
+        @keyframes share-shine {
+            0%   { left: -75%; }
+            60%, 100% { left: 130%; }
+        }
     </style>
 </head>
 <body>
@@ -373,7 +423,10 @@
         </div>
     </div>
 
-    <div class="footer">Developed by: <b>Ratul Krishna Mojumder</b></div>
+    <div class="footer">
+        <a class="share-btn" href="https://forms.gle/TDzA1bhX6ydURPQRA" target="_blank" rel="noopener">📝 Share Your Note</a>
+        <div>Developed by: <b>Ratul Krishna Mojumder</b></div>
+    </div>
 
     <script>
         // gradient = the original wheel colors; color = used for card borders
