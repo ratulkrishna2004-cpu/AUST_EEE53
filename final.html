@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EEE 2.2 Exam Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <style>
         :root {
             --lightning: #2ecc71;
             --thor-green: #00ff00;
+            --steel-light: #e9eef2;
+            --steel-dark: #3b4450;
+            --ninja-black: #0b0d10;
+            --ninja-red: #e63946;
         }
 
         body {
@@ -33,7 +38,7 @@
         
         .wheel-container {
             position: relative;
-            width: 360px; height: 360px;
+            width: 340px; height: 340px;
             margin-top: 350px; 
             margin-bottom: 60px;
             display: flex;
@@ -83,52 +88,160 @@
             50% { transform: translateY(-15px); }
         }
 
+        /* ===================== NINJA WHEEL ===================== */
+
+        /* Outer notched steel ring that slowly turns, like a shuriken edge */
+        .wheel-rim {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            background: repeating-conic-gradient(#3a414b 0deg 3deg, #14171b 3deg 6deg);
+            z-index: 5;
+            animation: rim-spin 40s linear infinite, rim-glow 2.5s ease-in-out infinite;
+        }
+        @keyframes rim-spin { to { transform: rotate(360deg); } }
+        @keyframes rim-glow {
+            0%, 100% { box-shadow: 0 0 0 2px #50575f, 0 0 18px rgba(46,204,113,0.35); }
+            50%      { box-shadow: 0 0 0 2px #6b737c, 0 0 38px rgba(46,204,113,0.75); }
+        }
+
         .wheel {
             position: absolute;
-            width: 100%; height: 100%;
+            inset: 0;
+            box-sizing: border-box;
             border-radius: 50%;
             overflow: hidden;
-            border: 8px solid rgba(255,255,255,0.2);
-            box-shadow: 0 0 50px rgba(0,0,0,0.9);
-            transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 5px solid var(--ninja-black);
+            transition: transform 1.1s cubic-bezier(0.2, 0.9, 0.3, 1.08);
             z-index: 10;
         }
 
+        /* Each segment = full-size layer clipped to a wedge pointing UP, rotated by i * 360/n */
         .segment {
             position: absolute;
-            width: 50%; height: 50%;
-            transform-origin: 100% 100%;
+            inset: 0;
             cursor: pointer;
-            clip-path: polygon(0 0, 100% 0, 100% 100%);
+            transition: filter 0.4s;
         }
-
-        .s1 { background: linear-gradient(45deg, #ff5f6d, #ffc371); transform: rotate(0deg) skewY(-18deg); }
-        .s2 { background: linear-gradient(45deg, #f1c40f, #f39c12); transform: rotate(72deg) skewY(-18deg); }
-        .s3 { background: linear-gradient(45deg, #11998e, #38ef7d); transform: rotate(144deg) skewY(-18deg); }
-        .s4 { background: linear-gradient(45deg, #00c6ff, #0072ff); transform: rotate(216deg) skewY(-18deg); }
-        .s5 { background: linear-gradient(45deg, #8e44ad, #c39bd3); transform: rotate(288deg) skewY(-18deg); }
+        .segment:hover { filter: brightness(1.15); }
+        .wheel.has-active .segment:not(.active) { filter: brightness(0.55) saturate(0.8); }
+        .wheel.has-active .segment.active { filter: brightness(1.15) saturate(1.15); }
 
         .segment span {
-            transform: skewY(18deg) rotate(-45deg);
             position: absolute;
-            font-weight: 900;
-            width: 90px;
-            right: 20px; top: 45px;
-            font-size: 0.9rem;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Russo One', 'Segoe UI', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            color: #fff;
+            text-shadow: 0 0 2px #000, 0 0 2px #000, 0 3px 8px rgba(0,0,0,0.8);
+            pointer-events: none;
+        }
+
+        /* Dark "blade" lines between segments (rotate with the wheel) */
+        .blade-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Static shading + gloss on top of the wheel */
+        .wheel-gloss {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 12;
+            background:
+                radial-gradient(circle, rgba(0,0,0,0.65) 0 24%, transparent 42%),
+                radial-gradient(circle, transparent 76%, rgba(0,0,0,0.5) 100%),
+                linear-gradient(155deg, rgba(255,255,255,0.22), transparent 45%);
+            box-shadow: inset 0 0 0 5px var(--ninja-black), inset 0 0 30px rgba(0,0,0,0.7);
+        }
+
+        /* Katana slash flash on every click */
+        .slash {
+            position: absolute;
+            left: -15%;
+            top: 50%;
+            width: 130%;
+            height: 4px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, transparent, #fff 35%, var(--thor-green) 65%, transparent);
+            filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px var(--lightning));
+            transform: rotate(-32deg) scaleX(0);
+            opacity: 0;
+            z-index: 25;
+            pointer-events: none;
+        }
+        .slash.go { animation: slash 0.5s ease-out; }
+        @keyframes slash {
+            0%   { transform: rotate(-32deg) scaleX(0);   opacity: 1; }
+            45%  { transform: rotate(-32deg) scaleX(1);   opacity: 1; }
+            100% { transform: rotate(-32deg) scaleX(1.05); opacity: 0; }
+        }
+
+        /* Kunai pointer at the top */
+        .kunai {
+            position: absolute;
+            top: -46px;
+            left: 50%;
+            width: 34px;
+            height: 84px;
+            transform: translateX(-50%);
+            z-index: 60;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)) drop-shadow(0 0 8px rgba(46,204,113,0.6));
+        }
+
+        /* Shuriken hub in the center */
+        .hub {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 170px; height: 170px;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+        .shuriken-wrap {
+            position: absolute;
+            inset: 0;
+            transition: transform 1.1s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+        .shuriken {
+            width: 100%; height: 100%;
+            animation: rim-spin 8s linear infinite;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
         }
 
         .routine-btn {
-            position: absolute;
-            width: 85px; height: 85px;
-            background: #fff; color: #000;
-            border-radius: 50%; border: 4px solid #000;
-            cursor: pointer; font-weight: 900;
-            z-index: 30;
-            font-size: 0.7rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
+            width: 84px; height: 84px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #2a2f36, #07080a 70%);
+            color: #fff;
+            border: 3px solid #c9d1d9;
+            font-family: 'Russo One', 'Segoe UI', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 1px;
+            line-height: 1.3;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 0 0 4px var(--ninja-black), 0 0 18px rgba(46,204,113,0.55), 0 10px 25px rgba(0,0,0,0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+        .routine-btn:hover {
+            transform: scale(1.07);
+            box-shadow: 0 0 0 4px var(--ninja-black), 0 0 30px var(--thor-green), 0 10px 25px rgba(0,0,0,0.6);
+        }
+        .routine-btn:active { transform: scale(0.95); }
 
         /* --- Updated Modal & Routine UI --- */
         .modal {
@@ -193,15 +306,52 @@
             <img src="thor-hammer.png" alt="Mjolnir" class="hammer-img">
         </div>
 
+        <div class="wheel-rim"></div>
+
+        <!-- Segments are generated from courseData in the script below -->
         <div class="wheel" id="wheelFrame">
-            <div class="segment s1" onclick="loadCourse(0)"><span>EEE-2203</span></div>
-            <div class="segment s2" onclick="loadCourse(3)"><span>HUM-2201</span></div>
-            <div class="segment s3" onclick="loadCourse(2)"><span>MATH-2203</span></div>
-            <div class="segment s4" onclick="loadCourse(4)"><span>HUM-2209</span></div>
-             <div class="segment s5" onclick="loadCourse(1)"><span>EEE-2213</span></div>
+            <div class="blade-lines" id="bladeLines"></div>
         </div>
 
-        <button class="routine-btn" onclick="openRoutine()">VIEW<br>ROUTINE</button>
+        <div class="wheel-gloss"></div>
+        <div class="slash" id="slash"></div>
+
+        <!-- Kunai pointer -->
+        <svg class="kunai" viewBox="0 0 40 100" aria-hidden="true">
+            <defs>
+                <linearGradient id="kunaiSteel" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#8a95a0"/>
+                    <stop offset="0.5" stop-color="#f4f7fa"/>
+                    <stop offset="1" stop-color="#6b7580"/>
+                </linearGradient>
+            </defs>
+            <circle cx="20" cy="9" r="6.5" fill="none" stroke="url(#kunaiSteel)" stroke-width="3"/>
+            <rect x="16" y="15" width="8" height="30" rx="1.5" fill="#15171b"/>
+            <path d="M16 19 L24 23 M16 25 L24 29 M16 31 L24 35 M16 37 L24 41" stroke="#e63946" stroke-width="2.4"/>
+            <rect x="11" y="44" width="18" height="4" rx="1" fill="url(#kunaiSteel)"/>
+            <path d="M20 99 L32 62 L20 48 L8 62 Z" fill="url(#kunaiSteel)" stroke="#2a2f36" stroke-width="1"/>
+            <path d="M20 50 L20 95" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1"/>
+        </svg>
+
+        <!-- Shuriken hub with the routine button -->
+        <div class="hub">
+            <div class="shuriken-wrap" id="shurikenWrap">
+                <svg class="shuriken" viewBox="-50 -50 100 100" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="shurikenSteel" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#f1f5f9"/>
+                            <stop offset="0.5" stop-color="#8b97a3"/>
+                            <stop offset="1" stop-color="#3b4450"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M0 -49 Q4 -16 12 -12 L49 0 Q16 4 12 12 L0 49 Q-4 16 -12 12 L-49 0 Q-16 -4 -12 -12 Z"
+                          fill="url(#shurikenSteel)" stroke="#0b0d10" stroke-width="1.5"/>
+                    <path d="M0 -49 Q4 -16 12 -12 L0 0 Z M49 0 Q16 4 12 12 L0 0 Z M0 49 Q-4 16 -12 12 L0 0 Z M-49 0 Q-16 -4 -12 -12 L0 0 Z"
+                          fill="rgba(0,0,0,0.35)"/>
+                </svg>
+            </div>
+            <button class="routine-btn" onclick="openRoutine()">VIEW<br>ROUTINE</button>
+        </div>
     </div>
 
     <div id="infoCard" class="info-card">
@@ -226,25 +376,71 @@
     <div class="footer">Developed by: <b>Ratul Krishna Mojumder</b></div>
 
     <script>
+        // gradient = the original wheel colors; color = used for card borders
         const courseData = [
-             { name: "Electronics II", code: "EEE-2203", date: "Ocotber 26, 2026", time: "09:30 AM-12:00 PM", day: "Monday", link: "https://drive.google.com/drivdihue/folders/1QpfegRbmSES0cPU5A2u8ThztCIDnbQhV///", color: "#2ecc71" },
-             { name: "Bengali Language & Literature", code: "HUM-2201", date: "Ocotber 29, 2026", time: "09:30 AM-12:00 PM", day: "Thursday", link: "https://dryuguyive.google.com/drive/folders/1pikfV-sZeGvZBv_RTFtm-aUmRC9VgvR7//", color: "#8e44ad" },
-            { name: "Mathematics-V", code: "MATH-2203", date: "November 03, 2026", time: "09:30 AM-12:00 PM", day: "Tuesday", link: "https://drive.google.com/driuhiive/folders/1lpebIYMXh4wugawWNpYKtkOnF-eMYO-0//", color: "#00c6ff" },
-             { name: "Accountings & Economics", code: "HUM-2209", date: "November 08, 2026", time: "09:30 AM-12:00 PM", day: "Sunday", link: "https://drive.gooihhghuiegle.com/drive/folders/1rQV9WMWOJKGwlUjHBhig3fMik9SNFbIB///", color: "#f1c40f" },
-            { name: "Electrical Properties of Materials", code: "EEE-2213", date: "November 16, 2026", time: "09:30 AM-12:00 PM", day: "Monday", link: "jdguhttps://drive.google.com/drive/folders/1VpU2gqtwiapRvBhHxeXenZraFj9seVK1//", color: "#ff5f6d" }
-           
-           
-            
-           
+            { name: "Electronics II", code: "EEE-2203", date: "October 26, 2026", time: "09:30 AM-12:00 PM", day: "Monday", link: "https://drive.google.com/drivdihue/folders/1QpfegRbmSES0cPU5A2u8ThztCIDnbQhV///", gradient: ["#ff5f6d", "#ffc371"], color: "#ff5f6d" },
+            { name: "Bengali Language & Literature", code: "HUM-2201", date: "October 29, 2026", time: "09:30 AM-12:00 PM", day: "Thursday", link: "https://dryuguyive.google.com/drive/folders/1pikfV-sZeGvZBv_RTFtm-aUmRC9VgvR7//", gradient: ["#f1c40f", "#f39c12"], color: "#f1c40f" },
+            { name: "Mathematics-V", code: "MATH-2203", date: "November 03, 2026", time: "09:30 AM-12:00 PM", day: "Tuesday", link: "https://drive.google.com/driuhiive/folders/1lpebIYMXh4wugawWNpYKtkOnF-eMYO-0//", gradient: ["#11998e", "#38ef7d"], color: "#38ef7d" },
+            { name: "Accountings & Economics", code: "HUM-2209", date: "November 08, 2026", time: "09:30 AM-12:00 PM", day: "Sunday", link: "https://drive.gooihhghuiegle.com/drive/folders/1rQV9WMWOJKGwlUjHBhig3fMik9SNFbIB///", gradient: ["#00c6ff", "#0072ff"], color: "#00c6ff" },
+            { name: "Electrical Properties of Materials", code: "EEE-2213", date: "November 16, 2026", time: "09:30 AM-12:00 PM", day: "Monday", link: "jdguhttps://drive.google.com/drive/folders/1VpU2gqtwiapRvBhHxeXenZraFj9seVK1//", gradient: ["#8e44ad", "#c39bd3"], color: "#c39bd3" }
         ];
+
+        const wheel = document.getElementById('wheelFrame');
+        const bladeLines = document.getElementById('bladeLines');
+        const shurikenWrap = document.getElementById('shurikenWrap');
+        const slash = document.getElementById('slash');
+
+        const SEG_ANGLE = 360 / courseData.length;   // 72deg for 5 courses
+        let currentRotation = 0;
+        let shurikenRotation = 0;
+
+        // Wedge shape for one segment, pointing up
+        const halfRad = (SEG_ANGLE / 2) * Math.PI / 180;
+        const off = 50 * Math.tan(halfRad) + 0.5;     // +0.5% overlap hides hairline gaps
+        const wedge = `polygon(50% 50%, ${50 - off}% 0%, ${50 + off}% 0%)`;
+
+        // Dark blade lines exactly on the segment borders
+        bladeLines.style.background =
+            `repeating-conic-gradient(from ${SEG_ANGLE / 2 - 0.8}deg, rgba(10,12,15,0.95) 0deg 1.6deg, transparent 1.6deg ${SEG_ANGLE}deg)`;
+
+        // Build the wheel: segment i is centered at (i * SEG_ANGLE) degrees, clockwise from the top
+        courseData.forEach((c, i) => {
+            const seg = document.createElement('div');
+            seg.className = 'segment';
+            seg.style.clipPath = wedge;
+            seg.style.webkitClipPath = wedge;
+            seg.style.transform = `rotate(${i * SEG_ANGLE}deg)`;
+            seg.style.background = `linear-gradient(90deg, ${c.gradient[0]} 22%, ${c.gradient[1]} 78%)`;
+            seg.innerHTML = `<span>${c.code}</span>`;
+            seg.addEventListener('click', () => loadCourse(i));
+            wheel.insertBefore(seg, bladeLines);
+        });
 
         function loadCourse(id) {
             const course = courseData[id];
-            document.getElementById('wheelFrame').style.transform = `rotate(${-id * 72}deg)`;
+
+            // Ninja spin: one extra full turn, then land segment `id` under the kunai
+            const target = -id * SEG_ANGLE;
+            const delta = ((target - currentRotation) % 360 + 540) % 360 - 180;
+            currentRotation += delta + (delta >= 0 ? 360 : -360);
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            // Shuriken hub whips around
+            shurikenRotation += 720;
+            shurikenWrap.style.transform = `rotate(${shurikenRotation}deg)`;
+
+            // Katana slash flash
+            slash.classList.remove('go');
+            void slash.offsetWidth;
+            slash.classList.add('go');
+
+            // Highlight selected, dim the others
+            wheel.classList.add('has-active');
+            wheel.querySelectorAll('.segment').forEach((s, i) => s.classList.toggle('active', i === id));
+
             const card = document.getElementById('infoCard');
             card.style.display = 'block';
             card.style.borderColor = course.color;
-            // Background shade based on color
             card.style.background = `linear-gradient(rgba(30, 20, 20, 0.9), rgba(10, 10, 10, 0.95))`;
             
             document.getElementById('title').innerText = course.name;
@@ -253,8 +449,11 @@
             document.getElementById('dayText').innerText = course.day;
             document.getElementById('driveBtn').href = course.link;
             
-            // Scroll to card
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Let the spin finish before scrolling down to the card
+            clearTimeout(loadCourse.scrollTimer);
+            loadCourse.scrollTimer = setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 900);
         }
 
         function openRoutine() {
